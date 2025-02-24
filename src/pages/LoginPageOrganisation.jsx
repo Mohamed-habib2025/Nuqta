@@ -11,7 +11,7 @@ function LoginPageOrganisation() {
       <div className="relative w-[768px] min-h-[70%] bg-white rounded-3xl shadow-xl overflow-hidden">
         {/* Sign Up Form */}
         <div className={`absolute top-0 right-0 w-1/2 h-full transition-all duration-700 ${isSignUp ? 'opacity-100 z-10 ' : 'opacity-0 z-0 '}`}>
-          <form className="flex flex-col items-center justify-center h-full p-10">
+          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col items-center justify-center h-full p-10">
             <h1 className="text-2xl font-bold">Create Account</h1>
             <span className="text-[18px]">or use your email for registration</span>
             <div className="space-y-2 mt-2 w-full">
@@ -19,7 +19,7 @@ function LoginPageOrganisation() {
               <input type="number" placeholder="License Number" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
               <input type="email" placeholder="Email" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
               <input type="password" placeholder="Password" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
-              <select className="text-gray-500 rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0">
+              <select className=" cursor-pointer text-gray-500 rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0">
                 <option>Location</option>
               </select>
             </div>
@@ -29,7 +29,7 @@ function LoginPageOrganisation() {
 
         {/* Sign In Form */}
         <div className={`absolute top-0 left-0 w-1/2 h-full transition-all duration-700 ${isSignUp ? 'opacity-0 z-0 ' : 'opacity-100 z-10 '}`}>
-          <form className="flex flex-col items-center justify-center h-full p-10">
+          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col items-center justify-center h-full p-10">
             <h1 className="text-2xl font-bold">Sign In</h1>
             <span className="text-[18px]">or use your email password</span>
             <div className="space-y-2 mt-2 w-full">

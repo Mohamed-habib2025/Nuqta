@@ -4,14 +4,14 @@ import img1 from "../Images/Volaintear.png"
 import img2 from "../Images/Donate.png"
 import img3 from "../Images/Enchourage.png"
 import { motion } from 'framer-motion';
-
+import img from "../Images/factory.jpeg"
 import { IoMail } from "react-icons/io5";
 
 const AboutUsSection = [
   {
     id: 1,
     img: img1,
-    title: "We volaintear",
+    title: "We Volunteer",
     description: "Donate experties donations food bags and equpments to loss privileged",
     AnimatTime: 0.4
   },
@@ -25,7 +25,7 @@ const AboutUsSection = [
   {
     id: 3,
     img: img3,
-    title: "We Eenchourage",
+    title: "We Encourage",
     description: "Donate experties donations food bags and equpments to loss privileged",
     AnimatTime: 0.8
   },

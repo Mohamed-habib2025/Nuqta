@@ -13,9 +13,9 @@ import "../../index.css"
 
 function Header() {
 
-
-  const [userType, setUserType] = useState(null);
   const navigate = useNavigate();
+  const headerRef = useRef(null)
+  const [open, setopen] = useState(false)
 
   const handleLogin = () => {
     Swal.fire({
@@ -30,20 +30,13 @@ function Header() {
         cancelButton: 'bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg',
       },
     }).then((result) => {
-      if (result.isConfirmed) {
-        setUserType('user');
-        navigate('/loginpage')
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        setUserType('organization');
-        navigate('loginpageorganisation')
-      }
+      const route = result.isConfirmed ? '/loginpage' : '/loginpageorganisation';
+      navigate(route);
     });
   };
 
-  const headerRef = useRef(null)
-  const [open, setopen] = useState(false)
 
-  function navscroll() {
+  useEffect(() => {
 
     const handleScroll = () => {
       if (window.scrollY > 80) {
@@ -57,24 +50,26 @@ function Header() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }
-
-  useEffect(() => {
-    navscroll()
   }, []);
 
 
+  const navLinks = [
+    { name: 'Home', to: '/' },
+    { name: 'Donars', to: '' },
+    { name: 'Blood Requests', to: '' },
+    { name: 'About Us', to: '#aboutus', smooth: true },
+  ];
+
+
   // start Active link 
-  const [activebtn, setActivebtn] = useState("home");
-  function getButtonClasses(active) {
-    return activebtn === active ? " text-red-600 " : "";
-  }
+  const [activebtn, setActivebtn] = useState('Home');
+  const getButtonClasses = (active) => (activebtn === active ? 'text-red-600' : '');
   // end Active link 
 
   return (
     <div>
       <motion.div
-        initial={{ opacity: 0, y: -50 }}
+        initial={{ opacity: 0, y: -30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{
           type: "spring",
@@ -88,12 +83,17 @@ function Header() {
             <span className="text-3xl font-semibold">Nu<span className=' text-red-600'>q</span>ta</span>
           </Link>
           <div className=' w-[50%] hidden lg:flex items-center justify-around'>
-            <Link to="/" onClick={() => setActivebtn("home")} className={` font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses('home')}`}>
-              Home
-            </Link>
-            <Link onClick={() => setActivebtn("Donars")} className={` font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses('Donars')}`} >Donars</Link>
-            <Link onClick={() => setActivebtn("Blood Requests")} className={` font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses('Blood Requests')}`} >Blood Requests</Link>
-            <Link smooth to='#aboutus' onClick={() => setActivebtn("About Us")} className={` font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses('About Us')}`} >About Us</Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.to}
+                smooth={link.smooth}
+                onClick={() => setActivebtn(link.name)}
+                className={`font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses(link.name)}`}
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
 
           <div className="flex">
@@ -124,12 +124,17 @@ function Header() {
                 }}
                 className=' w-[220px] bg-gray-50 shadow-lg duration-200 border-l-[1px] rounded-3xl absolute top-0 right-0 lg:hidden flex flex-col items-center justify-center space-y-7 h-screen z-[900]' >
                 <IoMdClose onClick={() => setopen(!open)} className=' absolute top-10 text-2xl cursor-pointer' />
-                <Link to="/" onClick={() => { setopen(!open); setActivebtn("home") }} className={` font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses('home')}`}>
-                  Home
-                </Link>
-                <Link to="" onClick={() => { setopen(!open); setActivebtn("Donars") }} className={` font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses('Donars')}`} >Donars</Link>
-                <Link to="" onClick={() => { setopen(!open); setActivebtn("Blood Requests") }} className={` font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses('Blood Requests')}`} >Blood Requests</Link>
-                <Link smooth to='#aboutus' onClick={() => { setopen(!open); setActivebtn("About Us") }} className={` font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses('About Us')}`} >About Us</Link>
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    to={link.to}
+                    smooth={link.smooth}
+                    onClick={() => { setopen(!open); setActivebtn(link.name); }}
+                    className={`font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses(link.name)}`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
               </motion.div>
             )
           }
