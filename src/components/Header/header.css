@@ -1,0 +1,9 @@
+.header_shrink{
+  position:fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: white;
+  z-index: 1;
+  box-shadow: 5px 5px 15px -5px #fde4e4;
+}
