@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 function Donors() {
 
   const [requests, setRequests] = useState([
-    { location: "Cairo", bloodType: "A+", status: "Open", phone: "0123456789", age: "" },
+    { governorate: "Cairo", city:"shbine" , bloodType: "A+", phone: "0123456789", age: "20" , status:"open" },
   ]);
 
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -25,12 +25,11 @@ function Donors() {
         <h2 className="text-2xl font-bold mb-4">Available Requests</h2>
         {requests.map((request) => (
           <div key={request.id} className="border p-3 rounded mt-2">
-            <p><strong>Location:</strong> {request.location}</p>
-            <p><strong>Blood Type:</strong> {request.bloodType}</p>
-            <p><strong>Status:</strong> {request.status}</p>
-            <p><strong>Age:</strong> {request.age}</p>
-            {request.status === "Open" && (
-              <button onClick={() => handleApprove(request)} className="mt-2 bg-red-600 text-white p-1 rounded hover:bg-red-800 duration-200">Approve</button>
+            <p className='font-bold text-[18px]'>Location :<strong className='text-red-600'> {request.governorate} / <span>{request.city}</span></strong></p>
+            <p className='font-bold text-[18px]'>Blood Type :<strong className='text-red-600'> {request.bloodType}</strong></p>
+            <p className='font-bold text-[18px]'>Age : <strong className='text-red-600'> {request.age}</strong></p>
+            {request.status === "open" && (
+              <button onClick={() => handleApprove(request)} className="mt-2 bg-red-600 text-white py-1 px-3 rounded hover:bg-red-800 duration-200">Approve</button>
             )}
           </div>
         ))}
