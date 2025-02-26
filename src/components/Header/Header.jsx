@@ -55,8 +55,8 @@ function Header() {
 
   const navLinks = [
     { name: 'Home', to: '/' },
-    { name: 'Donars', to: '' },
-    { name: 'Blood Requests', to: '' },
+    { name: 'Donars', to: '/donors' },
+    { name: 'Blood Requests', to: '/bloodRequest' },
     { name: 'About Us', to: '#aboutus', smooth: true },
   ];
 

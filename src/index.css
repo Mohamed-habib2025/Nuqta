@@ -68,9 +68,9 @@
   background-color: rgb(232, 229, 229);
 }
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(255, 30, 0);
+  background-color: rgb(217, 213, 213);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(205, 36, 14);
+  background-color: rgb(130, 130, 130);
 }
