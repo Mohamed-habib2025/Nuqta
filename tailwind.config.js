@@ -21,7 +21,7 @@ export default {
         },
       },
       animation:{
-        movetop:"movetop 3s ease-in-out infinite"
+        movetop:"movetop 3s 2s ease-in-out infinite"
       },
       screens: {
         'sm': '540px',

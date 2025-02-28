@@ -107,7 +107,7 @@ function Home() {
             delay: 0.2,
           }}
           className='mt-10 lg:mt-0'>
-          <img className=' max-w-[90%] animate-[movetop_3s_ease-in-out_infinite]' src={imagehero} alt="image hero" />
+          <img className=' max-w-[90%] animate-[movetop_3s_2s_ease-in-out_infinite]' src={imagehero} alt="image hero" />
         </motion.div>
       </div>
       {/* About us */}

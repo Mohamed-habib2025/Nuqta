@@ -35,8 +35,8 @@ function RequestsList({ requests, setRequests, setFormData, setIsEditing }) {
       <h3 className="text-2xl font-bold mb-4">Your Requests</h3>
       {requests.map((request) => (
         <div key={request.id} className="border-2 bg-red-50 p-3 rounded mt-2">
-          <p className='font-bold'>Governorate: <span className='text-red-500'>{request.governorate}</span></p>
-          <p className='font-bold'>City: <span className='text-red-500'>{request.city}</span></p>
+          <p className='font-bold'>Governorate / city: <span className='text-red-500'>{request.governorate}</span> / <span className='text-red-500'>{request.city}</span></p>
+          {/* <p className='font-bold'>City: <span className='text-red-500'>{request.city}</span></p> */}
           <p className='font-bold'>Blood Type: <span className='text-red-500'>{request.bloodType}</span></p>
           <p className='font-bold'>Quantity: <span className='text-red-500'>{request.quantity}</span></p>
           <p className='font-bold'>Age: <span className='text-red-500'>{request.age}</span></p>

@@ -1,10 +1,24 @@
 import React from 'react'
 import { useState } from "react";
-
+import { MdOutlineMail } from "react-icons/md";
+import { RiLockPasswordLine } from "react-icons/ri";
+import governorates from "../Data/egyptLocations"
 
 function LoginPageOrganisation() {
 
   const [isSignUp, setIsSignUp] = useState(false);
+  const [formData, setFormData] = useState({
+    governorate: "",
+    city: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   return (
     <div className='w-full mx-auto h-[670px] flex items-center justify-center bg-gradient-to-r from-gray-50 to-gray-200'>
@@ -12,16 +26,33 @@ function LoginPageOrganisation() {
         {/* Sign Up Form */}
         <div className={`absolute top-0 right-0 w-1/2 h-full transition-all duration-700 ${isSignUp ? 'opacity-100 z-10 ' : 'opacity-0 z-0 '}`}>
           <form onSubmit={(e) => e.preventDefault()} className="flex flex-col items-center justify-center h-full p-10">
-            <h1 className="text-2xl font-bold">Create Account</h1>
-            <span className="text-[18px]">or use your email for registration</span>
-            <div className="space-y-2 mt-2 w-full">
+            <h1 className="text-2xl font-bold mb-2">Create Account</h1>
+            <span className="text-[17px] font-bold text-gray-800">or use your email for registration</span>
+            <div className="space-y-2 mt-5 w-full">
               <input type="text" placeholder="Organization Name" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
               <input type="number" placeholder="License Number" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
-              <input type="email" placeholder="Email" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
-              <input type="password" placeholder="Password" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
-              <select className=" cursor-pointer text-gray-500 rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0">
-                <option>Location</option>
+              <div className=' relative'>
+                <input type="email" placeholder="Email" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
+                <MdOutlineMail className=' absolute text-[20px] text-gray-500 top-3 right-3' />
+              </div>
+              <div className=' relative'>
+                <input type="password" placeholder="Password" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
+                <RiLockPasswordLine className='absolute text-[20px] text-gray-500 top-3 right-3' />
+              </div>
+              <select name="governorate" value={formData.governorate} onChange={handleChange} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0" required>
+                <option value=""> Governorate</option>
+                {Object.keys(governorates).map((gov) => (
+                  <option key={gov} value={gov}>{gov}</option>
+                ))}
               </select>
+              {formData.governorate && (
+                <select name="city" value={formData.city} onChange={handleChange} className=" cursor-pointer w-full p-2 border rounded bg-gray-200" required>
+                  <option value="">Select City</option>
+                  {governorates[formData.governorate].map((city) => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              )}
             </div>
             <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign Up</button>
           </form>
@@ -33,8 +64,14 @@ function LoginPageOrganisation() {
             <h1 className="text-2xl font-bold">Sign In</h1>
             <span className="text-[18px]">or use your email password</span>
             <div className="space-y-2 mt-2 w-full">
-              <input type="email" placeholder="Email or License Number" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
-              <input type="password" placeholder="Password" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
+              <div className=' relative'>
+                <input type="email" placeholder="Email or License Number" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
+                <MdOutlineMail className=' absolute text-[20px] text-gray-500 top-3 right-3' />
+              </div>
+              <div className=' relative'>
+                <input type="password" placeholder="Password" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
+                <RiLockPasswordLine className='absolute text-[20px] text-gray-500 top-3 right-3' />
+              </div>
             </div>
             <a href="#" className="text-[14px] hover:text-red-600 duration-200 text-gray-500 mt-2">Forget Your Password?</a>
             <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign In</button>
