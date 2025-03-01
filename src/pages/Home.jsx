@@ -4,7 +4,6 @@ import img1 from "../Images/Volaintear.png"
 import img2 from "../Images/Donate.png"
 import img3 from "../Images/Enchourage.png"
 import { motion } from 'framer-motion';
-import img from "../Images/factory.jpeg"
 import { IoMail } from "react-icons/io5";
 
 const AboutUsSection = [

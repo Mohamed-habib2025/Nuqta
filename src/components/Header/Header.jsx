@@ -57,7 +57,7 @@ function Header() {
     { name: 'Home', to: '/' },
     { name: 'Donars', to: '/donors' },
     { name: 'Blood Requests', to: '/bloodRequest' },
-    { name: 'About Us', to: '#aboutus', smooth: true },
+    { name: 'About Us', to: '/#aboutus', smooth: true },
   ];
 
 

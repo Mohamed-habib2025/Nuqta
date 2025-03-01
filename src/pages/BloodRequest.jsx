@@ -37,7 +37,7 @@ function BloodRequest() {
   };
 
   return (
-    <div className="mx-5 mt-4 p-6 grid grid-cols-1 md:grid-cols-2 gap-7">
+    <div className="mx-5 mt-4 p-6 grid grid-cols-1 md:grid-cols-2 gap-7 h-screen ">
       <div>
         <h2 className="text-2xl font-bold mb-4">Request Blood</h2>
         <form onSubmit={handleSubmit} className="space-y-3">
