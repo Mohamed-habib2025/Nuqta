@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
+import male from "../Images/male.jpg"
 
 function Donors() {
 
   const [requests, setRequests] = useState([
-    { governorate: "Cairo", city:"shbine" , bloodType: "A+", phone: "0123456789", age: "20" , status:"open" },
+    { name: "mohamed habib", quantity: 200, image: male, governorate: "Cairo", city: "shbine", bloodType: "A+", phone: "0123456789", age: "20", status: "open" },
   ]);
 
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -24,13 +25,22 @@ function Donors() {
       <div className="p-6 max-w-2xl mx-auto">
         <h2 className="text-2xl font-bold mb-4">Available Requests</h2>
         {requests.map((request) => (
-          <div key={request.id} className="border p-3 rounded mt-2">
-            <p className='font-bold text-[18px]'>Location :<strong className='text-red-600'> {request.governorate} / <span>{request.city}</span></strong></p>
-            <p className='font-bold text-[18px]'>Blood Type :<strong className='text-red-600'> {request.bloodType}</strong></p>
-            <p className='font-bold text-[18px]'>Age : <strong className='text-red-600'> {request.age}</strong></p>
-            {request.status === "open" && (
-              <button onClick={() => handleApprove(request)} className="mt-2 bg-red-600 text-white py-1 px-3 rounded hover:bg-red-800 duration-200">Approve</button>
-            )}
+          <div key={request.name} className="border-[2px] border-black p-3 rounded mt-2 flex items-center space-x-4">
+            <div>
+              <img src={request.image} alt="image gender" className='w-[150px] h-[170px] rounded' />
+            </div>
+            <div >
+              <div className='font-bold text-[15px] sm:text-[18px]'>
+                <p>Name :<strong className='text-red-600'> {request.name}</strong></p>
+                <p>Location :<strong className='text-red-600'> {request.governorate} - <span>{request.city}</span></strong></p>
+                <p>Blood Type :<strong className='text-red-600'> {request.bloodType}</strong></p>
+                <p>Quantity :<strong className='text-red-600'> {request.quantity}</strong></p>
+                <p>Age : <strong className='text-red-600'> {request.age}</strong></p>
+              </div>
+              {request.status === "open" && (
+                <button onClick={() => handleApprove(request)} className="mt-2 bg-red-600 text-white py-1 px-3 rounded hover:bg-red-800 duration-200">Approve</button>
+              )}
+            </div>
           </div>
         ))}
 
