@@ -5,7 +5,7 @@ import { IoMenu } from "react-icons/io5";
 import { Navbar } from "flowbite-react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoMdClose } from "react-icons/io";
-import { AiOutlineUser } from "react-icons/ai";
+import { CgProfile } from "react-icons/cg";
 import Swal from 'sweetalert2';
 
 import "./header.css"
@@ -17,23 +17,23 @@ function Header() {
   const headerRef = useRef(null)
   const [open, setopen] = useState(false)
 
-  const handleLogin = () => {
-    Swal.fire({
-      title: 'Select account type',
-      text: 'Are you a regular user or an organization?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'User',
-      cancelButtonText: 'Organization',
-      customClass: {
-        confirmButton: 'bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg mr-2',
-        cancelButton: 'bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg',
-      },
-    }).then((result) => {
-      const route = result.isConfirmed ? '/loginpage' : '/loginpageorganisation';
-      navigate(route);
-    });
-  };
+  // const handleLogin = () => {
+  //   Swal.fire({
+  //     title: 'Select account type',
+  //     text: 'Are you a regular user or an organization?',
+  //     icon: 'question',
+  //     showCancelButton: true,
+  //     confirmButtonText: 'User',
+  //     cancelButtonText: 'Organization',
+  //     customClass: {
+  //       confirmButton: 'bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg mr-2',
+  //       cancelButton: 'bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg',
+  //     },
+  //   }).then((result) => {
+  //     const route = result.isConfirmed ? '/loginpage' : '/loginpageorganisation';
+  //     navigate(route);
+  //   });
+  // };
 
 
   useEffect(() => {
@@ -78,7 +78,7 @@ function Header() {
           delay: 0.1,
         }}
         ref={headerRef} >
-        <Navbar className='w-[85%] mx-auto pt-5'>
+        <Navbar className='w-[87%] mx-auto pt-5 '>
           <Link to="/" className='flex flex-col items-center'>
             <span className="text-3xl font-semibold">Nu<span className=' text-red-600'>q</span>ta</span>
           </Link>
@@ -98,14 +98,16 @@ function Header() {
 
           <div className="flex">
             <div className=' flex items-center space-x-2 '>
-              <Link onClick={() => handleLogin()} className='block lg:hidden '>
+              {/* <Link onClick={() => handleLogin()} className='block lg:hidden '>
                 <AiOutlineUser className=' cursor-pointer text-[22px]' />
               </Link>
-              <Link onClick={() => handleLogin()} className=' hidden lg:block border-2 border-red-600 rounded text-red-600 hover:text-white hover:bg-red-600 duration-300 px-5 sm:px-8 py-[2px] sm:py-1'> Login </Link>
-              {/* <Link className='btn-bor_red border-[2px] px-2 sm:px-4 sm:py-1'> Register </Link> */}
+              <Link onClick={() => handleLogin()} className=' hidden lg:block border-2 border-red-600 rounded text-red-600 hover:text-white hover:bg-red-600 duration-300 px-5 sm:px-8 py-[2px] sm:py-1'> Login </Link> */}
+              <div>
+                <CgProfile className=' cursor-pointer text-2xl'/>
+              </div>
               {/* toggle */}
               <div onClick={() => setopen(!open)} className=' block lg:hidden cursor-pointer'>
-                <IoMenu className='text-2xl ' />
+                <IoMenu className='text-3xl ' />
               </div>
             </div>
           </div>
