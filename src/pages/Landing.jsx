@@ -7,10 +7,10 @@ function Landing() {
   const [userType, setUserType] = useState("user");
 
   return (
-    <div className="">
-      <div className="">
+    <div className="bg-gradient-to-r from-gray-50 to-gray-200">
+      <div className="w-[85%] mx-auto flex justify-center">
         <select
-          className=" w-32 mx-auto p-2 mb-4 border rounded-md focus:outline-none focus:ring-0"
+          className=" mt-5 cursor-pointer rounded-md focus:outline-none focus:ring-0"
           value={userType}
           onChange={(e) => setUserType(e.target.value)}
         >

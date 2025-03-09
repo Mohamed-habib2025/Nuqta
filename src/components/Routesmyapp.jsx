@@ -13,9 +13,12 @@ import Footer from './Footer';
 
 
 function Routesmyapp() {
+
+  const user = false;
+  
   return (
     <div>
-      <Header />
+      {user && <Header />}
       <Routes>
         <Route path='/loginpage' element={<LoginPage />} />
         <Route path='/loginpageorganisation' element={<LoginPageOrganisation />} />
@@ -24,8 +27,8 @@ function Routesmyapp() {
         <Route path='/donors' element={<Donors />} />
         <Route path='/landingpage' element={<Landingpage />} />
       </Routes>
-      <Banner />
-      <Footer />
+      {user && <Banner />}
+      {user && <Footer />}
     </div>
   )
 }
