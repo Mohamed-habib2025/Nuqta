@@ -1,11 +1,11 @@
-import React from 'react'
-import { Navigate } from "react-router-dom";
+// import React from 'react'
+// import { Navigate } from "react-router-dom";
 
-function ProtectedRoute({ children }) {
+// function ProtectedRoute({ children }) {
 
-  const user = false;
+//   const user = true;
 
-  return user ? children : <Navigate to="/landingpage" />;
-}
+//   return user ? children : <Navigate to="/landingpage" />;
+// }
 
-export default ProtectedRoute
+// export default ProtectedRoute

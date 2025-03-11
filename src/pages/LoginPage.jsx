@@ -22,11 +22,11 @@ function LoginPage() {
   };
 
   return (
-    <div className='w-full mx-auto h-[700px] flex items-center justify-center'>
+    <div className='w-full mx-auto h-[750px] flex items-center justify-center'>
       <div className="relative w-[768px] min-h-[90%] md:min-h-[70%] bg-white rounded-3xl shadow-xl overflow-hidden m-5">
         {/* Sign Up Form */}
         <div className={`absolute transition-all duration-700 ${isSignUp ? 'opacity-100 bottom-0 md:top-0 right-0 w-full md:w-1/2 md:h-full' : 'opacity-0'}`}>
-          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col items-center justify-center h-full p-10">
+          <form onSubmit={(e) => {e.preventDefault() ; setIsSignUp(false);}} className="flex flex-col items-center justify-center h-full p-10">
             <h1 className="text-2xl font-bold">Create Account</h1>
             <span className="text-[18px]">or use your email for registration</span>
             <div className="space-y-2 mt-2 w-full">
@@ -74,7 +74,7 @@ function LoginPage() {
         </div>
 
         {/* Sign In Form */}
-        <div className={`absolute transition-all duration-700 ${isSignUp ? 'opacity-0 w-full h-[70%] right-0 ' : 'opacity-100 top-0 left-0 w-full md:w-1/2 h-[70%] md:h-full'}`}>
+        <div className={`absolute transition-all duration-700 ${isSignUp ? 'opacity-0 w-full  right-0 ' : 'opacity-100 top-0 left-0 w-full md:w-1/2 h-[70%] md:h-full'}`}>
           <form onSubmit={(e) => e.preventDefault()} className="flex flex-col items-center justify-center h-full p-10">
             <h1 className="text-2xl font-bold">Sign In</h1>
             <span className="text-[18px]">or use your email password</span>
@@ -94,10 +94,9 @@ function LoginPage() {
         </div>
 
         {/* Toggle Container */}
-        <div className={`absolute  transition-all duration-700 transform 
-          ${isSignUp ?
-            ' -translate-y-full md:-translate-y-0 md:-translate-x-full w-full md:w-1/2 h-[30%] md:h-full md:left-1/2 top-[30%] md:top-0'
-            : ' translate-y-full md:-translate-y-0 w-full md:w-1/2 h-[30%] md:h-full bottom-[30%] md:top-0 md:right-0'}`}>
+        <div className={`absolute transition-all duration-700 transform ${isSignUp ?
+          ' -translate-y-full md:-translate-y-0 md:-translate-x-full w-full md:w-1/2 h-[30%] md:h-full md:left-1/2 top-[30%] md:top-0'
+          : ' translate-y-full md:-translate-y-0 w-full md:w-1/2 h-[30%] md:h-full bottom-[30%] md:top-0 md:right-0'}`}>
           <div className={`bg-red-600 text-white flex flex-col items-center justify-center h-full px-10 text-center transition-all duration-500 ease-in-out ${isSignUp ? ' rounded-b-[100px] md:rounded-none md:rounded-r-[150px]' : ' rounded-t-[100px] md:rounded-none md:rounded-l-[150px]'}`}>
             <h1 className="text-2xl font-bold">{isSignUp ? 'Welcome Back!' : 'Hello, Friend!'}</h1>
             <p className="text-sm mt-2">{isSignUp ? 'Enter your details to use all features' : 'Register with your details to use all features'}</p>

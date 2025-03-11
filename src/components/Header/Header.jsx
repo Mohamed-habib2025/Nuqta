@@ -1,70 +1,97 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { HashLink as Link } from "react-router-hash-link";
-import { IoMenu } from "react-icons/io5";
-import { Navbar } from "flowbite-react";
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { IoMdClose } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
+import { IoMenu } from "react-icons/io5";
+import { FiLogIn } from "react-icons/fi";
+import { Navbar } from "flowbite-react";
 import Swal from 'sweetalert2';
-
-import "./header.css"
 import "../../index.css"
+import "./header.css"
+import { useLocation } from 'react-router-dom';
 
 function Header() {
+
+
+  const navLinks = [
+    { name: 'Home', to: '/' },
+    { name: 'Donate', to: '/donors', protected: true },
+    { name: 'Request', to: '/bloodRequest', protected: true },
+    { name: 'About Us', to: '/#aboutus', smooth: true },
+  ];
+
+  // start Active link 
+  const Location = useLocation();
+  const [activebtn, setActivebtn] = useState(Location.pathname);
+  const getButtonClasses = (active) => (activebtn === active ? 'text-red-600' : '');
+
+  useEffect(() => {
+    setActivebtn(Location.pathname + Location.hash);
+    Location.hash ? null : window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [Location.pathname, Location.hash]);
+  // end Active link 
+
+  const user = true;
 
   const navigate = useNavigate();
   const headerRef = useRef(null)
   const [open, setopen] = useState(false)
 
-  // const handleLogin = () => {
-  //   Swal.fire({
-  //     title: 'Select account type',
-  //     text: 'Are you a regular user or an organization?',
-  //     icon: 'question',
-  //     showCancelButton: true,
-  //     confirmButtonText: 'User',
-  //     cancelButtonText: 'Organization',
-  //     customClass: {
-  //       confirmButton: 'bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg mr-2',
-  //       cancelButton: 'bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg',
-  //     },
-  //   }).then((result) => {
-  //     const route = result.isConfirmed ? '/loginpage' : '/loginpageorganisation';
-  //     navigate(route);
-  //   });
-  // };
+  const handleLogin = () => {
+    Swal.fire({
+      title: 'Select account type',
+      text: 'Are you a regular user or an organization?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'User',
+      cancelButtonText: 'Organization',
+      customClass: {
+        confirmButton: 'bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg mr-2',
+        cancelButton: 'bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg',
+      },
+    }).then((result) => {
+      const route = result.isConfirmed ? '/loginpage' : '/loginpageorganisation';
+      navigate(route);
+    });
+  };
 
+
+  const handleProtectedRoute = (event, to, linkname) => {
+    if (!user) {
+      const alertWidth = window.innerWidth < 768 ? '450px' : '500px';
+      event.preventDefault();
+      Swal.fire({
+        title: 'Access Denied',
+        text: 'You need to login first to access this page.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+        width: alertWidth,
+        customClass: {
+          confirmButton: 'bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg',
+        },
+      });
+    } else {
+      navigate(to);
+      setActivebtn(linkname)
+    }
+  };
+
+  const handleScroll = useCallback(() => {
+    if (window.scrollY > 80) {
+      headerRef.current?.classList.add("header_shrink");
+    } else {
+      headerRef.current?.classList.remove("header_shrink");
+    }
+  }, []);
 
   useEffect(() => {
-
-    const handleScroll = () => {
-      if (window.scrollY > 80) {
-        headerRef.current?.classList.add("header_shrink");
-      } else {
-        headerRef.current?.classList.remove("header_shrink");
-      }
-    };
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
-
-
-  const navLinks = [
-    { name: 'Home', to: '/' },
-    { name: 'Donars', to: '/donors' },
-    { name: 'Blood Requests', to: '/bloodRequest' },
-    { name: 'About Us', to: '/#aboutus', smooth: true },
-  ];
-
-
-  // start Active link 
-  const [activebtn, setActivebtn] = useState('Home');
-  const getButtonClasses = (active) => (activebtn === active ? 'text-red-600' : '');
-  // end Active link 
+  }, [handleScroll]);
 
   return (
     <div>
@@ -88,8 +115,8 @@ function Header() {
                 key={link.name}
                 to={link.to}
                 smooth={link.smooth}
-                onClick={() => setActivebtn(link.name)}
-                className={`font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses(link.name)}`}
+                onClick={(e) => link.protected ? (handleProtectedRoute(e, link.to, link.name)) : setActivebtn(link.name)}
+                className={`font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses(link.to)}`}
               >
                 {link.name}
               </Link>
@@ -97,14 +124,19 @@ function Header() {
           </div>
 
           <div className="flex">
-            <div className=' flex items-center space-x-2 '>
-              {/* <Link onClick={() => handleLogin()} className='block lg:hidden '>
-                <AiOutlineUser className=' cursor-pointer text-[22px]' />
-              </Link>
-              <Link onClick={() => handleLogin()} className=' hidden lg:block border-2 border-red-600 rounded text-red-600 hover:text-white hover:bg-red-600 duration-300 px-5 sm:px-8 py-[2px] sm:py-1'> Login </Link> */}
-              <div>
-                <CgProfile className=' cursor-pointer text-2xl'/>
-              </div>
+            <div className=' flex items-center space-x-5 '>
+              {user ?
+                <div>
+                  <CgProfile className=' cursor-pointer text-2xl' />
+                </div>
+                : <div>
+                  <Link onClick={() => handleLogin()} className='block lg:hidden space-x-2 hover:text-red-600 duration-200'>
+                    <FiLogIn className='inline-block cursor-pointer text-[22px]' />
+                    <span>Login</span>
+                  </Link>
+                  <Link onClick={() => handleLogin()} className=' hidden lg:block border-2 border-red-600 rounded text-red-600 hover:text-white hover:bg-red-600 duration-300 px-5 sm:px-8 py-[2px] sm:py-1'> Login </Link>
+                </div>
+              }
               {/* toggle */}
               <div onClick={() => setopen(!open)} className=' block lg:hidden cursor-pointer'>
                 <IoMenu className='text-3xl ' />
@@ -131,8 +163,8 @@ function Header() {
                     key={link.name}
                     to={link.to}
                     smooth={link.smooth}
-                    onClick={() => { setopen(!open); setActivebtn(link.name); }}
-                    className={`font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses(link.name)}`}
+                    onClick={(e) => link.protected ? (handleProtectedRoute(e, link.to, link.name), setopen(!open)) : (setActivebtn(link.name), setopen(!open))}
+                    className={`font-semibold md:mx-0 mx-auto my-2 md:mt-0 hover:text-red-600 duration-300 text-lg ${getButtonClasses(link.to)}`}
                   >
                     {link.name}
                   </Link>

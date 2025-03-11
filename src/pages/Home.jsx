@@ -5,9 +5,7 @@ import img2 from "../Images/Donate.png"
 import img3 from "../Images/Enchourage.png"
 import { motion } from 'framer-motion';
 import { IoMail } from "react-icons/io5";
-import Header from "../components/Header/Header"
-import Banner from '../components/Banner/Banner'
-import Footer from '../components/Footer'
+import { useNavigate } from 'react-router-dom';
 
 const AboutUsSection = [
   {
@@ -34,6 +32,9 @@ const AboutUsSection = [
 ]
 
 function Home() {
+
+  const navigate = useNavigate();
+
   return (
     <div>
       <div className='w-[85%] mx-auto my-5 '>
@@ -87,7 +88,9 @@ function Home() {
                   damping: 45,
                   delay: 0.2,
                 }}
-                className='btn-bg_red px-5 sm:px-10 py-2'>Donate blood</motion.button>
+                className='btn-bg_red px-5 sm:px-10 py-2'
+                onClick={() => navigate('/donors')}
+              >Donate blood</motion.button>
               <motion.button
                 initial={{ opacity: 0, y: 100 }}
                 whileInView={{ opacity: 100, y: 0 }}
@@ -96,7 +99,9 @@ function Home() {
                   damping: 45,
                   delay: 0.6,
                 }}
-                className='border-[1px] btn-bor_red px-5 sm:px-11 py-2'>Blood Requests</motion.button>
+                className='border-[1px] btn-bor_red px-5 sm:px-11 py-2'
+                onClick={() => navigate('/bloodRequest')}
+              >Blood Requests</motion.button>
             </div>
           </div>
           {/* image page */}
