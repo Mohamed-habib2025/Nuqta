@@ -127,7 +127,7 @@ function BloodRequest() {
                 <button
                   className="bg-red-600 hover:bg-red-800 text-white text-sm text-nowrap sm:text-[16px] p-3 rounded-lg w-full sm:w-auto transition duration-300"
                 >
-                  {isEditing ? 'Update Request' : 'Upload Request'}
+                  {isEditing ? 'Edit Request' : 'Upload Request'}
                 </button>
 
                 {requests.length > 0 && (

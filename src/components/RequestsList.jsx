@@ -4,6 +4,8 @@ import quantity from "../Images/quantity blood .png"
 import { IoLocationOutline } from "react-icons/io5";
 import { LuPhone } from "react-icons/lu";
 import { MdBloodtype } from "react-icons/md";
+import male from "../Images/male.jpg";
+import female from "../Images/female.png";
 
 function RequestsList({ requests, setRequests, setFormData, setIsEditing , setShowForm}) {
 

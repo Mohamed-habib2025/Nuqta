@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import imagehero from "../Images/home-img.png"
 import img1 from "../Images/Volaintear.png"
 import img2 from "../Images/Donate.png"
@@ -34,6 +34,12 @@ const AboutUsSection = [
 function Home() {
 
   const navigate = useNavigate();
+
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    setIsReady(true);
+  }, []);
 
   return (
     <div>
@@ -106,14 +112,14 @@ function Home() {
           </div>
           {/* image page */}
           <motion.div
-            // initial={{ opacity: 0, x: 100 }}
-            // whileInView={{ opacity: 100, x: 0 }}
-            // transition={{
-            //   type: "spring",
-            //   stiffness: 100,
-            //   damping: 50,
-            //   delay: 0.2,
-            // }}
+            initial={{ opacity: 0, x: isReady ? 100 : 0 }}
+            whileInView={{ opacity: 100, x: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 100,
+              damping: 50,
+              delay: 0.2,
+            }}
             className='mt-10 lg:mt-0'>
             <img className=' max-w-[90%] animate-[movetop_3s_2s_ease-in-out_infinite]' src={imagehero} alt="image hero" />
           </motion.div>

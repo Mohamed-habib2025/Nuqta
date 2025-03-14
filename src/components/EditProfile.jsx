@@ -1,8 +1,14 @@
 import React, { useState } from 'react'
+import { FaArrowLeft } from "react-icons/fa";
+import { GoCheck } from "react-icons/go";
+import { HiChevronRight } from "react-icons/hi";
+import LocationPicker from './LocationPicker';
+
 
 function EditProfile({ userData, setUserData, setIsEditing }) {
 
   const [formData, setFormData] = useState(userData);
+  const [isEditlocation, setIsEditlocation] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,26 +23,81 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
 
 
   return (
-    <div className='p-8'>
+    <div className='px-6'>
       <div className='flex flex-col items-center'>
-        <h2 className='text-xl font-bold mb-4'>Edit Profile</h2>
         <form onSubmit={handleSubmit} className='w-full space-y-3'>
-          <div className='flex flex-col'>
-            <label className='text-sm font-semibold'>Full Name</label>
-            <input type="text" name="name" value={formData.name} onChange={handleChange} className='w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500' required />
-          </div>
-          <div className='flex flex-col'>
-            <label className='text-sm font-semibold'>Phone</label>
-            <input type="text" name="phone" value={formData.phone} onChange={handleChange} className='w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500' required />
-          </div>
-          <div className='flex flex-col'>
-            <label className='text-sm font-semibold'>Location</label>
-            <input type="text" name="location" value={formData.location} onChange={handleChange} className='w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500' required />
-          </div>
-          <div className='flex justify-between mt-4'>
-            <button type="submit" className='bg-blue-600 text-white px-4 py-2 rounded shadow-md hover:bg-blue-700'>Save</button>
-            <button type="button" onClick={() => setIsEditing(false)} className='bg-gray-400 text-white px-4 py-2 rounded shadow-md hover:bg-gray-500'>Cancel</button>
-          </div>
+          {
+            isEditlocation ? (
+              <LocationPicker
+                handleSubmit={handleSubmit}
+                formData={formData}
+                setFormData={setFormData}
+                setIsEditlocation={setIsEditlocation}
+                onClose={() => setIsEditlocation(false)}
+              />
+            ) : (
+              <div>
+                {/* header edit profile */}
+                <div className="px-4 py-10 flex items-center justify-between">
+                  <div className='flex items-center gap-3'>
+                    <FaArrowLeft className='text-lg cursor-pointer' onClick={() => setIsEditing(false)} />
+                    <span className='text-xl'>Edit Profile</span>
+                  </div>
+                  <button type="submit">
+                    <GoCheck className=' cursor-pointer text-3xl text-[#212245] ' />
+                  </button>
+                </div>
+
+                <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                  <span className='text-gray-500 text-sm'>Email</span>
+                </div>
+
+                <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
+                  <input type="text" name="username" value={formData.name} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                  <span className='text-gray-500 text-sm'>User Name</span>
+                </div>
+
+                <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
+                  <input type="text" name="phone" minLength='13' maxLength='13' value={formData.phone} onChange={handleChange} className=' p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                  <span className='text-gray-500 text-sm'>phone number</span>
+                </div>
+
+                <div className='flex items-center justify-between mb-4 border-b-[1px] border-gray-300 cursor-pointer'>
+                  <select name="bloodType" value={formData.bloodType} onChange={handleChange}
+                    className=" p-3 bg-transparent border-none outline-none  focus:ring-0 font-normal text-gray-700 cursor-pointer appearance-none" required
+                  >
+                    <option value="">Blood Type</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                  </select>
+                  <span className='text-gray-500 text-sm'>blood Type</span>
+                </div>
+
+                <div
+                  onClick={() => setIsEditlocation(true)}
+                  className=' w-full flex items-center justify-between mb-4 border-b-[1px] border-gray-300 cursor-pointer'>
+                  <div className='w-full flex items-center'>
+                    <input disabled type="text" name="governorate" value={formData.governorate} onChange={handleChange} className=' w-16 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required /> -
+                    <input disabled type="text" name="city" value={formData.city} onChange={handleChange} className=' w-36 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                  </div>
+                  <div className=' flex items-center gap-1'>
+                    <span className='text-gray-500 text-sm'>Location</span>
+                    <HiChevronRight className='text-lg text-gray-500' />
+                  </div>
+                </div>
+
+              </div>
+
+            )
+          }
+
         </form>
       </div>
     </div>
