@@ -81,23 +81,23 @@ function Home() {
             </motion.p>
             <div className=' space-x-4'>
               <motion.button
-                initial={{ opacity: 0, y: 100 }}
-                whileInView={{ opacity: 100, y: 0 }}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 40, y: 0 }}
                 transition={{
                   type: "spring",
-                  damping: 45,
+                  damping: 10,
                   delay: 0.2,
                 }}
                 className='btn-bg_red px-5 sm:px-10 py-2'
                 onClick={() => navigate('/donors')}
               >Donate blood</motion.button>
               <motion.button
-                initial={{ opacity: 0, y: 100 }}
-                whileInView={{ opacity: 100, y: 0 }}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 40, y: 0 }}
                 transition={{
                   type: "spring",
-                  damping: 45,
-                  delay: 0.6,
+                  damping: 10,
+                  delay: 0.4,
                 }}
                 className='border-[1px] btn-bor_red px-5 sm:px-11 py-2'
                 onClick={() => navigate('/bloodRequest')}
@@ -106,14 +106,14 @@ function Home() {
           </div>
           {/* image page */}
           <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            whileInView={{ opacity: 100, x: 0 }}
-            transition={{
-              type: "spring",
-              stiffness: 100,
-              damping: 50,
-              delay: 0.2,
-            }}
+            // initial={{ opacity: 0, x: 100 }}
+            // whileInView={{ opacity: 100, x: 0 }}
+            // transition={{
+            //   type: "spring",
+            //   stiffness: 100,
+            //   damping: 50,
+            //   delay: 0.2,
+            // }}
             className='mt-10 lg:mt-0'>
             <img className=' max-w-[90%] animate-[movetop_3s_2s_ease-in-out_infinite]' src={imagehero} alt="image hero" />
           </motion.div>

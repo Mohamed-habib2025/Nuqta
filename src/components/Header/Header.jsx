@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 import "../../index.css"
 import "./header.css"
 import { useLocation } from 'react-router-dom';
+import Profile from '../../pages/Profile';
+
 
 function Header() {
 
@@ -21,6 +23,17 @@ function Header() {
     { name: 'Request', to: '/bloodRequest', protected: true },
     { name: 'About Us', to: '/#aboutus', smooth: true },
   ];
+
+  const [openDialog, setOpenDialog] = useState(false)
+
+  
+  const handleProfileClick = () => {
+    if (window.innerWidth >= 720) {
+      setOpenDialog(true);
+    } else {
+      navigate("/profile");
+    }
+  };
 
   // start Active link 
   const Location = useLocation();
@@ -127,7 +140,7 @@ function Header() {
             <div className=' flex items-center space-x-5 '>
               {user ?
                 <div>
-                  <CgProfile className=' cursor-pointer text-2xl' />
+                  <CgProfile onClick={handleProfileClick} className=' cursor-pointer text-2xl' />
                 </div>
                 : <div>
                   <Link onClick={() => handleLogin()} className='block lg:hidden space-x-2 hover:text-red-600 duration-200'>
@@ -173,6 +186,26 @@ function Header() {
             )
           }
         </AnimatePresence>
+
+
+        <AnimatePresence>
+          {openDialog && window.innerWidth >= 720 && (
+            <motion.div
+              initial={{ x: 480 }}
+              whileInView={{ x: 0 }}
+              exit={{ x: 500 }}
+              transition={{
+                type: "spring",
+                stiffness: 30,
+              }}
+              className=" w-full sm:w-[500px] h-screen bg-gray-100 shadow-lg rounded-3xl absolute top-0 right-0 z-[990]"
+            >
+              <Profile openDialog={openDialog} setOpenDialog={setOpenDialog} />
+            </motion.div>
+
+          )}
+        </AnimatePresence>
+
 
       </motion.div>
     </div>

@@ -1,7 +1,6 @@
 import React from 'react'
 import Swal from 'sweetalert2'
 import quantity from "../Images/quantity blood .png"
-import { FiUser } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
 import { LuPhone } from "react-icons/lu";
 import { MdBloodtype } from "react-icons/md";
@@ -35,7 +34,7 @@ function RequestsList({ requests, setRequests, setFormData, setIsEditing , setSh
   };
 
   return (
-    <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
+    <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6'>
       {requests.map((request) => (
         < div key={request.id} className="bg-gray-100 border border-gray-300 shadow-lg rounded-lg p-4 flex flex-col items-center text-center transition-transform " >
           <img src={request.image} alt="Donor" className="w-24 h-24 rounded-full mb-3" />

@@ -42,53 +42,102 @@ function BloodRequest() {
         </div>
       )}
       {showForm && (
-        <div className='w-full md:w-[50%] mx-auto'>
-          <h2 className="text-2xl font-bold mb-4">Request Blood</h2>
-          <form onSubmit={handleSubmit} className="space-y-3">
-            <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} className="w-full p-2 border rounded" required />
-            <input type="text" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} className="w-full p-2 border rounded" required />
-            <input type="number" name="quantity" placeholder="Blood Quantity" value={formData.quantity} onChange={handleChange} className="w-full p-2 border rounded" required />
-            <input type="number" name="age" placeholder="Age" value={formData.age} onChange={handleChange} className="w-full p-2 border rounded" required />
-            <select name="governorate" value={formData.governorate} onChange={handleChange} className="w-full p-2 border rounded" required>
-              <option value="">Select Governorate</option>
-              {Object.keys(governorates).map((gov) => (
-                <option key={gov} value={gov}>{gov}</option>
-              ))}
-            </select>
-            {formData.governorate && (
-              <select name="city" value={formData.city} onChange={handleChange} className="w-full p-2 border rounded" required>
-                <option value="">Select City</option>
-                {governorates[formData.governorate].map((city) => (
-                  <option key={city} value={city}>{city}</option>
-                ))}
-              </select>
-            )}
-            <select name="urgency" value={formData.urgency} onChange={handleChange} className="w-full p-2 border rounded">
-              <option value="">Select Urgency</option>
-              <option value="Urgent">Urgent</option>
-              <option value="Not Urgent">Not Urgent</option>
-            </select>
-            <select name="gender" value={formData.gender} onChange={handleChange} className="w-full p-2 border rounded">
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-            <select name="bloodType" value={formData.bloodType} onChange={handleChange} className="w-full p-2 border rounded" required>
-              <option value="">Select Blood Type</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-            </select>
-            <div className='flex items-center justify-between w-full'>
-              <button className="bg-red-600 hover:bg-red-800 text-white p-2 rounded">{isEditing ? 'Update Request' : 'Upload Request'}</button>
-              {
-                requests.length > 0 ? <button onClick={()=> setShowForm(false)} className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded">Close</button> : null
-              }
+        <div className='w-full md:w-[80%] lg:w-[60%] mx-auto'>
+          <form
+            onSubmit={handleSubmit}
+            className=" mx-auto bg-white shadow-lg rounded-xl p-6 border border-gray-300 space-y-4"
+          >
+            <h2 className="text-xl font-semibold text-center text-gray-700">Request Blood Donation</h2>
+
+            <div className="flex flex-col gap-3">
+              <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange}
+                className="w-full p-3 border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px] " required
+              />
+
+              <div className="flex gap-3">
+                <input type="text" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
+                />
+                <input type="number" name="age" placeholder="Age" value={formData.age} onChange={handleChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <input type="number" name="quantity" placeholder="Blood Quantity" value={formData.quantity} onChange={handleChange}
+                  className="w-1/2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
+                />
+                <select name="urgency" value={formData.urgency} onChange={handleChange}
+                  className=" cursor-pointer w-1/2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]"
+                >
+                  <option value="">Urgency</option>
+                  <option value="Urgent">Urgent</option>
+                  <option value="Not Urgent">Not Urgent</option>
+                </select>
+              </div>
+
+              <div className="flex gap-3">
+                <select name="gender" value={formData.gender} onChange={handleChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]"
+                >
+                  <option value="">Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+
+                <select name="bloodType" value={formData.bloodType} onChange={handleChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
+                >
+                  <option value="">Blood Type</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                </select>
+              </div>
+
+              <div className="flex gap-3">
+                <select name="governorate" value={formData.governorate} onChange={handleChange}
+                  className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
+                >
+                  <option value="">Select Governorate</option>
+                  {Object.keys(governorates).map((gov) => (
+                    <option key={gov} value={gov}>{gov}</option>
+                  ))}
+
+                </select>
+
+                {formData.governorate && (
+                  <select name="city" value={formData.city} onChange={handleChange}
+                    className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
+                  >
+                    <option value="">Select City</option>
+                    {governorates[formData.governorate].map((city) => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  className="bg-red-600 hover:bg-red-800 text-white text-sm text-nowrap sm:text-[16px] p-3 rounded-lg w-full sm:w-auto transition duration-300"
+                >
+                  {isEditing ? 'Update Request' : 'Upload Request'}
+                </button>
+
+                {requests.length > 0 && (
+                  <button onClick={() => setShowForm(false)}
+                    className="bg-gray-500 hover:bg-gray-700 text-white text-sm sm:text-base py-3 px-6 sm:px-10 rounded-lg w-full sm:w-auto  transition duration-300"
+                  >
+                    Close
+                  </button>
+                )}
+              </div>
             </div>
           </form>
         </div>

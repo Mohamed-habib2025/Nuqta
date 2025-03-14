@@ -30,7 +30,7 @@ function Donors() {
   return (
     <div className="p-6 w-full max-w-7xl mx-auto">
       <h2 className="text-3xl font-bold text-center mb-6 text-red-700">Available Requests</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
         {requests.map((request) => (
           <div key={request.id} className="bg-gray-100 border border-gray-300 shadow-lg rounded-lg p-4 flex flex-col items-center text-center transition-transform hover:scale-105 cursor-pointer">
             <img src={request.image} alt="Donor" className="w-24 h-24 rounded-full mb-3" />
