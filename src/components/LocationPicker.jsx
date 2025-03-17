@@ -22,13 +22,13 @@ function LocationPicker({ formData, setFormData, handleSubmit, setIsEditlocation
       ...localData,
     }));
 
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Your Password updated successfully!",
-      showConfirmButton: false,
-      timer: 2000
-    });
+    // Swal.fire({
+    //   position: "center",
+    //   icon: "success",
+    //   title: "Your Password updated successfully!",
+    //   showConfirmButton: false,
+    //   timer: 2000
+    // });
 
   };
 

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaArrowLeft } from "react-icons/fa";
 import { GoCheck } from "react-icons/go";
 import { HiChevronRight } from "react-icons/hi";
@@ -12,16 +12,34 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
   const [formData, setFormData] = useState(userData);
   const [isEditlocation, setIsEditlocation] = useState(false);
   const [isEditpassword, setIsEditpassword] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
+
+
+  useEffect(() => {
+    setIsChanged(
+      formData.name !== userData.name ||
+      formData.phone !== userData.phone ||
+      formData.bloodType !== userData.bloodType
+    );
+  }, [formData, userData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+  const isupdate = () => {
+    setIsUpdating(true);
+    setTimeout(() => {
+      setIsUpdating(false)
+      setIsEditing(false)
+    }, 1000);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setUserData(formData);
-    setIsEditlocation(false)
+    setIsEditlocation(false);
   };
 
   return (
@@ -55,13 +73,17 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
                       <FaArrowLeft className='text-lg cursor-pointer' onClick={() => setIsEditing(false)} />
                       <span className='text-xl'>Edit Profile</span>
                     </div>
-                    <button type="submit">
+                    <button type="submit" disabled={!isChanged} onClick={isupdate} >
                       <GoCheck className=' cursor-pointer text-3xl text-[#212245] ' />
                     </button>
                   </div>
 
+                  {isUpdating && (
+                    <p className="text-green-500 mb-2">Updating profile...</p>
+                  )}
+
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="username" value={formData.name} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
                     <span className='text-gray-500 text-sm'>User Name</span>
                   </div>
 
