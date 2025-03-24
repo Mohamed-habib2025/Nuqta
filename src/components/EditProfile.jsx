@@ -83,14 +83,19 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
                   )}
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                    <input type="text" name="name" disabled value={formData.email} className=' py-2 text-gray-400 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                    <span className='text-gray-500 text-sm'> Email</span>
+                  </div>
+
+                  <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <span className='text-gray-500 text-sm'>User Name</span>
                   </div>
 
                   <div
                     onClick={() => setIsEditpassword(true)}
                     className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300 cursor-pointer'>
-                    <input type="password" name="password" value={formData.password} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                    <input type="password" name="password" value={formData.password} onChange={handleChange} className=' w-[50%] py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <div className=' flex items-center gap-1'>
                       <span className='text-gray-500 text-sm'>Change Password</span>
                       <HiChevronRight className='text-lg text-gray-500' />
@@ -98,7 +103,7 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
                   </div>
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="phone" minLength='13' maxLength='13' value={formData.phone} onChange={handleChange} className=' p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                    <input type="text" name="phone" minLength='13' maxLength='13' value={formData.phone} onChange={handleChange} className=' w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
                     <span className='text-gray-500 text-sm'>phone number</span>
                   </div>
 

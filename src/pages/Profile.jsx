@@ -27,7 +27,7 @@ function Profile({ setOpenDialog }) {
   const navigate = useNavigate();
 
   return (
-    <div className='w-full h-screen relative sm:h-[95%]'>
+    <div className='w-full h-screen relative sm:h-[95%] '>
       {
         !isEditing ? (
           <div>

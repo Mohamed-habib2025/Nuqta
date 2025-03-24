@@ -16,6 +16,8 @@ function Routesmyapp() {
 
   const location = useLocation();
 
+  if (!location.pathname) return null;
+
   const isProfilePage = location.pathname === "/profile";
 
 

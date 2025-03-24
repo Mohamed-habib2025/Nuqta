@@ -26,10 +26,12 @@ function BloodRequest() {
     if (isEditing) {
       setRequests(requests.map((req) => (req.id === formData.id ? { ...formData } : req)));
       setIsEditing(false);
+
     } else {
       setRequests([...requests, { ...formData, id: Date.now(), image: formData.image }]);
       setShowForm(false);
     }
+    setShowForm(false);
     setFormData({ id: null, name: "", governorate: "", city: "", gender: "", phone: "", quantity: "", age: "", urgency: "normal", bloodType: "", status: 'Open', image: null });
   };
 
@@ -38,7 +40,11 @@ function BloodRequest() {
       {!showForm && requests.length > 0 && (
         <div className='w-full flex items-center justify-between'>
           <h3 className="text-2xl font-bold mb-4">Your Requests</h3>
-          <button onClick={() => setShowForm(true)} className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded mb-4">New Request</button>
+          <button onClick={() => {
+            setShowForm(true);
+            setFormData({ id: null, name: "", governorate: "", city: "", phone: "", quantity: "", age: "", gender: "", urgency: "normal", bloodType: "", status: 'Open', image: null });
+          }}
+            className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded mb-4">New Request</button>
         </div>
       )}
       {showForm && (
@@ -55,16 +61,16 @@ function BloodRequest() {
               />
 
               <div className="flex gap-3">
-                <input type="text" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange}
+                <input type='text' minLength='11' maxLength='11' name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
                 />
-                <input type="number" name="age" placeholder="Age" value={formData.age} onChange={handleChange}
+                <input type="number" name="age" min='18' max='30' placeholder="Age" value={formData.age} onChange={handleChange}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
                 />
               </div>
 
               <div className="flex gap-3">
-                <input type="number" name="quantity" placeholder="Blood Quantity" value={formData.quantity} onChange={handleChange}
+                <input type="number" name="quantity" min='100' max='500' placeholder="Blood Quantity" value={formData.quantity} onChange={handleChange}
                   className="w-1/2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
                 />
                 <select name="urgency" value={formData.urgency} onChange={handleChange}

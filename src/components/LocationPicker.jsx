@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import governorates from "../Data/egyptLocations";
 import { GoCheck } from "react-icons/go";
 import { FaArrowLeft } from "react-icons/fa";
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 
 function LocationPicker({ formData, setFormData, handleSubmit, setIsEditlocation }) {
 
