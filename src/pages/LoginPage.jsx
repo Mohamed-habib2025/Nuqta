@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from "react";
 import { MdOutlineMail } from "react-icons/md";
-import { RiLockPasswordLine } from "react-icons/ri";
 import governorates from "../Data/egyptLocations"
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 function LoginPage() {
 
@@ -12,6 +12,15 @@ function LoginPage() {
     city: "",
     bloodType: "",
   });
+  const [showPassword, setShowPassword] = useState({
+    old: false,
+    new: false,
+    confirm: false,
+  });
+
+  const togglePasswordVisibility = (field) => {
+    setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,30 +31,28 @@ function LoginPage() {
   };
 
   return (
-    <div className='w-full mx-auto h-[750px] flex items-center justify-center'>
-      <div className="relative w-[768px] min-h-[90%] md:min-h-[70%] bg-white rounded-3xl shadow-xl overflow-hidden m-5">
+    <div className={` w-full my-5 sm:h-[720px] flex items-center justify-center ${isSignUp ? 'h-[650px]' : 'h-[550px] '}`}>
+      <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden m-5">
         {/* Sign Up Form */}
-        <div className={`absolute transition-all duration-700 ${isSignUp ? 'opacity-100 bottom-0 md:top-0 right-0 w-full md:w-1/2 md:h-full' : 'opacity-0'}`}>
-          <form onSubmit={(e) => {e.preventDefault() ; setIsSignUp(false);}} className="flex flex-col items-center justify-center h-full p-10">
+        <div className={`absolute transition-all duration-700 bottom-0 sm:top-0 right-0 w-full sm:w-1/2 h-[70%] sm:h-full ${isSignUp ? 'opacity-100 ' : 'opacity-0 '}`}>
+          <form onSubmit={(e) => { e.preventDefault(); setIsSignUp(false); }} className="flex flex-col items-center justify-center h-full p-5 sm:p-8">
             <h1 className="text-2xl font-bold">Create Account</h1>
             <span className="text-[18px]">or use your email for registration</span>
             <div className="space-y-2 mt-2 w-full">
-              <input type="text" placeholder="Username" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
+              <input type="text" placeholder="Username" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               <div className="flex justify-between w-full">
-                {/* <select className=" cursor-pointer rounded-lg bg-gray-200 border-none w-[48%] p-2 focus:ring-0">
-              <option>Birth Date</option>
-            </select> */}
-                <input type="date" className=" text-gray-500 rounded-lg bg-gray-200 border-none w-[49%] p-2 focus:ring-0" />
-                <input type="number" placeholder='Weight' className=" rounded-lg bg-gray-200 border-none w-[49%] p-2 focus:ring-0" />
+
+                <input type="date" className=" text-gray-500 rounded-lg bg-gray-200 border-none w-[49%] p-2 focus:ring-0" required />
+                <input type="number" placeholder='Weight' className=" rounded-lg bg-gray-200 border-none w-[49%] p-2 focus:ring-0" required />
               </div>
               <div className="flex justify-between w-full">
-                <select name="governorate" value={formData.governorate} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0" required>
+                <select name="governorate" value={formData.governorate} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
                   <option value=""> Governorate</option>
                   {Object.keys(governorates).map((gov) => (
                     <option key={gov} value={gov}>{gov}</option>
                   ))}
                 </select>
-                <select name="bloodType" value={formData.bloodType} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0" required>
+                <select name="bloodType" value={formData.bloodType} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
                   <option value="">Blood Type</option>
                   {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map((type) => (
                     <option key={type} value={type}>{type}</option>
@@ -53,20 +60,24 @@ function LoginPage() {
                 </select>
               </div>
               {formData.governorate && (
-                <select name="city" value={formData.city} onChange={handleChange} className=" cursor-pointer w-full p-2 border rounded bg-gray-200" required>
+                <select name="city" value={formData.city} onChange={handleChange} className="cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
                   <option value="">Select City</option>
                   {governorates[formData.governorate].map((city) => (
                     <option key={city} value={city}>{city}</option>
                   ))}
                 </select>
               )}
-              <div className=' relative'>
-                <input type="email" placeholder="Email" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
-                <MdOutlineMail className=' absolute text-[20px] text-gray-500 top-3 right-3' />
+              <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
+                <input type="email" placeholder="Email" className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
+                <MdOutlineMail className='text-[20px] text-gray-500 ' />
               </div>
-              <div className=' relative'>
-                <input type="password" placeholder="Password" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
-                <RiLockPasswordLine className='absolute text-[20px] text-gray-500 top-3 right-3' />
+              <div className=' p-2 bg-gray-200 rounded-lg flex items-center justify-between'>
+                <input type={showPassword.new ? "text" : "password"} placeholder="Password" className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
+                <div className=' flex items-center justify-between w-fit cursor-pointer' onClick={() => togglePasswordVisibility("new")}>
+                  <button className='text-gray-500' type='button'>
+                    {showPassword.new ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                  </button>
+                </div>
               </div>
             </div>
             <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign Up</button>
@@ -74,18 +85,22 @@ function LoginPage() {
         </div>
 
         {/* Sign In Form */}
-        <div className={`absolute transition-all duration-700 ${isSignUp ? 'opacity-0 w-full  right-0 ' : 'opacity-100 top-0 left-0 w-full md:w-1/2 h-[70%] md:h-full'}`}>
+        <div className={`absolute transition-all duration-700 top-0 left-0 w-full sm:w-1/2 h-[50%] sm:h-full ${isSignUp ? 'opacity-0 ' : 'opacity-100'}`}>
           <form onSubmit={(e) => e.preventDefault()} className="flex flex-col items-center justify-center h-full p-10">
             <h1 className="text-2xl font-bold">Sign In</h1>
             <span className="text-[18px]">or use your email password</span>
             <div className="space-y-2 mt-2 w-full">
-              <div className=' relative'>
-                <input type="email" placeholder="Email" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
-                <MdOutlineMail className=' absolute text-[20px] text-gray-500 top-3 right-3' />
+              <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
+                <input type="email" placeholder="Email" className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
+                <MdOutlineMail className='text-[20px] text-gray-500 ' />
               </div>
-              <div className=' relative'>
-                <input type="password" placeholder="Password" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" />
-                <RiLockPasswordLine className='absolute text-[20px] text-gray-500 top-3 right-3' />
+              <div className=' py-2 px-3 bg-gray-200 rounded-lg flex items-center justify-between'>
+                <input type={showPassword.new ? "text" : "password"} placeholder="Password" className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
+                <div className=' flex items-center justify-between w-fit cursor-pointer' onClick={() => togglePasswordVisibility("new")}>
+                  <button className='text-gray-500' type='button'>
+                    {showPassword.new ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                  </button>
+                </div>
               </div>
             </div>
             <a href="#" className="text-[14px] hover:text-red-600 duration-200 text-gray-500 mt-2">Forget Your Password?</a>
