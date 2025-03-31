@@ -3,6 +3,7 @@ import { useState } from "react";
 import { MdOutlineMail } from "react-icons/md";
 import governorates from "../Data/egyptLocations"
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { Link } from 'react-router-dom';
 
 function LoginPage() {
 
@@ -30,8 +31,10 @@ function LoginPage() {
     });
   };
 
+  
+
   return (
-    <div className={` w-full my-5 sm:h-[720px] flex items-center justify-center ${isSignUp ? 'h-[650px]' : 'h-[550px] '}`}>
+    <div className={` w-full flex justify-center mt-14 sm:h-[720px]  ${isSignUp ? 'h-[650px]' : 'h-[550px] '}`}>
       <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden m-5">
         {/* Sign Up Form */}
         <div className={`absolute transition-all duration-700 bottom-0 sm:top-0 right-0 w-full sm:w-1/2 h-[70%] sm:h-full ${isSignUp ? 'opacity-100 ' : 'opacity-0 '}`}>
@@ -103,7 +106,7 @@ function LoginPage() {
                 </div>
               </div>
             </div>
-            <a href="#" className="text-[14px] hover:text-red-600 duration-200 text-gray-500 mt-2">Forget Your Password?</a>
+            <Link to='/forgetpassworduser' className="text-[14px] hover:text-red-600 duration-200 text-gray-500 mt-2">Forget Your Password?</Link>
             <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign In</button>
           </form>
         </div>

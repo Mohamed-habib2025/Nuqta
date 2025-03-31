@@ -9,6 +9,8 @@ import Header from './Header/Header';
 import Banner from './Banner/Banner';
 import Footer from './Footer';
 import Profile from '../pages/Profile';
+import Forgetpassworduser from './Forgetpassworduser';
+import Forgetpasswordorga from './Forgetpasswordorga';
 
 
 
@@ -31,6 +33,8 @@ function Routesmyapp() {
         <Route path='/bloodRequest' element={<BloodRequest />} />
         <Route path='/donors' element={<Donors />} />
         <Route path='/profile' element={<Profile />} />
+        <Route path='/forgetpassworduser' element={<Forgetpassworduser />} />
+        <Route path='/forgetpasswordorga' element={<Forgetpasswordorga />} />
       </Routes>
       {!isProfilePage && <Banner />}
       {!isProfilePage && <Footer />}

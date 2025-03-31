@@ -14,6 +14,7 @@ import { useLocation } from 'react-router-dom';
 import Profile from '../../pages/Profile';
 
 
+
 function Header() {
 
 
@@ -26,7 +27,7 @@ function Header() {
 
   const [openDialog, setOpenDialog] = useState(false)
 
-  
+
   const handleProfileClick = () => {
     if (window.innerWidth >= 720) {
       setOpenDialog(true);
@@ -59,14 +60,20 @@ function Header() {
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'User',
-      cancelButtonText: 'Organization',
+      cancelButtonText: 'Cancel',
+      showDenyButton: true,
+      denyButtonText: 'Organization',
       customClass: {
         confirmButton: 'bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg mr-2',
+        denyButton: 'bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg mr-2',
         cancelButton: 'bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg',
       },
     }).then((result) => {
-      const route = result.isConfirmed ? '/loginpage' : '/loginpageorganisation';
-      navigate(route);
+      if (result.isConfirmed) {
+        navigate("/loginpage"); 
+      } else if (result.isDenied) {
+        navigate("/loginpageorganisation"); 
+      }
     });
   };
 
