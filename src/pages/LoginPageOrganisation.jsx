@@ -32,8 +32,8 @@ function LoginPageOrganisation() {
   };
 
   return (
-    <div className={` w-full flex justify-center mt-14 sm:h-[720px] ${isSignUp ? 'h-[650px]' : 'h-[550px] '}`}>
-      <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden m-5">
+    <div className={` w-full flex items-center justify-center sm:h-[720px] ${isSignUp ? 'h-[650px]' : 'h-[550px] '}`}>
+      <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden mx-5">
         {/* Sign Up Form */}
         <div className={`absolute transition-all duration-700 bottom-0 sm:top-0 right-0 w-full sm:w-1/2 h-[70%] sm:h-full ${isSignUp ? 'opacity-100 ' : 'opacity-0 '}`}>
           <form onSubmit={(e) => { e.preventDefault(); setIsSignUp(false); }} className="flex flex-col items-center justify-center h-full p-5 sm:p-8">

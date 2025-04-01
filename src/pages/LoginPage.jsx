@@ -3,9 +3,11 @@ import { useState } from "react";
 import { MdOutlineMail } from "react-icons/md";
 import governorates from "../Data/egyptLocations"
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function LoginPage() {
+
+  const navigate = useNavigate()
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,6 +21,7 @@ function LoginPage() {
     confirm: false,
   });
 
+
   const togglePasswordVisibility = (field) => {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
@@ -31,31 +34,40 @@ function LoginPage() {
     });
   };
 
-  
+  const handleSubmitRegister = (e) => {
+    e.preventDefault();
+    setIsSignUp(false);
+  }
+  const handleSubmitLogin = (e) => {
+    e.preventDefault();
+    navigate('/')
+  }
+
+
 
   return (
-    <div className={` w-full flex justify-center mt-14 sm:h-[720px]  ${isSignUp ? 'h-[650px]' : 'h-[550px] '}`}>
-      <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden m-5">
+    <div className={` w-full flex items-center justify-center sm:h-[720px]  ${isSignUp ? 'h-[650px]' : 'h-[550px] '}`}>
+      <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden mx-5">
         {/* Sign Up Form */}
         <div className={`absolute transition-all duration-700 bottom-0 sm:top-0 right-0 w-full sm:w-1/2 h-[70%] sm:h-full ${isSignUp ? 'opacity-100 ' : 'opacity-0 '}`}>
-          <form onSubmit={(e) => { e.preventDefault(); setIsSignUp(false); }} className="flex flex-col items-center justify-center h-full p-5 sm:p-8">
+          <form onSubmit={handleSubmitRegister} className="flex flex-col items-center justify-center h-full p-5 sm:p-8">
             <h1 className="text-2xl font-bold">Create Account</h1>
             <span className="text-[18px]">or use your email for registration</span>
             <div className="space-y-2 mt-2 w-full">
               <input type="text" placeholder="Username" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               <div className="flex justify-between w-full">
 
-                <input type="date" className=" text-gray-500 rounded-lg bg-gray-200 border-none w-[49%] p-2 focus:ring-0" required />
+                <input type="date" className=" rounded-lg bg-gray-200 border-none w-[49%] p-2 focus:ring-0" required />
                 <input type="number" placeholder='Weight' className=" rounded-lg bg-gray-200 border-none w-[49%] p-2 focus:ring-0" required />
               </div>
               <div className="flex justify-between w-full">
-                <select name="governorate" value={formData.governorate} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                <select name="governorate" value={formData.governorate} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0 focus:text-black" required>
                   <option value=""> Governorate</option>
                   {Object.keys(governorates).map((gov) => (
                     <option key={gov} value={gov}>{gov}</option>
                   ))}
                 </select>
-                <select name="bloodType" value={formData.bloodType} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                <select name="bloodType" value={formData.bloodType} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0 focus:text-black" required>
                   <option value="">Blood Type</option>
                   {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map((type) => (
                     <option key={type} value={type}>{type}</option>
@@ -63,7 +75,7 @@ function LoginPage() {
                 </select>
               </div>
               {formData.governorate && (
-                <select name="city" value={formData.city} onChange={handleChange} className="cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                <select name="city" value={formData.city} onChange={handleChange} className="cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 focus:text-black" required>
                   <option value="">Select City</option>
                   {governorates[formData.governorate].map((city) => (
                     <option key={city} value={city}>{city}</option>
@@ -89,7 +101,7 @@ function LoginPage() {
 
         {/* Sign In Form */}
         <div className={`absolute transition-all duration-700 top-0 left-0 w-full sm:w-1/2 h-[50%] sm:h-full ${isSignUp ? 'opacity-0 ' : 'opacity-100'}`}>
-          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col items-center justify-center h-full p-10">
+          <form onSubmit={handleSubmitLogin} className="flex flex-col items-center justify-center h-full p-10">
             <h1 className="text-2xl font-bold">Sign In</h1>
             <span className="text-[18px]">or use your email password</span>
             <div className="space-y-2 mt-2 w-full">

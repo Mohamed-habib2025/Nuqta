@@ -12,21 +12,21 @@ const AboutUsSection = [
     id: 1,
     img: img1,
     title: "We Volunteer",
-    description: "Donate experties donations food bags and equpments to loss privileged",
+    description: "Donate experties donations food bags and equpments to loss privileged.",
     AnimatTime: 0.4
   },
   {
     id: 2,
     img: img2,
     title: "We Donate",
-    description: "Donate experties donations food bags and equpments to loss privileged",
+    description: "Donate experties donations food bags and equpments to loss privileged.",
     AnimatTime: 0.6
   },
   {
     id: 3,
     img: img3,
     title: "We Encourage",
-    description: "Donate experties donations food bags and equpments to loss privileged",
+    description: "Donate experties donations food bags and equpments to loss privileged.",
     AnimatTime: 0.8
   },
 ]
@@ -45,7 +45,7 @@ function Home() {
     <div>
       <div className='w-[85%] mx-auto my-5 '>
         {/* home */}
-        <div className=' flex flex-col lg:flex-row items-center justify-between mb-8'>
+        <div className=' flex flex-col lg:flex-row items-center justify-between my-8'>
           {/* content page */}
           <div className=' lg:w-[45%] space-y-8'>
             <motion.h4
@@ -136,11 +136,11 @@ function Home() {
               delay: 0.2,
             }}
             className='text-4xl font-bold text-red-600 '>We Heal lives</motion.h2>
-          <div className='mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-6'>
+          <div className='mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-6'>
             {
               AboutUsSection.map((sec) => (
                 <motion.div
-                  initial={{ opacity: 0, y: 80 }}
+                  initial={{ opacity: 0, y: 100 }}
                   whileInView={{ opacity: 100, y: 0 }}
                   transition={{
                     type: "spring",
@@ -148,7 +148,7 @@ function Home() {
                     damping: 50,
                     delay: sec.AnimatTime,
                   }}
-                  key={sec.id} className='text-center lg:text-left flex flex-col items-center lg:items-start gap-5 w-full'>
+                  key={sec.id} className=' mb-16 text-center lg:text-left flex flex-col items-center lg:items-start gap-5 w-full'>
                   <div className=' text-center flex flex-col md:flex-row items-center space-x-3'>
                     <img className='w-20' src={sec.img} alt={sec.title} />
                     <h2 className='text-xl font-bold text-[#710C12]'>{sec.title}</h2>

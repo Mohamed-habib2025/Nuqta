@@ -14,7 +14,7 @@ function Profile({ setOpenDialog }) {
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({
     email: "MohamedHabib@gmail.com",
-    password: "123456" ,
+    password: "123456",
     name: "Mohamed Habib",
     phone: "+201255663325",
     governorate: "Cairo",

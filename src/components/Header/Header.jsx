@@ -12,6 +12,8 @@ import "../../index.css"
 import "./header.css"
 import { useLocation } from 'react-router-dom';
 import Profile from '../../pages/Profile';
+import { FaRegUser , FaRegHospital } from "react-icons/fa";
+import ReactDOMServer from "react-dom/server";
 
 
 
@@ -47,8 +49,6 @@ function Header() {
   }, [Location.pathname, Location.hash]);
   // end Active link 
 
-  const user = false;
-
   const navigate = useNavigate();
   const headerRef = useRef(null)
   const [open, setopen] = useState(false)
@@ -57,18 +57,27 @@ function Header() {
 
   const handleLogin = () => {
     Swal.fire({
-      title: 'Select account type',
-      text: 'If you are a user who wants to donate blood or want blood, choose “user” If you belong to an organization, choose “organization” ',
-      icon: 'question',
+      title: "Select Account Type",
+      text: "Choose 'User' if you want to donate or receive blood. Choose 'Organization' if you represent a blood bank or hospital.",
+      icon: "info",
       showCancelButton: true,
-      confirmButtonText: 'User',
-      cancelButtonText: 'Cancel',
+      cancelButtonText: "Cancel",
       showDenyButton: true,
-      denyButtonText: 'Organization',
+      confirmButtonText: ReactDOMServer.renderToString(
+        <div className="flex items-center gap-2">
+          <FaRegUser className="w-5 h-5" /> <span>User</span>
+        </div>
+      ),
+      denyButtonText: ReactDOMServer.renderToString(
+        <div className="flex items-center gap-2">
+          <FaRegHospital className="w-5 h-5" /> <span>Organization</span>
+        </div>
+      ),
       customClass: {
-        confirmButton: 'bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg mr-2',
-        denyButton: 'bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg mr-2',
-        cancelButton: 'bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg',
+        confirmButton: "bg-red-500 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-medium transition-all duration-300",
+        denyButton: "bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition-all duration-300",
+        cancelButton: "bg-gray-400 hover:bg-gray-500 text-white px-5 py-2 rounded-lg transition-all duration-300",
+        popup: "shadow-lg rounded-xl",
       },
     }).then((result) => {
       if (result.isConfirmed) {
@@ -83,7 +92,7 @@ function Header() {
 
   };
 
-
+  const user = true;
   const handleProtectedRoute = (event, to, linkname) => {
     if (!user) {
       const alertWidth = window.innerWidth < 768 ? '450px' : '500px';

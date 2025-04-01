@@ -113,7 +113,7 @@ function Forgetpassworduser() {
     <div className=" h-[90%] my-28 w-[85%] mx-auto flex items-center justify-center">
 
       {step === 1 && (
-        <form onSubmit={handleEmailSubmit}>
+        <form onSubmit={handleEmailSubmit} className='my-10'>
           <div className=" w-80 md:w-96 px-4 py-8 border border-gray-200 shadow-xl rounded-lg space-y-4">
             <h2 className=" text-center text-xl font-bold text-red-500">Forget Password</h2>
             <div className='flex items-center justify-center space-x-1'>
