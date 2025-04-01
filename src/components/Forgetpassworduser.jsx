@@ -6,10 +6,11 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 function Forgetpassworduser() {
 
   const [step, setStep] = useState(1);
-  const [email, setEmail] = useState("test@gmail.com");
+  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [emailerror, setemailerror] = useState(0);
   const [Passworderror, setPassworderror] = useState(false);
   const [otperror, setotperror] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
@@ -46,14 +47,21 @@ function Forgetpassworduser() {
 
 
   const handleEmailSubmit = (e) => {
+    e.preventDefault();
+
     if (email === "test@gmail.com") {
-      setStep(2);
+      setemailerror(3)
+      setTimeout(() => {
+        setStep(2);
+        setemailerror(0)
+      }, 1000);
+
     } else if (email === "") {
-      alert(" you should enter your email");
-    } else { 
-      e.preventDefault();
-      alert("Email not found");
+      setemailerror(1)
+    } else {
+      setemailerror(2)
     }
+
   };
 
   const handleOtpChange = (index, value) => {
@@ -106,12 +114,36 @@ function Forgetpassworduser() {
 
       {step === 1 && (
         <form onSubmit={handleEmailSubmit}>
-          <div className=" w-80 md:w-96 px-4 py-10 border border-gray-200 shadow-xl rounded-lg space-y-4">
+          <div className=" w-80 md:w-96 px-4 py-8 border border-gray-200 shadow-xl rounded-lg space-y-4">
             <h2 className=" text-center text-xl font-bold text-red-500">Forget Password</h2>
             <div className='flex items-center justify-center space-x-1'>
               <p className='text-gray-600'>Remember your password? </p>
               <Link to='/loginpage' className='text-red-600 hover:text-red-800 duration-200'> Login here</Link>
             </div>
+
+            {
+              (emailerror === 1) && (
+                <div className=' my-3  bg-red-200 text-red-600 rounded p-2'>
+                  you should enter your email
+                </div>
+              )
+            }
+            {
+              (emailerror === 2) && (
+                <div className=' my-3  bg-red-200 text-red-600 rounded p-2'>
+                  Email not found
+                </div>
+              )
+            }
+            {
+              (emailerror === 3) && (
+                <div className=' my-3 bg-green-200 text-green-600 rounded p-2'>
+                  setsuccessfully
+                </div>
+              )
+            }
+
+
             <div className=' mb-2 border-b-[1px]'>
               <input
                 type="email"

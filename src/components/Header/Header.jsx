@@ -53,10 +53,12 @@ function Header() {
   const headerRef = useRef(null)
   const [open, setopen] = useState(false)
 
+  const [selecttype, setselecttype] = useState("")
+
   const handleLogin = () => {
     Swal.fire({
       title: 'Select account type',
-      text: 'Are you a regular user or an organization?',
+      text: 'If you are a user who wants to donate blood or want blood, choose “user” If you belong to an organization, choose “organization” ',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'User',
@@ -70,11 +72,15 @@ function Header() {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate("/loginpage"); 
+        setselecttype("user");
+        navigate("/loginpage");
       } else if (result.isDenied) {
-        navigate("/loginpageorganisation"); 
+        setselecttype("organization");
+        navigate("/loginpageorganisation");
       }
     });
+
+
   };
 
 

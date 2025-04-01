@@ -6,7 +6,7 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 function Forgetpasswordorga() {
 
   const [step, setStep] = useState(1);
-  const [email, setEmail] = useState("test@gmail.com");
+  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
