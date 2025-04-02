@@ -101,7 +101,7 @@ function LoginPage() {
 
         {/* Sign In Form */}
         <div className={`absolute transition-all duration-700 top-0 left-0 w-full sm:w-1/2 h-[50%] sm:h-full ${isSignUp ? 'opacity-0 ' : 'opacity-100'}`}>
-          <form onSubmit={handleSubmitLogin} className="flex flex-col items-center justify-center h-full p-10">
+          <form onSubmit={handleSubmitLogin} className="flex flex-col items-center justify-center sm:h-full p-10">
             <h1 className="text-2xl font-bold">Sign In</h1>
             <span className="text-[18px]">or use your email password</span>
             <div className="space-y-2 mt-2 w-full">
@@ -118,16 +118,16 @@ function LoginPage() {
                 </div>
               </div>
             </div>
-            <Link to='/forgetpassworduser' className="text-[14px] hover:text-red-600 duration-200 text-gray-500 mt-2">Forget Your Password?</Link>
+            <Link to='/forgetpassword' className="text-[14px] hover:text-red-600 duration-200 text-gray-500 mt-2">Forget Your Password?</Link>
             <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign In</button>
           </form>
         </div>
 
         {/* Toggle Container */}
         <div className={`absolute transition-all duration-700 transform ${isSignUp ?
-          ' -translate-y-full md:-translate-y-0 md:-translate-x-full w-full md:w-1/2 h-[30%] md:h-full md:left-1/2 top-[30%] md:top-0'
-          : ' translate-y-full md:-translate-y-0 w-full md:w-1/2 h-[30%] md:h-full bottom-[30%] md:top-0 md:right-0'}`}>
-          <div className={`bg-red-600 text-white flex flex-col items-center justify-center h-full px-10 text-center transition-all duration-500 ease-in-out ${isSignUp ? ' rounded-b-[100px] md:rounded-none md:rounded-r-[150px]' : ' rounded-t-[100px] md:rounded-none md:rounded-l-[150px]'}`}>
+          ' -translate-y-full sm:-translate-y-0 sm:-translate-x-full w-full sm:w-1/2 h-[30%] sm:h-full sm:left-1/2 top-[30%] sm:top-0'
+          : ' translate-y-full sm:-translate-y-0 w-full sm:w-1/2 h-[30%] sm:h-full bottom-[30%] sm:top-0 sm:right-0'}`}>
+          <div className={`bg-red-600 text-white flex flex-col items-center justify-center h-full px-10 text-center transition-all duration-500 ease-in-out ${isSignUp ? ' rounded-b-[100px] sm:rounded-none sm:rounded-r-[150px]' : ' rounded-t-[100px] sm:rounded-none sm:rounded-l-[150px]'}`}>
             <h1 className="text-2xl font-bold">{isSignUp ? 'Welcome Back!' : 'Hello, Friend!'}</h1>
             <p className="text-sm mt-2">{isSignUp ? 'Enter your details to use all features' : 'Register with your details to use all features'}</p>
             <button onClick={() => setIsSignUp(!isSignUp)}

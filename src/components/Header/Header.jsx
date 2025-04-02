@@ -8,11 +8,12 @@ import { IoMenu } from "react-icons/io5";
 import { FiLogIn } from "react-icons/fi";
 import { Navbar } from "flowbite-react";
 import Swal from 'sweetalert2';
+import { toast } from "react-toastify";
 import "../../index.css"
 import "./header.css"
 import { useLocation } from 'react-router-dom';
 import Profile from '../../pages/Profile';
-import { FaRegUser , FaRegHospital } from "react-icons/fa";
+import { FaRegUser, FaRegHospital } from "react-icons/fa";
 import ReactDOMServer from "react-dom/server";
 
 
@@ -77,6 +78,7 @@ function Header() {
         confirmButton: "bg-red-500 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-medium transition-all duration-300",
         denyButton: "bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition-all duration-300",
         cancelButton: "bg-gray-400 hover:bg-gray-500 text-white px-5 py-2 rounded-lg transition-all duration-300",
+        text: "text-2xl text-red-600",
         popup: "shadow-lg rounded-xl",
       },
     }).then((result) => {
@@ -92,20 +94,18 @@ function Header() {
 
   };
 
-  const user = true;
+  const user = false;
   const handleProtectedRoute = (event, to, linkname) => {
     if (!user) {
-      const alertWidth = window.innerWidth < 768 ? '450px' : '500px';
       event.preventDefault();
-      Swal.fire({
-        title: 'Access Denied',
-        text: 'You need to login first to access this page.',
-        icon: 'warning',
-        confirmButtonText: 'OK',
-        width: alertWidth,
-        customClass: {
-          confirmButton: 'bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg',
-        },
+      toast.warning("You need to login first to access this page.", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        className: "text-red-500 font-bold"
       });
     } else {
       navigate(to);
@@ -114,7 +114,7 @@ function Header() {
   };
 
   const handleScroll = useCallback(() => {
-    if (window.scrollY > 80) {
+    if (window.scrollY > 50) {
       headerRef.current?.classList.add("header_shrink");
     } else {
       headerRef.current?.classList.remove("header_shrink");

@@ -9,8 +9,8 @@ import Header from './Header/Header';
 import Banner from './Banner/Banner';
 import Footer from './Footer';
 import Profile from '../pages/Profile';
-import Forgetpassworduser from './Forgetpassworduser';
-import Forgetpasswordorga from './Forgetpasswordorga';
+import Forgetpassword from './Forgetpassword';
+import { ToastContainer } from "react-toastify";
 
 
 
@@ -26,6 +26,7 @@ function Routesmyapp() {
   return (
     <div>
       {!isProfilePage && <Header />}
+      <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/loginpage' element={<LoginPage />} />
@@ -33,8 +34,7 @@ function Routesmyapp() {
         <Route path='/bloodRequest' element={<BloodRequest />} />
         <Route path='/donors' element={<Donors />} />
         <Route path='/profile' element={<Profile />} />
-        <Route path='/forgetpassworduser' element={<Forgetpassworduser />} />
-        <Route path='/forgetpasswordorga' element={<Forgetpasswordorga />} />
+        <Route path='/forgetpassword' element={<Forgetpassword />} />
       </Routes>
       {!isProfilePage && <Banner />}
       {!isProfilePage && <Footer />}

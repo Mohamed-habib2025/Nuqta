@@ -6,6 +6,7 @@ import img3 from "../Images/Enchourage.png"
 import { motion } from 'framer-motion';
 import { IoMail } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 const AboutUsSection = [
   {
@@ -40,6 +41,24 @@ function Home() {
   useEffect(() => {
     setIsReady(true);
   }, []);
+
+  const user = false;
+  const handleProtectedRoute = (e, to) => {
+    if (!user) {
+      e.preventDefault();
+      toast.warning("You need to login first to access this page.", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        className: "text-red-500 font-bold"
+      });
+    } else {
+      navigate(to);
+    }
+  };
 
   return (
     <div>
@@ -95,7 +114,7 @@ function Home() {
                   delay: 0.2,
                 }}
                 className='btn-bg_red px-5 sm:px-10 py-2'
-                onClick={() => navigate('/donors')}
+                onClick={(e)=> handleProtectedRoute(e,'/donors')}
               >Donate blood</motion.button>
               <motion.button
                 initial={{ opacity: 0, y: 40 }}
@@ -106,7 +125,7 @@ function Home() {
                   delay: 0.4,
                 }}
                 className='border-[1px] btn-bor_red px-5 sm:px-11 py-2'
-                onClick={() => navigate('/bloodRequest')}
+                onClick={ (e)=> handleProtectedRoute(e,'/bloodRequest')}
               >Blood Requests</motion.button>
             </div>
           </div>
