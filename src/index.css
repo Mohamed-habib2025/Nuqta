@@ -3,11 +3,17 @@
 @tailwind utilities;
 
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 @layer components {
-  .btn-bg_red{
+  .btn-bg_red {
     @apply bg-red-600 rounded-2xl text-white hover:text-black duration-300;
   }
-  .btn-bor_red{
+
+  .btn-bor_red {
     @apply border-red-600 rounded-2xl text-red-600 hover:bg-red-600 hover:text-white duration-300;
   }
 }
@@ -64,13 +70,16 @@
 ::-webkit-scrollbar {
   width: 12px;
 }
+
 ::-webkit-scrollbar-track {
   background-color: rgb(232, 229, 229);
 }
+
 ::-webkit-scrollbar-thumb {
   background-color: rgb(217, 213, 213);
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgb(130, 130, 130);
 }

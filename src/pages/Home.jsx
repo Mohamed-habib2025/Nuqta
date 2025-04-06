@@ -36,12 +36,6 @@ function Home() {
 
   const navigate = useNavigate();
 
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    setIsReady(true);
-  }, []);
-
   const user = false;
   const handleProtectedRoute = (e, to) => {
     if (!user) {
@@ -69,7 +63,7 @@ function Home() {
           <div className=' lg:w-[45%] space-y-8'>
             <motion.h4
               initial={{ opacity: 0, x: 100 }}
-              whileInView={{ opacity: 100, x: 0 }}
+              whileInView={{ opacity: 1, x: 0 }}
               transition={{
                 type: "spring",
                 stiffness: 100,
@@ -81,7 +75,7 @@ function Home() {
             </motion.h4>
             <motion.p
               initial={{ opacity: 0, x: -100 }}
-              whileInView={{ opacity: 100, x: 0 }}
+              whileInView={{ opacity: 1, x: 0 }}
               transition={{
                 type: "spring",
                 stiffness: 100,
@@ -93,7 +87,7 @@ function Home() {
             </motion.p>
             <motion.p
               initial={{ opacity: 0, y: 100 }}
-              whileInView={{ opacity: 100, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{
                 type: "spring",
                 stiffness: 100,
@@ -104,10 +98,10 @@ function Home() {
               to connecting blood donors with individuals in need, providing a lifeline of hope and support to
               those requiring blood transfusions across the country.
             </motion.p>
-            <div className=' space-x-4'>
+            <div className=' space-x-3 flex '>
               <motion.button
                 initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 40, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{
                   type: "spring",
                   damping: 10,
@@ -118,7 +112,7 @@ function Home() {
               >Donate blood</motion.button>
               <motion.button
                 initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 40, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{
                   type: "spring",
                   damping: 10,
@@ -130,24 +124,16 @@ function Home() {
             </div>
           </div>
           {/* image page */}
-          <motion.div
-            initial={{ opacity: 0, x: isReady ? 100 : 0 }}
-            whileInView={{ opacity: 100, x: 0 }}
-            transition={{
-              type: "spring",
-              stiffness: 100,
-              damping: 50,
-              delay: 0.2,
-            }}
+          <div
             className='mt-10 lg:mt-0'>
             <img className=' max-w-[90%] animate-[movetop_3s_2s_ease-in-out_infinite]' src={imagehero} alt="image hero" />
-          </motion.div>
+          </div>
         </div>
         {/* About us */}
         <div id='aboutus' className='mt-36 scroll-mt-36'>
           <motion.h2
             initial={{ opacity: 0, x: -100 }}
-            whileInView={{ opacity: 100, x: 0 }}
+            whileInView={{ opacity: 1, x: 0 }}
             transition={{
               type: "spring",
               stiffness: 100,
@@ -160,7 +146,7 @@ function Home() {
               AboutUsSection.map((sec) => (
                 <motion.div
                   initial={{ opacity: 0, y: 100 }}
-                  whileInView={{ opacity: 100, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   transition={{
                     type: "spring",
                     stiffness: 100,

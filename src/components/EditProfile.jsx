@@ -15,6 +15,9 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
 
+  const [phoneChanged, setPhoneChanged] = useState(false);  // State to track phone change
+  const [phoneConfirm, setPhoneConfirm] = useState(false);  // State to confirm phone change
+
 
   useEffect(() => {
     setIsChanged(
@@ -28,7 +31,27 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+
+  const handlePhoneChange = (e) => {
+    setFormData({ ...formData, phone: e.target.value });
+    setPhoneChanged(true);
+    setPhoneConfirm(false);
+  };
+
+  const confirmPhoneChange = () => {
+    setPhoneConfirm(true);
+    setPhoneChanged(false);
+  };
+  const cancelPhoneChange = () => {
+    setPhoneConfirm(false);
+    setPhoneChanged(false);
+  };
+
   const isupdate = () => {
+    if (phoneChanged && !phoneConfirm) {
+      alert("Please confirm your phone number change.");
+      return;
+    }
     setIsUpdating(true);
     setTimeout(() => {
       setIsUpdating(false)
@@ -103,9 +126,32 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
                   </div>
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="phone" minLength='13' maxLength='13' value={formData.phone} onChange={handleChange} className=' w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                    <input type="text" name="phone" minLength='13' maxLength='13' value={formData.phone} onChange={handlePhoneChange} className=' w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
                     <span className='text-gray-500 text-sm'>phone number</span>
                   </div>
+
+                  {phoneChanged && !phoneConfirm && (
+                    <div className="bg-white rounded-lg p-6 shadow-lg max-w-xs w-full">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                        Are you sure you want to change your phone number?
+                      </h3>
+                      <div className="flex space-x-3">
+                        <button
+                          onClick={confirmPhoneChange}
+                          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                        >
+                          Confirm
+                        </button>
+                        <button
+                          onClick={cancelPhoneChange}
+                          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+
+                  )}
 
                   <div className='flex items-center justify-between mb-4 border-b-[1px] border-gray-300 cursor-pointer'>
                     <select name="bloodType" value={formData.bloodType} onChange={handleChange}

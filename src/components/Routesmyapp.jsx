@@ -26,7 +26,7 @@ function Routesmyapp() {
   return (
     <div>
       {!isProfilePage && <Header />}
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/loginpage' element={<LoginPage />} />

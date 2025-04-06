@@ -17,9 +17,7 @@ import { FaRegUser, FaRegHospital } from "react-icons/fa";
 import ReactDOMServer from "react-dom/server";
 
 
-
 function Header() {
-
 
   const navLinks = [
     { name: 'Home', to: '/' },
@@ -30,7 +28,6 @@ function Header() {
 
   const [openDialog, setOpenDialog] = useState(false)
 
-
   const handleProfileClick = () => {
     if (window.innerWidth >= 720) {
       setOpenDialog(true);
@@ -38,6 +35,16 @@ function Header() {
       navigate("/profile");
     }
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 720) {
+        setOpenDialog(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // start Active link 
   const Location = useLocation();
@@ -94,17 +101,13 @@ function Header() {
 
   };
 
-  const user = false;
+  const user = true;
   const handleProtectedRoute = (event, to, linkname) => {
     if (!user) {
       event.preventDefault();
       toast.warning("You need to login first to access this page.", {
-        position: "top-right",
-        autoClose: 2500,
+        autoClose: 2000,
         hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
         className: "text-red-500 font-bold"
       });
     } else {
@@ -114,7 +117,7 @@ function Header() {
   };
 
   const handleScroll = useCallback(() => {
-    if (window.scrollY > 50) {
+    if (window.scrollY > 66) {
       headerRef.current?.classList.add("header_shrink");
     } else {
       headerRef.current?.classList.remove("header_shrink");
@@ -129,7 +132,7 @@ function Header() {
   }, [handleScroll]);
 
   return (
-    <div>
+    <>
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -140,7 +143,7 @@ function Header() {
           delay: 0.1,
         }}
         ref={headerRef} >
-        <Navbar className='w-[87%] mx-auto pt-5 '>
+        <Navbar className=' w-[85%] mx-auto pt-5 !px-0'>
           <Link to="/" className='flex flex-col items-center'>
             <span className="text-3xl font-semibold">Nu<span className=' text-red-600'>q</span>ta</span>
           </Link>
@@ -230,7 +233,7 @@ function Header() {
 
 
       </motion.div>
-    </div>
+    </>
 
   )
 }
