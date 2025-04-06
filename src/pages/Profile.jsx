@@ -16,7 +16,7 @@ function Profile({ setOpenDialog }) {
     email: "MohamedHabib@gmail.com",
     password: "123456",
     name: "Mohamed Habib",
-    phone: "+201255663325",
+    phone: "01255663325",
     governorate: "Cairo",
     city: "Zamalek",
     bloodType: "A+",
@@ -60,7 +60,7 @@ function Profile({ setOpenDialog }) {
 
               <div className='flex items-center gap-2'>
                 <LuPhone className='text-2xl text-red-600' />
-                <span className='text-lg'>{userData.phone}</span>
+                <span className='text-lg'>+2{userData.phone}</span>
               </div>
 
               <div className='mt-2 flex items-center space-x-2'>

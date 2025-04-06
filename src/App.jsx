@@ -13,7 +13,7 @@ function App() {
   }, [pathname]);
 
   return (
-    <div className="ubuntu-medium">
+    <div className="ubuntu-medium min-h-screen">
       <Routesmyapp />
     </div>
 

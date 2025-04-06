@@ -12,7 +12,7 @@ function Donors() {
     { id: 1, name: 'Mohamed Habib', quantity: 200, image: male, governorate: 'Cairo', city: 'Zamalek', bloodType: 'A+', phone: '0123456789', age: '20', status: 'open' },
     { id: 2, name: 'Mohamed Habib', quantity: 200, image: male, governorate: 'Cairo', city: 'Zamalek', bloodType: 'A+', phone: '0123456789', age: '20', status: 'open' },
     { id: 3, name: 'Mohamed Habib', quantity: 200, image: male, governorate: 'Cairo', city: 'Zamalek', bloodType: 'A+', phone: '0123456789', age: '20', status: 'open' },
-    { id: 3, name: 'Mohamed Habib', quantity: 200, image: male, governorate: 'Cairo', city: 'Zamalek', bloodType: 'A+', phone: '0123456789', age: '20', status: 'open' },
+    { id: 4, name: 'Mohamed Habib', quantity: 200, image: male, governorate: 'Cairo', city: 'Zamalek', bloodType: 'A+', phone: '0123456789', age: '20', status: 'open' },
   ]);
 
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -46,27 +46,25 @@ function Donors() {
             </div>
 
             {request.status === 'open' && (
-              <div className=''>
+              <div className='flex items-center gap-2 mt-4'>
                 {/* <button
-                  onClick={() => handleApprove(request)}
-                  className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-800 transition duration-200"
-                >
-                  Donate
-                </button> */}
-                <div className='flex items-center gap-2 mt-4'>
-                  <button
                     className="bg-green-500 flex items-center gap-2 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition duration-200"
                   >
                     <IoCallOutline className='text-xl'/>
                     <span>Call</span>
-                  </button>
-                  <button
-                    className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition duration-200"
-                  >
-                    <BsChatDots className='text-xl'/>
-                    <span>Chat</span>
-                  </button>
-                </div>
+                  </button> */}
+                <button
+                  onClick={() => handleApprove(request)}
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-800 transition duration-200"
+                >
+                  Donate
+                </button>
+                <button
+                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition duration-200"
+                >
+                  <BsChatDots className='text-xl' />
+                  <span>Chat</span>
+                </button>
               </div>
             )}
           </div>

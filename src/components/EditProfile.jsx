@@ -5,6 +5,7 @@ import { GoCheck } from "react-icons/go";
 import { HiChevronRight } from "react-icons/hi";
 import LocationPicker from './LocationPicker';
 import ChangePasswordprofile from './ChangePasswordprofile';
+import { toast } from "react-toastify";
 
 
 function EditProfile({ userData, setUserData, setIsEditing }) {
@@ -14,9 +15,8 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
   const [isEditpassword, setIsEditpassword] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
-
-  const [phoneChanged, setPhoneChanged] = useState(false);  // State to track phone change
-  const [phoneConfirm, setPhoneConfirm] = useState(false);  // State to confirm phone change
+  const [phoneChanged, setPhoneChanged] = useState(false);
+  const [phoneConfirm, setPhoneConfirm] = useState(false);
 
 
   useEffect(() => {
@@ -41,22 +41,59 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
   const confirmPhoneChange = () => {
     setPhoneConfirm(true);
     setPhoneChanged(false);
+    setIsChanged(true);
+    setIsUpdating(false);
   };
+  
   const cancelPhoneChange = () => {
     setPhoneConfirm(false);
     setPhoneChanged(false);
   };
 
-  const isupdate = () => {
+
+  const isFormValid = () => {
+    if (!formData.name || !formData.phone) {
+      toast.warning("Please make sure to complete your data.", {
+        autoClose: 1500,
+        hideProgressBar: true,
+        className: "text-red-500 font-bold"
+      });
+      return false;
+    }
+
+    if (formData.phone.length !== 11) {
+      toast.warning("Phone number must be 11 digits.", {
+        autoClose: 1500,
+        hideProgressBar: true,
+        className: "text-red-500 font-bold"
+      });
+      return false;
+    }
+
     if (phoneChanged && !phoneConfirm) {
-      alert("Please confirm your phone number change.");
+      toast.warning("Please confirm your phone number change.", {
+        autoClose: 1500,
+        hideProgressBar: true,
+        className: "text-red-500 font-bold"
+      });
       return;
     }
-    setIsUpdating(true);
-    setTimeout(() => {
-      setIsUpdating(false)
-      setIsEditing(false)
-    }, 1000);
+
+    return true;
+  }
+
+  const isupdate = () => {
+
+    if (isFormValid()) {
+      setIsUpdating(true);
+      setTimeout(() => {
+        setIsUpdating(false)
+        setIsEditing(false)
+      }, 1000);
+    } else {
+      setIsEditing(true)
+    }
+
   };
 
   const handleSubmit = (e) => {
@@ -126,7 +163,7 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
                   </div>
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="phone" minLength='13' maxLength='13' value={formData.phone} onChange={handlePhoneChange} className=' w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                    <input type="text" name="phone" maxLength='11' value={formData.phone} onChange={handlePhoneChange} className=' w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <span className='text-gray-500 text-sm'>phone number</span>
                   </div>
 
