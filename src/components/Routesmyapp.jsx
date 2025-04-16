@@ -11,6 +11,7 @@ import Footer from './Footer';
 import Profile from '../pages/Profile';
 import Forgetpassword from './Forgetpassword';
 import { ToastContainer } from "react-toastify";
+import RequstOrga from '../pages/RequstOrga';
 
 
 
@@ -32,6 +33,7 @@ function Routesmyapp() {
         <Route path='/loginpage' element={<LoginPage />} />
         <Route path='/loginpageorganisation' element={<LoginPageOrganisation />} />
         <Route path='/bloodRequest' element={<BloodRequest />} />
+        <Route path='/RequstOrganization' element={<RequstOrga />} />
         <Route path='/donors' element={<Donors />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/forgetpassword' element={<Forgetpassword />} />

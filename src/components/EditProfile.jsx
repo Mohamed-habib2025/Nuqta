@@ -128,7 +128,7 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
               />) : (
                 <div>
                   {/* header edit profile */}
-                  <div className="px-4 py-10 flex items-center justify-between">
+                  <div className="sm:px-4 py-10 flex items-center justify-between">
                     <div className='flex items-center gap-3'>
                       <FaArrowLeft className='text-lg cursor-pointer' onClick={() => setIsEditing(false)} />
                       <span className='text-xl'>Edit Profile</span>

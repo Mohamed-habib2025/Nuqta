@@ -36,7 +36,7 @@ function LocationPicker({ formData, setFormData, handleSubmit, setIsEditlocation
   return (
     <div>
       {/* header edit location */}
-      <div className="px-4 py-10 flex items-center justify-between">
+      <div className="sm:px-4 py-10 flex items-center justify-between">
         <div className='flex items-center gap-3'>
           <FaArrowLeft className='text-lg cursor-pointer' onClick={() => setIsEditlocation(false)} />
           <span className='text-xl'>Edit location</span>

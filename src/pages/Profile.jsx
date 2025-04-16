@@ -31,7 +31,7 @@ function Profile({ setOpenDialog }) {
       {
         !isEditing ? (
           <div>
-            <div className="px-6 py-10 flex items-center justify-between">
+            <div className="px-6 py-8 flex items-center justify-between">
               <span className='text-xl'>My Profile</span>
               <FaArrowRight
                 onClick={() => setOpenDialog ? setOpenDialog(false) : navigate(-1)}
@@ -81,16 +81,18 @@ function Profile({ setOpenDialog }) {
 
               </div>
             </div>
+
+            <div className=' absolute bottom-8 sm:-bottom-1 left-0 px-4 flex items-center space-x-2 text-red-600 cursor-pointer hover:translate-x-1 duration-300'>
+              <PiSignOutBold className='text-2xl' />
+              <span >Sign Out</span>
+            </div>
+
           </div>
         ) : (
           <EditProfile userData={userData} setUserData={setUserData} setIsEditing={setIsEditing} />
         )
       }
 
-      <div className=' absolute bottom-10 sm:bottom-0 left-0 px-4 flex items-center space-x-2 text-red-600 cursor-pointer hover:translate-x-1 duration-300'>
-        <PiSignOutBold className='text-2xl' />
-        <span >Sign Out</span>
-      </div>
 
     </div>
 

@@ -57,17 +57,17 @@ function LoginPage() {
               <input type="text" placeholder="Username" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               <div className="flex justify-between w-full">
 
-                <input type="date" className=" rounded-lg bg-gray-200 border-none w-[49%] p-2 focus:ring-0" required />
+                <input type="date" className=" rounded-lg text-gray-500 bg-gray-200 border-none w-[49%] p-2 focus:ring-0" required />
                 <input type="number" placeholder='Weight' className=" rounded-lg bg-gray-200 border-none w-[49%] p-2 focus:ring-0" required />
               </div>
               <div className="flex justify-between w-full">
-                <select name="governorate" value={formData.governorate} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0 focus:text-black" required>
+                <select name="governorate" value={formData.governorate} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
                   <option value=""> Governorate</option>
                   {Object.keys(governorates).map((gov) => (
                     <option key={gov} value={gov}>{gov}</option>
                   ))}
                 </select>
-                <select name="bloodType" value={formData.bloodType} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0 focus:text-black" required>
+                <select name="bloodType" value={formData.bloodType} onChange={handleChange} className=" cursor-pointer w-[49%] p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
                   <option value="">Blood Type</option>
                   {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map((type) => (
                     <option key={type} value={type}>{type}</option>
@@ -75,7 +75,7 @@ function LoginPage() {
                 </select>
               </div>
               {formData.governorate && (
-                <select name="city" value={formData.city} onChange={handleChange} className="cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 focus:text-black" required>
+                <select name="city" value={formData.city} onChange={handleChange} className="cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
                   <option value="">Select City</option>
                   {governorates[formData.governorate].map((city) => (
                     <option key={city} value={city}>{city}</option>

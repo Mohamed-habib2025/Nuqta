@@ -19,10 +19,16 @@ import ReactDOMServer from "react-dom/server";
 
 function Header() {
 
+  const usertype = 'organization'
+
   const navLinks = [
     { name: 'Home', to: '/' },
     { name: 'Donate', to: '/donors', protected: true },
-    { name: 'Request', to: '/bloodRequest', protected: true },
+    {
+      name: 'Request',
+      to: usertype === 'organization' ? '/RequstOrganization' : '/bloodRequest',
+      protected: true
+    },
     { name: 'About Us', to: '/#aboutus', smooth: true },
   ];
 
@@ -102,6 +108,7 @@ function Header() {
   };
 
   const user = true;
+
   const handleProtectedRoute = (event, to, linkname) => {
     if (!user) {
       event.preventDefault();

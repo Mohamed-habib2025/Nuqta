@@ -75,7 +75,7 @@ function ChangePasswordprofile({ formData, setFormData, setUserData, setIsEditin
 
       <div onSubmit={handleSelectChange} className="space-y-4">
 
-        <div className="px-4 py-10 flex items-center justify-between">
+        <div className="sm:px-4 py-10 flex items-center justify-between">
           <div className='flex items-center gap-3'>
             <FaArrowLeft className='text-lg cursor-pointer' onClick={() => setIsEditpassword(false)} />
             <span className='text-xl'>Change Password</span>
