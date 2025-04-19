@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import { IoLocationOutline } from "react-icons/io5";
 import { LuPhone } from "react-icons/lu";
@@ -6,25 +6,29 @@ import { PiSignOutBold } from "react-icons/pi";
 import { MdEdit } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
-import male from "../Images/male.jpg"
-import EditProfile from '../components/EditProfile'
+import male from "../Images/male.jpg";
+import EditProfile from '../components/EditProfile';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '../rtk/slices/userSlice';
+import { fetchUserid } from '../rtk/slices/userid';
 
 function Profile({ setOpenDialog }) {
 
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState({
-    email: "MohamedHabib@gmail.com",
-    password: "123456",
-    name: "Mohamed Habib",
-    phone: "01255663325",
-    governorate: "Cairo",
-    city: "Zamalek",
-    bloodType: "A+",
-    donateCount: 10,
-    requests: 2
-  });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user , loading } = useSelector(state => state.userid);
+
+  useEffect(() => {
+    dispatch(fetchUserid());
+  }, [dispatch]);
+
+  
+  if (loading || !user) {
+    return <p className=' p-10 text-green-400 text-lg'>Loading profile...</p>;
+  }
 
   return (
     <div className='w-full h-screen relative sm:h-[95%] '>
@@ -51,30 +55,30 @@ function Profile({ setOpenDialog }) {
                 <img src={male} alt="Profile phote" className='w-44 h-44 rounded-full' />
               </div>
 
-              <p className='text-xl text-blue-600 font-bold'>{userData.name}</p>
+              <p className='text-xl text-blue-600 font-bold'>{user.username}</p>
 
               <div className='flex items-center gap-2'>
                 <IoLocationOutline className='text-3xl text-red-600' />
-                <p className='text-lg'><span>{userData.governorate}</span> - <span>{userData.city}</span> </p>
+                <p className='text-lg'><span>{user.donation.conservatism}</span> - <span>{user.donation.city}</span> </p>
               </div>
 
               <div className='flex items-center gap-2'>
                 <LuPhone className='text-2xl text-red-600' />
-                <span className='text-lg'>+2{userData.phone}</span>
+                <span className='text-lg'>{user.phoneNumber}</span>
               </div>
 
               <div className='mt-2 flex items-center space-x-2'>
                 <p className=' w-28 p-2 text-red-500 flex flex-col items-center bg-red-200 border-[2px] border-red-300 rounded-lg'>
                   <span>Donate</span>
-                  <span>{userData.donateCount}</span>
+                  <span>0</span>
                 </p>
                 <p className=' w-28 p-2 text-red-500 flex flex-col items-center bg-red-200 border-[2px] border-red-300 rounded-lg'>
                   <span>Blood Type</span>
-                  <span>{userData.bloodType}</span>
+                  <span>{user.donation.blood_type}</span>
                 </p>
                 <p className=' w-28 p-2 text-red-500 flex flex-col items-center bg-red-200 border-[2px] border-red-300 rounded-lg'>
                   <span>Requests</span>
-                  <span>{userData.requests}</span>
+                  <span>0</span>
                 </p>
               </div>
               <div>
@@ -82,14 +86,20 @@ function Profile({ setOpenDialog }) {
               </div>
             </div>
 
-            <div className=' absolute bottom-8 sm:-bottom-1 left-0 px-4 flex items-center space-x-2 text-red-600 cursor-pointer hover:translate-x-1 duration-300'>
+            <div
+              onClick={() => {
+                dispatch(logoutUser());
+                navigate("/loginpage");
+                setOpenDialog(false);
+              }}
+              className=' absolute bottom-8 sm:-bottom-1 left-0 px-4 flex items-center space-x-2 text-red-600 cursor-pointer hover:translate-x-1 duration-300'>
               <PiSignOutBold className='text-2xl' />
               <span >Sign Out</span>
             </div>
 
           </div>
         ) : (
-          <EditProfile userData={userData} setUserData={setUserData} setIsEditing={setIsEditing} />
+          <EditProfile user={user} setIsEditing={setIsEditing} />
         )
       }
 

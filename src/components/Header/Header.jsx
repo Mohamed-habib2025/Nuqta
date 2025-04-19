@@ -107,10 +107,11 @@ function Header() {
 
   };
 
-  const user = false;
+  const user = useSelector((state) => state.userid);
+  const token = useSelector((state) => state.user.token);
 
   const handleProtectedRoute = (event, to, linkname) => {
-    if (!user) {
+    if (!user || !token) {
       event.preventDefault();
       toast.warning("You need to login first to access this page.", {
         autoClose: 2000,
@@ -170,7 +171,7 @@ function Header() {
 
           <div className="flex">
             <div className=' flex items-center space-x-5 '>
-              {user ?
+              {user && token ?
                 <div>
                   <CgProfile onClick={handleProfileClick} className=' cursor-pointer text-2xl' />
                 </div>

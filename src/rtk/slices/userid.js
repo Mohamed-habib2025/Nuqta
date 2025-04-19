@@ -1,53 +1,56 @@
+// userid.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const fetchUsers = createAsyncThunk(
-  'users/fetchUsers',
+export const fetchUserid = createAsyncThunk(
+  'profile/fetchUserid',
   async (_, thunkAPI) => {
     try {
-      const token = localStorage.getItem('userToken') || "";
+      const state = thunkAPI.getState();
+      const token = localStorage.getItem('userToken');
+      const userId = state.user.user_id;
       const response = await axios.get(
-        'https://nuqta-production.up.railway.app/api/user',
+        `https://nuqta-production.up.railway.app/api/user/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
             'Accept-Language': 'en',
           },
         }
       );
+
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Failed to fetch users'
+        error.response?.data?.message || 'Failed to fetch user profile'
       );
     }
   }
 );
 
-const usersSlice = createSlice({
-  name: 'users',
+const userid = createSlice({
+  name: 'userid',
   initialState: {
-    users: [],
+    user: null,
     loading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchUsers.pending, (state) => {
+      .addCase(fetchUserid.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchUsers.fulfilled, (state, action) => {
+      .addCase(fetchUserid.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
+        state.user = action.payload;
       })
-      .addCase(fetchUsers.rejected, (state, action) => {
+      .addCase(fetchUserid.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
-export default usersSlice.reducer;
+export default userid.reducer;

@@ -8,9 +8,9 @@ import ChangePasswordprofile from './ChangePasswordprofile';
 import { toast } from "react-toastify";
 
 
-function EditProfile({ userData, setUserData, setIsEditing }) {
+function EditProfile({ user, setIsEditing }) {
 
-  const [formData, setFormData] = useState(userData);
+  const [formData, setFormData] = useState(user);
   const [isEditlocation, setIsEditlocation] = useState(false);
   const [isEditpassword, setIsEditpassword] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -21,19 +21,30 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
 
   useEffect(() => {
     setIsChanged(
-      formData.name !== userData.name ||
-      formData.phone !== userData.phone ||
-      formData.bloodType !== userData.bloodType
+      formData.username !== user.username ||
+      formData.phoneNumber !== user.phoneNumber ||
+      formData.donation.blood_type !== user.donation.blood_type
     );
-  }, [formData, userData]);
+  }, [formData, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+
+    if (name === 'blood_type') {
+      setFormData((prevData) => ({
+        ...prevData,
+        donation: {
+          ...prevData.donation,
+          blood_type: value,
+        },
+      }));
+    } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
   };
 
   const handlePhoneChange = (e) => {
-    setFormData({ ...formData, phone: e.target.value });
+    setFormData({ ...formData, phoneNumber: e.target.value });
     setPhoneChanged(true);
     setPhoneConfirm(false);
   };
@@ -44,7 +55,7 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
     setIsChanged(true);
     setIsUpdating(false);
   };
-  
+
   const cancelPhoneChange = () => {
     setPhoneConfirm(false);
     setPhoneChanged(false);
@@ -52,7 +63,7 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
 
 
   const isFormValid = () => {
-    if (!formData.name || !formData.phone) {
+    if (!formData.username || !formData.phoneNumber) {
       toast.warning("Please make sure to complete your data.", {
         autoClose: 1500,
         hideProgressBar: true,
@@ -61,7 +72,7 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
       return false;
     }
 
-    if (formData.phone.length !== 11) {
+    if (formData.phoneNumber.length !== 11) {
       toast.warning("Phone number must be 11 digits.", {
         autoClose: 1500,
         hideProgressBar: true,
@@ -120,7 +131,7 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
               isEditpassword ? (<ChangePasswordprofile
                 handleSubmit={handleSubmit}
                 formData={formData}
-                setUserData={setUserData}
+                // setUserData={setUserData}
                 setFormData={setFormData}
                 setIsEditing={setIsEditing}
                 setIsEditpassword={setIsEditpassword}
@@ -143,12 +154,12 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
                   )}
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="name" disabled value={formData.email} className=' py-2 text-gray-400 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                    <input type="text" name="email" disabled value={formData.email} className='w-3/4 py-2 text-gray-400 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <span className='text-gray-500 text-sm'> Email</span>
                   </div>
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                    <input type="text" name="username" value={formData.username} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <span className='text-gray-500 text-sm'>User Name</span>
                   </div>
 
@@ -163,7 +174,7 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
                   </div>
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="phone" maxLength='11' value={formData.phone} onChange={handlePhoneChange} className=' w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                    <input type="text" name="phoneNumber" maxLength='11' value={formData.phoneNumber} onChange={handlePhoneChange} className=' w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <span className='text-gray-500 text-sm'>phone number</span>
                   </div>
 
@@ -191,7 +202,7 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
                   )}
 
                   <div className='flex items-center justify-between mb-4 border-b-[1px] border-gray-300 cursor-pointer'>
-                    <select name="bloodType" value={formData.bloodType} onChange={handleChange}
+                    <select name="blood_type" value={formData.donation.blood_type} onChange={handleChange}
                       className=" p-3 bg-transparent border-none outline-none  focus:ring-0 font-normal text-gray-700 cursor-pointer appearance-none" required
                     >
                       <option value="">Blood Type</option>
@@ -211,8 +222,8 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
                     onClick={() => setIsEditlocation(true)}
                     className=' w-full flex items-center justify-between mb-4 border-b-[1px] border-gray-300 cursor-pointer'>
                     <div className='w-full flex items-center'>
-                      <input disabled type="text" name="governorate" value={formData.governorate} onChange={handleChange} className=' w-16 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required /> -
-                      <input disabled type="text" name="city" value={formData.city} onChange={handleChange} className=' w-36 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                      <input disabled type="text" name="conservatism" value={formData.donation.conservatism} onChange={handleChange} className=' w-16 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required /> -
+                      <input disabled type="text" name="city" value={formData.donation.city} onChange={handleChange} className=' w-36 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
                     </div>
                     <div className=' flex items-center gap-1'>
                       <span className='text-gray-500 text-sm'>Location</span>
@@ -222,11 +233,8 @@ function EditProfile({ userData, setUserData, setIsEditing }) {
 
                 </div>
               )
-
-
             )
           }
-
         </form>
       </div>
     </div>

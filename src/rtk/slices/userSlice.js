@@ -32,6 +32,7 @@ export const loginUser = createAsyncThunk(
         config
       );
 
+
       if (response.data.token) {
         localStorage.setItem("userToken", response.data.token);
       }
@@ -44,10 +45,11 @@ export const loginUser = createAsyncThunk(
 );
 
 const initialState = {
-  user: null,
+  user: [],
   loading: false,
   error: null,
   token: localStorage.getItem("userToken") || null,
+  user_id: localStorage.getItem("userid") || null,
 };
 
 const userSlice = createSlice({
@@ -55,13 +57,15 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logoutUser: (state) => {
-      state.user = null;
       state.token = null;
       localStorage.removeItem("userToken");
     },
     setUserToken: (state, action) => {
       state.token = action.payload;
       localStorage.setItem("userToken", action.payload);
+    },
+    setUserId: (state, action) => {
+      state.user_id = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -87,9 +91,10 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
         state.token = action.payload.token;
-        localStorage.setItem("userToken", action.payload.token); 
+        state.user_id = action.payload.user_id;
+        localStorage.setItem("userToken", action.payload.token);
+        localStorage.setItem("userid", action.payload.user_id);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

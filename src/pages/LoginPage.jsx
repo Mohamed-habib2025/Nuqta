@@ -65,7 +65,7 @@ function LoginPage() {
   };
 
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.users);
+  const { users, loading } = useSelector((state) => state.users);
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -82,12 +82,10 @@ function LoginPage() {
   const handleSubmitRegister = async (e) => {
     e.preventDefault();
 
-
     const AllFormData = {
       ...formData,
       scope: scope.toUpperCase(),
     };
-
     try {
       const res = await dispatch(registerUser(AllFormData)).unwrap();
       console.log("REGISTER SUCCESS:", res);
