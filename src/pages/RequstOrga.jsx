@@ -116,11 +116,11 @@ function RequstOrga() {
         </div>
       </form>
 
-      <div className="mt-6 text-center">
+      {/* <div className="mt-6 text-center">
         <span className={`px-4 py-2 rounded-full text-white text-sm font-semibold ${getStatusColor(status)}`}>
           {status}
         </span>
-      </div>
+      </div> */}
     </div>
   );
 };

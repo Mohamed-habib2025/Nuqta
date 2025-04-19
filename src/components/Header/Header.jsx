@@ -15,18 +15,20 @@ import { useLocation } from 'react-router-dom';
 import Profile from '../../pages/Profile';
 import { FaRegUser, FaRegHospital } from "react-icons/fa";
 import ReactDOMServer from "react-dom/server";
-
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserType } from '../../rtk/slices/userTypeSlice';
 
 function Header() {
 
-  const usertype = 'organization'
+  const usertyperequest = useSelector((state) => state.user.scope);
+  const dispatch = useDispatch();
 
   const navLinks = [
     { name: 'Home', to: '/' },
     { name: 'Donate', to: '/donors', protected: true },
     {
       name: 'Request',
-      to: usertype === 'organization' ? '/RequstOrganization' : '/bloodRequest',
+      to: usertyperequest === 'organization' ? '/RequstOrganization' : '/bloodRequest',
       protected: true
     },
     { name: 'About Us', to: '/#aboutus', smooth: true },
@@ -67,7 +69,6 @@ function Header() {
   const headerRef = useRef(null)
   const [open, setopen] = useState(false)
 
-  const [selecttype, setselecttype] = useState("")
 
   const handleLogin = () => {
     Swal.fire({
@@ -96,18 +97,17 @@ function Header() {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        setselecttype("user");
+        dispatch(setUserType("user"));
         navigate("/loginpage");
       } else if (result.isDenied) {
-        setselecttype("organization");
+        dispatch(setUserType("organization"));
         navigate("/loginpageorganisation");
       }
     });
 
-
   };
 
-  const user = true;
+  const user = false;
 
   const handleProtectedRoute = (event, to, linkname) => {
     if (!user) {

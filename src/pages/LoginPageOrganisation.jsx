@@ -1,16 +1,21 @@
-import React from 'react'
-import { useState } from "react";
+import React, { useState } from 'react';
 import { MdOutlineMail } from "react-icons/md";
 import governorates from "../Data/egyptLocations"
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerOrg, loginOrg } from '../rtk/slices/orgSlice';
 
 function LoginPageOrganisation() {
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
-    governorate: "",
-    city: "",
+    organizationName: '',
+    licenseNumber: '',
+    email: '',
+    password: '',
+    governorate: '',
+    city: '',
   });
 
   const [showPassword, setShowPassword] = useState({
@@ -23,6 +28,9 @@ function LoginPageOrganisation() {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
+  const { loading, error } = useSelector((state) => state.organization);
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -31,23 +39,48 @@ function LoginPageOrganisation() {
     });
   };
 
+  const handleSubmitSignUp = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await dispatch(registerOrg(formData)).unwrap();
+      console.log("REGISTER SUCCESS:", res);
+      setIsSignUp(false); 
+    } catch (error) {
+      console.error("REGISTER ERROR:", error);
+    }
+  };
+
+  const handleSubmitSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await dispatch(loginOrg({
+        email: formData.email,
+        password: formData.password
+      })).unwrap();
+      console.log("LOGIN SUCCESS:", res);
+      navigate("/");
+    } catch (error) {
+      console.error("LOGIN ERROR:", error);
+    }
+  };
+
   return (
     <div className={` w-full flex items-center justify-center sm:h-[720px] ${isSignUp ? 'h-[650px]' : 'h-[550px] '}`}>
       <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden mx-5">
         {/* Sign Up Form */}
         <div className={`absolute transition-all duration-700 bottom-0 sm:top-0 right-0 w-full sm:w-1/2 h-[70%] sm:h-full ${isSignUp ? 'opacity-100 ' : 'opacity-0 '}`}>
-          <form onSubmit={(e) => { e.preventDefault(); setIsSignUp(false); }} className="flex flex-col items-center justify-center h-full p-5 sm:p-8">
+          <form onSubmit={handleSubmitSignUp} className="flex flex-col items-center justify-center h-full p-5 sm:p-8">
             <h1 className="text-2xl font-bold mb-2">Create Account</h1>
             <span className="text-[17px] font-bold text-gray-800">or use your email for registration</span>
             <div className="space-y-2 mt-5 w-full">
-              <input type="text" placeholder="Organization Name" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
-              <input type="number" placeholder="License Number" className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+              <input type="text" name='organizationName' placeholder="Organization Name" value={formData.organizationName} onChange={handleChange} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+              <input type="number" name="licenseNumber" placeholder="License Number" value={formData.licenseNumber} onChange={handleChange} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
-                <input type="email" placeholder="Email" className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
+                <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
                 <MdOutlineMail className='text-[20px] text-gray-500 ' />
               </div>
               <div className=' p-2 bg-gray-200 rounded-lg flex items-center justify-between'>
-                <input type={showPassword.new ? "text" : "password"} placeholder="Password" className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
+                <input type={showPassword.new ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleChange} className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
                 <div className=' flex items-center justify-between w-fit cursor-pointer' onClick={() => togglePasswordVisibility("new")}>
                   <button className='text-gray-500' type='button'>
                     {showPassword.new ? <IoEyeOutline /> : <IoEyeOffOutline />}
@@ -75,16 +108,16 @@ function LoginPageOrganisation() {
 
         {/* Sign In Form */}
         <div className={`absolute transition-all duration-700 top-0 left-0 w-full sm:w-1/2 h-[50%] sm:h-full ${isSignUp ? 'opacity-0 ' : 'opacity-100'}`}>
-          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col items-center justify-center sm:h-full p-10">
+          <form onSubmit={handleSubmitSignIn} className="flex flex-col items-center justify-center sm:h-full p-10">
             <h1 className="text-2xl font-bold">Sign In</h1>
             <span className="text-[18px]">or use your email password</span>
             <div className="space-y-2 mt-2 w-full  ">
               <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
-                <input type="email" placeholder="Email" className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
+                <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
                 <MdOutlineMail className='text-[20px] text-gray-500 ' />
               </div>
               <div className=' p-2 bg-gray-200 rounded-lg flex items-center justify-between'>
-                <input type={showPassword.new ? "text" : "password"} placeholder="Password" className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
+                <input type={showPassword.new ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} placeholder="Password" className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
                 <div className=' flex items-center justify-between w-fit cursor-pointer' onClick={() => togglePasswordVisibility("new")}>
                   <button className='text-gray-500' type='button'>
                     {showPassword.new ? <IoEyeOutline /> : <IoEyeOffOutline />}

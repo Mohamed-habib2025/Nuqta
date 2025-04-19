@@ -1,9 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./slices/AuthSlice"
+import userTypeReducer from './slices/userTypeSlice'
 
+import userReducer from './slices/userSlice'
+import orgReducer from './slices/orgSlice'
+import usersReducer from './slices/usersSlice';
+import organizationsReducer from './slices/organizationsSlice';
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
+    userType: userTypeReducer,
+    user: userReducer,
+    organization: orgReducer,
+    users: usersReducer,
+    organizations: organizationsReducer,
   }
 })
