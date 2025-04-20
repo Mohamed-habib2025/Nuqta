@@ -6,9 +6,12 @@ import { HiChevronRight } from "react-icons/hi";
 import LocationPicker from './LocationPicker';
 import ChangePasswordprofile from './ChangePasswordprofile';
 import { toast } from "react-toastify";
+import { useSelector } from 'react-redux';
 
 
-function EditProfile({ user, setIsEditing }) {
+function EditProfile({ setIsEditing }) {
+
+  const { user } = useSelector(state => state.userid);
 
   const [formData, setFormData] = useState(user);
   const [isEditlocation, setIsEditlocation] = useState(false);

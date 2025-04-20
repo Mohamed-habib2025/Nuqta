@@ -111,7 +111,7 @@ function Header() {
   const token = useSelector((state) => state.user.token);
 
   const handleProtectedRoute = (event, to, linkname) => {
-    if (!user || !token) {
+    if (!token) {
       event.preventDefault();
       toast.warning("You need to login first to access this page.", {
         autoClose: 2000,

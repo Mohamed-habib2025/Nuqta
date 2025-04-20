@@ -1,13 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const REGISTER_ORG_URL = 'https://nuqta-production.up.railway.app/api/auth/register/org';
-const LOGIN_ORG_URL = 'https://nuqta-production.up.railway.app/api/auth/login/org';
 
 // register
 export const registerOrg = createAsyncThunk(
   'organization/register',
-  async (userData, { rejectWithValue }) => {
+  async (userData, thunkAPI) => {
     try {
       const state = thunkAPI.getState();
       const { userType } = state.userType;
@@ -15,10 +13,10 @@ export const registerOrg = createAsyncThunk(
         ...userData,
         userType
       }
-      const response = await axios.post(REGISTER_ORG_URL, fullData);
+      const response = await axios.post('https://nuqta-production.up.railway.app/api/auth/register/org', fullData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Registration failed");
     }
   }
 );
@@ -26,27 +24,31 @@ export const registerOrg = createAsyncThunk(
 // login
 export const loginOrg = createAsyncThunk(
   'organization/login',
-  async (loginData, { rejectWithValue, getState }) => {
+  async (credentials, thunkAPI) => {
     try {
-      const token = localStorage.getItem("userToken");
-      const config = {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : ''
-        }
-      };
-      const response = await axios.post(LOGIN_ORG_URL, loginData, config);
+      const token = localStorage.getItem("organizationToken");
+      const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+
+      const response = await axios.post('https://nuqta-production.up.railway.app/api/auth/login/org',
+        credentials, config);
+
+      if (response.data.token) {
+        localStorage.setItem("organizationToken", response.data.token);
+      }
+
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Login failed");
     }
   }
 );
 
 const initialState = {
-  org: null,
+  org: [],
   loading: false,
   error: null,
-  token: localStorage.getItem('org_token') || null,
+  token: localStorage.getItem('organizationToken') || null,
+  org_id: localStorage.getItem("orgaid") || null,
 };
 
 const organizationSlice = createSlice({
@@ -56,7 +58,15 @@ const organizationSlice = createSlice({
     logoutOrg: (state) => {
       state.org = null;
       state.token = null;
-      localStorage.removeItem('org_token');
+      localStorage.removeItem('organizationToken');
+      localStorage.removeItem('orgaid');
+    },
+    setorgToken: (state, action) => {
+      state.token = action.payload;
+      localStorage.setItem("organizationToken", action.payload);
+    },
+    setorgId: (state, action) => {
+      state.org_id = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -69,13 +79,14 @@ const organizationSlice = createSlice({
       .addCase(registerOrg.fulfilled, (state, action) => {
         state.loading = false;
         state.org = action.payload;
-        state.token = action.payload.token;
-        localStorage.setItem('org_token', action.payload.token);
+        // state.token = action.payload.token;
+        // localStorage.setItem('org_token', action.payload.token);
       })
       .addCase(registerOrg.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
+
       // Login
       .addCase(loginOrg.pending, (state) => {
         state.loading = true;
@@ -85,7 +96,8 @@ const organizationSlice = createSlice({
         state.loading = false;
         state.org = action.payload;
         state.token = action.payload.token;
-        localStorage.setItem('org_token', action.payload.token);
+        localStorage.setItem('organizationToken', action.payload.token);
+        localStorage.setItem("orgaid", action.payload.org_id);
       })
       .addCase(loginOrg.rejected, (state, action) => {
         state.loading = false;
@@ -94,6 +106,6 @@ const organizationSlice = createSlice({
   },
 });
 
-export const { logoutOrg } = organizationSlice.actions;
+export const { logoutOrg, setorgToken } = organizationSlice.actions;
 
 export default organizationSlice.reducer;

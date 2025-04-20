@@ -15,7 +15,8 @@ export const fetchUsers = createAsyncThunk(
             'Accept-Language': 'en',
           },
         }
-      );
+      )
+        console.log("🚀 Users from API:", response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(

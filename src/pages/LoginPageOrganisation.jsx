@@ -2,20 +2,24 @@ import React, { useState } from 'react';
 import { MdOutlineMail } from "react-icons/md";
 import governorates from "../Data/egyptLocations"
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerOrg, loginOrg } from '../rtk/slices/orgSlice';
+import { registerOrg, loginOrg, setorgToken } from '../rtk/slices/orgSlice';
+import { toast } from 'react-toastify';
 
 function LoginPageOrganisation() {
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
-    organizationName: '',
-    licenseNumber: '',
+    orgName: '',
     email: '',
     password: '',
-    governorate: '',
     city: '',
+    conservatism: '',
+    phoneNumber: '',
+    licenseNumber: '',
+    scope: '',
+    fcmToken: "abc123xyz"
   });
 
   const [showPassword, setShowPassword] = useState({
@@ -28,9 +32,6 @@ function LoginPageOrganisation() {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
-  const { loading, error } = useSelector((state) => state.organization);
-  const dispatch = useDispatch();
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -39,13 +40,25 @@ function LoginPageOrganisation() {
     });
   };
 
+  const Navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { scope } = useSelector((state) => state.userType);
+
   const handleSubmitSignUp = async (e) => {
     e.preventDefault();
+
+    const AllFormData = {
+      ...formData,
+      scope: scope.toUpperCase(),
+    };
+
     try {
-      const res = await dispatch(registerOrg(formData)).unwrap();
+      const res = await dispatch(registerOrg(AllFormData)).unwrap();
+      toast.success("Registration Successful");
       console.log("REGISTER SUCCESS:", res);
-      setIsSignUp(false); 
+      setIsSignUp(false);
     } catch (error) {
+      toast.error("REGISTER failed. Please try again");
       console.error("REGISTER ERROR:", error);
     }
   };
@@ -57,10 +70,19 @@ function LoginPageOrganisation() {
         email: formData.email,
         password: formData.password
       })).unwrap();
-      console.log("LOGIN SUCCESS:", res);
-      navigate("/");
+      if (res?.token) {
+        dispatch(setorgToken(res.token));
+        localStorage.setItem("organizationToken", res.token);
+        Navigate("/");
+        toast.success("LOGIN Successful");
+        console.log("LOGIN SUCCESS:", res);
+      } else {
+        toast.error("Login failed. Please try again");
+        console.error("Login failed, no token received.");
+      }
     } catch (error) {
-      console.error("LOGIN ERROR:", error);
+      const errorMessage = error?.response?.data?.message || error?.message || "An unknown error occurred.";
+      console.error("LOGIN ERROR:", errorMessage);
     }
   };
 
@@ -73,8 +95,9 @@ function LoginPageOrganisation() {
             <h1 className="text-2xl font-bold mb-2">Create Account</h1>
             <span className="text-[17px] font-bold text-gray-800">or use your email for registration</span>
             <div className="space-y-2 mt-5 w-full">
-              <input type="text" name='organizationName' placeholder="Organization Name" value={formData.organizationName} onChange={handleChange} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
-              <input type="number" name="licenseNumber" placeholder="License Number" value={formData.licenseNumber} onChange={handleChange} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+              <input type="text" name='orgName' placeholder="Organization Name" value={formData.orgName} onChange={handleChange} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+              <input type="text" name="licenseNumber" placeholder="License Number" value={formData.licenseNumber} onChange={handleChange} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+              <input type="number" name="phoneNumber" placeholder="phone Number" value={formData.phoneNumber} onChange={handleChange} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
                 <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
                 <MdOutlineMail className='text-[20px] text-gray-500 ' />
@@ -87,16 +110,16 @@ function LoginPageOrganisation() {
                   </button>
                 </div>
               </div>
-              <select name="governorate" value={formData.governorate} onChange={handleChange} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
-                <option value=""> Governorate</option>
+              <select name="conservatism" value={formData.conservatism} onChange={handleChange} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                <option value=""> conservatism</option>
                 {Object.keys(governorates).map((gov) => (
                   <option key={gov} value={gov}>{gov}</option>
                 ))}
               </select>
-              {formData.governorate && (
+              {formData.conservatism && (
                 <select name="city" value={formData.city} onChange={handleChange} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
                   <option value="">Select City</option>
-                  {governorates[formData.governorate].map((city) => (
+                  {governorates[formData.conservatism].map((city) => (
                     <option key={city} value={city}>{city}</option>
                   ))}
                 </select>

@@ -1,17 +1,14 @@
-// userid.js
+// orgid.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const fetchUserid = createAsyncThunk(
-  'profile/fetchUserid',
-  async (userId, thunkAPI) => {
+export const fetchorgid = createAsyncThunk(
+  'profile/fetchorgid',
+  async (orgId, thunkAPI) => {
     try {
-      // const state = thunkAPI.getState();
-      // const userId = state.user.user_id;
-      // const userId = localStorage.getItem('userid');
-      const token = localStorage.getItem('userToken');
+      const token = localStorage.getItem('organizationToken');
       const response = await axios.get(
-        `https://nuqta-production.up.railway.app/api/user/${userId}`,
+        `https://nuqta-production.up.railway.app/api/org/${orgId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -29,13 +26,13 @@ export const fetchUserid = createAsyncThunk(
   }
 );
 
-export const deleteUserById = createAsyncThunk(
-  'profile/deleteUserById',
-  async (userId, thunkAPI) => {
+export const deleteorgById = createAsyncThunk(
+  'profile/deleteorgById',
+  async (orgId, thunkAPI) => {
     try {
       const token = localStorage.getItem('userToken');
       const response = await axios.delete(
-        `https://nuqta-production.up.railway.app/api/user/${userId}`,
+        `https://nuqta-production.up.railway.app/api/org/${orgId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,7 +50,7 @@ export const deleteUserById = createAsyncThunk(
 );
 
 const userid = createSlice({
-  name: 'userid',
+  name: 'orgid',
   initialState: {
     user: null,
     loading: false,
@@ -62,29 +59,29 @@ const userid = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchUserid.pending, (state) => {
+      .addCase(fetchorgid.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchUserid.fulfilled, (state, action) => {
+      .addCase(fetchorgid.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
       })
-      .addCase(fetchUserid.rejected, (state, action) => {
+      .addCase(fetchorgid.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
       // delele
-      .addCase(deleteUserById.pending, (state) => {
+      .addCase(deleteorgById.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteUserById.fulfilled, (state, action) => {
+      .addCase(deleteorgById.fulfilled, (state, action) => {
         state.loading = false;
         state.user = null;
       })
-      .addCase(deleteUserById.rejected, (state, action) => {
+      .addCase(deleteorgById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

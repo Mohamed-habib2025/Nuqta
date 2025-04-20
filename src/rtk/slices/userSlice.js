@@ -6,7 +6,7 @@ export const registerUser = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const state = thunkAPI.getState();
-      const { userType } = state.userType;
+      const { userType } = state.userType.scope;
       const fullData = {
         ...userData,
         userType
@@ -14,6 +14,7 @@ export const registerUser = createAsyncThunk(
       const response = await axios.post("https://nuqta-production.up.railway.app/api/auth/register/user", fullData);
       return response.data;
     } catch (error) {
+      console.log("LOGIN ERROR:", error);
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Registration failed");
     }
   }
@@ -22,16 +23,15 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (credentials, thunkAPI) => {
+    console.log("loginUser called with:", credentials);
     try {
       const token = localStorage.getItem("userToken");
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-
       const response = await axios.post(
         "https://nuqta-production.up.railway.app/api/auth/login/user",
         credentials,
         config
       );
-
 
       if (response.data.token) {
         localStorage.setItem("userToken", response.data.token);
@@ -59,6 +59,7 @@ const userSlice = createSlice({
     logoutUser: (state) => {
       state.token = null;
       localStorage.removeItem("userToken");
+      localStorage.removeItem("userid");
     },
     setUserToken: (state, action) => {
       state.token = action.payload;

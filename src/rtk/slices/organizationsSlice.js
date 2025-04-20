@@ -5,10 +5,18 @@ export const fetchOrganizations = createAsyncThunk(
   'organizations/fetchOrganizations',
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get('https://nuqta-production.up.railway.app/api/org');
+      const token = localStorage.getItem('organizationToken') || "";
+      const response = await axios.get('https://nuqta-production.up.railway.app/api/org', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept-Language': 'en',
+        },
+      });
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to fetch organizations');
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to fetch organizations');
     }
   }
 );

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import { IoLocationOutline } from "react-icons/io5";
@@ -10,7 +11,8 @@ import male from "../Images/male.jpg";
 import EditProfile from '../components/EditProfile';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../rtk/slices/userSlice';
-import { fetchUserid } from '../rtk/slices/userid';
+import { deleteUserById, fetchUserid } from '../rtk/slices/userid';
+import { MdDeleteForever } from "react-icons/md";
 
 function Profile({ setOpenDialog }) {
 
@@ -19,15 +21,36 @@ function Profile({ setOpenDialog }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { user , loading } = useSelector(state => state.userid);
+  const { user, loading, error } = useSelector(state => state.userid);
 
+  const userId = localStorage.getItem('userid');
   useEffect(() => {
-    dispatch(fetchUserid());
+    if (userId) {
+      dispatch(fetchUserid(userId));
+      // dispatch(deleteUserById(userId));
+    }
   }, [dispatch]);
 
-  
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete the user?')) {
+      dispatch(deleteUserById(userId)).then((res) => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          alert('User deleted successfully');
+          setOpenDialog(false);
+          navigate("/loginpage");
+        } else {
+          alert('Failed to delete user: ' + res.payload);
+        }
+      });
+    }
+  };
+
   if (loading || !user) {
     return <p className=' p-10 text-green-400 text-lg'>Loading profile...</p>;
+  }
+
+  if (error) {
+    return <p className='text-red-500'>Error: {error}</p>;
   }
 
   return (
@@ -85,21 +108,30 @@ function Profile({ setOpenDialog }) {
 
               </div>
             </div>
-
+            
             <div
-              onClick={() => {
+              className=' absolute bottom-8 sm:-bottom-1 left-0 px-4 text-red-600 space-y-2'>
+              <div
+                onClick={handleDelete}
+                className='flex items-center space-x-2 cursor-pointer hover:translate-x-1 duration-300'>
+                <MdDeleteForever className='text-2xl' />
+                <span>Delete Account</span>
+              </div>
+              <div onClick={() => {
                 dispatch(logoutUser());
                 navigate("/loginpage");
                 setOpenDialog(false);
               }}
-              className=' absolute bottom-8 sm:-bottom-1 left-0 px-4 flex items-center space-x-2 text-red-600 cursor-pointer hover:translate-x-1 duration-300'>
-              <PiSignOutBold className='text-2xl' />
-              <span >Sign Out</span>
+                className='flex items-center space-x-2 cursor-pointer hover:translate-x-1 duration-300'>
+                <PiSignOutBold className='text-2xl' />
+                <span >Sign Out</span>
+              </div>
+
             </div>
 
           </div>
         ) : (
-          <EditProfile user={user} setIsEditing={setIsEditing} />
+          <EditProfile setIsEditing={setIsEditing} />
         )
       }
 

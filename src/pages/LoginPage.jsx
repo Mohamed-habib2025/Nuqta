@@ -6,13 +6,12 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser, loginUser } from "../rtk/slices/userSlice";
-import { fetchUsers } from '../rtk/slices/usersSlice';
 import { setUserToken } from '../rtk/slices/userSlice'
+import { toast } from 'react-toastify';
 
 function LoginPage() {
 
   const navigate = useNavigate()
-
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
@@ -35,6 +34,7 @@ function LoginPage() {
       conservatism: ""
     },
   });
+
   const [showPassword, setShowPassword] = useState({
     old: false,
     new: false,
@@ -47,7 +47,6 @@ function LoginPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     if (["blood_type", "donation_date", "last_donation", "amount", "payment_offered", "status", "weight", "city", "governorate"].includes(name)) {
       setFormData((prev) => ({
         ...prev,
@@ -65,17 +64,6 @@ function LoginPage() {
   };
 
   const dispatch = useDispatch();
-  const { users, loading } = useSelector((state) => state.users);
-
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (users.length > 0) {
-      console.log("🚀 Users from API:", users);
-    }
-  }, [users]);
 
   const { scope } = useSelector((state) => state.userType);
 
@@ -88,9 +76,11 @@ function LoginPage() {
     };
     try {
       const res = await dispatch(registerUser(AllFormData)).unwrap();
+      toast.success("Registration Successful");
       console.log("REGISTER SUCCESS:", res);
       setIsSignUp(false);
     } catch (error) {
+      toast.error("REGISTER failed. Please try again");
       console.error("REGISTER ERROR:", error);
     }
   };
@@ -108,8 +98,14 @@ function LoginPage() {
         dispatch(setUserToken(res.token));
         localStorage.setItem("userToken", res.token);
         navigate("/");
+        toast.success("LOGIN Successful", {
+          duration: 3000,
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
         console.log("LOGIN SUCCESS:", res);
       } else {
+        toast.error("Login failed. Please try again");
         console.error("Login failed, no token received.");
       }
     } catch (error) {
@@ -204,7 +200,7 @@ function LoginPage() {
               </div>
             </div>
             <Link to='/forgetpassword' className="text-[14px] hover:text-red-600 duration-200 text-gray-500 mt-2">Forget Your Password?</Link>
-            <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign In</button>
+            <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">{ }Sign In</button>
           </form>
         </div>
 
