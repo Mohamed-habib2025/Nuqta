@@ -52,6 +52,33 @@ export const deleteUserById = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  "users/updateUser",
+  async (updatedData, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("userToken");
+      const response = await axios.put(
+        "https://nuqta-production.up.railway.app/api/user",
+        updatedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Updated user:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Update failed:", error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Update failed"
+      );
+    }
+  }
+);
+
 const userid = createSlice({
   name: 'userid',
   initialState: {
@@ -85,6 +112,20 @@ const userid = createSlice({
         state.user = null;
       })
       .addCase(deleteUserById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // update
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

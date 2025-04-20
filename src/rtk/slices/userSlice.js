@@ -25,16 +25,15 @@ export const loginUser = createAsyncThunk(
   async (credentials, thunkAPI) => {
     console.log("loginUser called with:", credentials);
     try {
-      const token = localStorage.getItem("userToken");
-      const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
       const response = await axios.post(
         "https://nuqta-production.up.railway.app/api/auth/login/user",
-        credentials,
-        config
+        credentials
+        // config
       );
 
       if (response.data.token) {
         localStorage.setItem("userToken", response.data.token);
+        localStorage.setItem("userid", response.data.user_id);
       }
 
       return response.data;

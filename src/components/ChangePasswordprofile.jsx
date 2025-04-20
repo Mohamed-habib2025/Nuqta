@@ -6,7 +6,7 @@ import { GoCheck } from "react-icons/go";
 import Swal from 'sweetalert2';
 
 
-function ChangePasswordprofile({ formData, setFormData, setUserData, setIsEditing, setIsEditpassword }) {
+function ChangePasswordprofile({ userData, setuserData, setUserData, setIsEditing, setIsEditpassword }) {
 
 
   const [oldPassword, setOldPassword] = useState("");
@@ -39,7 +39,7 @@ function ChangePasswordprofile({ formData, setFormData, setUserData, setIsEditin
   const handleSelectChange = (e) => {
     e.preventDefault();
 
-    if (oldPassword !== formData.password) {
+    if (oldPassword !== userData.password) {
       seterroroldPassword(true);
     } else {
       seterroroldPassword(false);
@@ -51,8 +51,8 @@ function ChangePasswordprofile({ formData, setFormData, setUserData, setIsEditin
       seterrorconfirmPassword(false);
     }
 
-    if (isPasswordValid && oldPassword === formData.password && newPassword === confirmPassword) {
-      setFormData((prevData) => {
+    if (isPasswordValid && oldPassword === userData.password && newPassword === confirmPassword) {
+      setuserData((prevData) => {
         const updatedData = { ...prevData, password: newPassword };
         setUserData(updatedData);
         return updatedData;

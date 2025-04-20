@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 import { IoMail } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
+import { fetchUsers } from '../rtk/slices/usersSlice'
+import { useDispatch } from 'react-redux'
 
 const AboutUsSection = [
   {
@@ -35,6 +37,11 @@ const AboutUsSection = [
 function Home() {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   const user = false;
   const handleProtectedRoute = (e, to) => {
@@ -108,7 +115,7 @@ function Home() {
                   delay: 0.2,
                 }}
                 className='btn-bg_red px-5 sm:px-10 py-2'
-                onClick={(e)=> handleProtectedRoute(e,'/donors')}
+                onClick={(e) => handleProtectedRoute(e, '/donors')}
               >Donate blood</motion.button>
               <motion.button
                 initial={{ opacity: 0, y: 40 }}
@@ -119,7 +126,7 @@ function Home() {
                   delay: 0.4,
                 }}
                 className='border-[1px] btn-bor_red px-5 sm:px-11 py-2'
-                onClick={ (e)=> handleProtectedRoute(e,'/bloodRequest')}
+                onClick={(e) => handleProtectedRoute(e, '/bloodRequest')}
               >Blood Requests</motion.button>
             </div>
           </div>

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser, loginUser } from "../rtk/slices/userSlice";
 import { setUserToken } from '../rtk/slices/userSlice'
 import { toast } from 'react-toastify';
+// import { fetchUsers } from '../rtk/slices/usersSlice';
 
 function LoginPage() {
 
@@ -69,6 +70,11 @@ function LoginPage() {
 
   const handleSubmitRegister = async (e) => {
     e.preventDefault();
+
+    if (!scope) {
+      toast.error("Please select a user type first.");
+      return;
+    }
 
     const AllFormData = {
       ...formData,

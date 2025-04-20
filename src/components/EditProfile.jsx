@@ -6,14 +6,16 @@ import { HiChevronRight } from "react-icons/hi";
 import LocationPicker from './LocationPicker';
 import ChangePasswordprofile from './ChangePasswordprofile';
 import { toast } from "react-toastify";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUser } from '../rtk/slices/userid';
 
 
 function EditProfile({ setIsEditing }) {
 
   const { user } = useSelector(state => state.userid);
+  const dispatch = useDispatch();
 
-  const [formData, setFormData] = useState(user);
+  const [userData, setuserData] = useState(user);
   const [isEditlocation, setIsEditlocation] = useState(false);
   const [isEditpassword, setIsEditpassword] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -24,17 +26,17 @@ function EditProfile({ setIsEditing }) {
 
   useEffect(() => {
     setIsChanged(
-      formData.username !== user.username ||
-      formData.phoneNumber !== user.phoneNumber ||
-      formData.donation.blood_type !== user.donation.blood_type
+      userData.username !== user.username ||
+      userData.phoneNumber !== user.phoneNumber ||
+      userData.donation.blood_type !== user.donation.blood_type
     );
-  }, [formData, user]);
+  }, [userData, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === 'blood_type') {
-      setFormData((prevData) => ({
+      setuserData((prevData) => ({
         ...prevData,
         donation: {
           ...prevData.donation,
@@ -42,12 +44,12 @@ function EditProfile({ setIsEditing }) {
         },
       }));
     } else {
-      setFormData((prevData) => ({ ...prevData, [name]: value }));
+      setuserData((prevData) => ({ ...prevData, [name]: value }));
     }
   };
 
   const handlePhoneChange = (e) => {
-    setFormData({ ...formData, phoneNumber: e.target.value });
+    setuserData({ ...userData, phoneNumber: e.target.value });
     setPhoneChanged(true);
     setPhoneConfirm(false);
   };
@@ -66,7 +68,7 @@ function EditProfile({ setIsEditing }) {
 
 
   const isFormValid = () => {
-    if (!formData.username || !formData.phoneNumber) {
+    if (!userData.username || !userData.phoneNumber) {
       toast.warning("Please make sure to complete your data.", {
         autoClose: 1500,
         hideProgressBar: true,
@@ -75,7 +77,7 @@ function EditProfile({ setIsEditing }) {
       return false;
     }
 
-    if (formData.phoneNumber.length !== 11) {
+    if (userData.phoneNumber.length !== 11) {
       toast.warning("Phone number must be 11 digits.", {
         autoClose: 1500,
         hideProgressBar: true,
@@ -110,9 +112,11 @@ function EditProfile({ setIsEditing }) {
 
   };
 
+  const [userId] = useState(localStorage.getItem('userid'));
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    setUserData(formData);
+    dispatch(updateUser({id:userId ,userData}));
     setIsEditlocation(false);
   };
 
@@ -124,8 +128,8 @@ function EditProfile({ setIsEditing }) {
             isEditlocation ? (
               <LocationPicker
                 handleSubmit={handleSubmit}
-                formData={formData}
-                setFormData={setFormData}
+                userData={userData}
+                setuserData={setuserData}
                 setIsEditing={setIsEditing}
                 setIsEditlocation={setIsEditlocation}
                 onClose={() => setIsEditlocation(false)}
@@ -133,9 +137,9 @@ function EditProfile({ setIsEditing }) {
             ) : (
               isEditpassword ? (<ChangePasswordprofile
                 handleSubmit={handleSubmit}
-                formData={formData}
+                userData={userData}
                 // setUserData={setUserData}
-                setFormData={setFormData}
+                setuserData={setuserData}
                 setIsEditing={setIsEditing}
                 setIsEditpassword={setIsEditpassword}
                 onClose={() => setIsEditpassword(false)}
@@ -157,19 +161,19 @@ function EditProfile({ setIsEditing }) {
                   )}
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="email" disabled value={formData.email} className='w-3/4 py-2 text-gray-400 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                    <input type="text" name="email" disabled value={userData.email} className='w-3/4 py-2 text-gray-400 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <span className='text-gray-500 text-sm'> Email</span>
                   </div>
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="username" value={formData.username} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                    <input type="text" name="username" value={userData.username} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <span className='text-gray-500 text-sm'>User Name</span>
                   </div>
 
                   <div
                     onClick={() => setIsEditpassword(true)}
                     className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300 cursor-pointer'>
-                    <input type="password" name="password" value={formData.password} onChange={handleChange} className=' w-[50%] py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                    <input type="password" name="password" value={userData.password} onChange={handleChange} className=' w-[50%] py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <div className=' flex items-center gap-1'>
                       <span className='text-gray-500 text-sm'>Change Password</span>
                       <HiChevronRight className='text-lg text-gray-500' />
@@ -177,7 +181,7 @@ function EditProfile({ setIsEditing }) {
                   </div>
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="phoneNumber" maxLength='11' value={formData.phoneNumber} onChange={handlePhoneChange} className=' w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                    <input type="text" name="phoneNumber" maxLength='11' value={userData.phoneNumber} onChange={handlePhoneChange} className=' w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <span className='text-gray-500 text-sm'>phone number</span>
                   </div>
 
@@ -205,7 +209,7 @@ function EditProfile({ setIsEditing }) {
                   )}
 
                   <div className='flex items-center justify-between mb-4 border-b-[1px] border-gray-300 cursor-pointer'>
-                    <select name="blood_type" value={formData.donation.blood_type} onChange={handleChange}
+                    <select name="blood_type" value={userData.donation.blood_type} onChange={handleChange}
                       className=" p-3 bg-transparent border-none outline-none  focus:ring-0 font-normal text-gray-700 cursor-pointer appearance-none" required
                     >
                       <option value="">Blood Type</option>
@@ -225,8 +229,8 @@ function EditProfile({ setIsEditing }) {
                     onClick={() => setIsEditlocation(true)}
                     className=' w-full flex items-center justify-between mb-4 border-b-[1px] border-gray-300 cursor-pointer'>
                     <div className='w-full flex items-center'>
-                      <input disabled type="text" name="conservatism" value={formData.donation.conservatism} onChange={handleChange} className=' w-16 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required /> -
-                      <input disabled type="text" name="city" value={formData.donation.city} onChange={handleChange} className=' w-36 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
+                      <input disabled type="text" name="conservatism" value={userData.donation.conservatism} onChange={handleChange} className=' w-16 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required /> -
+                      <input disabled type="text" name="city" value={userData.donation.city} onChange={handleChange} className=' w-36 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
                     </div>
                     <div className=' flex items-center gap-1'>
                       <span className='text-gray-500 text-sm'>Location</span>

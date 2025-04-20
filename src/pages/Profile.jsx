@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import { IoLocationOutline } from "react-icons/io5";
@@ -23,13 +22,12 @@ function Profile({ setOpenDialog }) {
 
   const { user, loading, error } = useSelector(state => state.userid);
 
-  const userId = localStorage.getItem('userid');
+  const [userId] = useState(localStorage.getItem('userid'));
   useEffect(() => {
-    if (userId) {
+    if (!user && userId) {
       dispatch(fetchUserid(userId));
-      // dispatch(deleteUserById(userId));
     }
-  }, [dispatch]);
+  }, [dispatch, userId , user]);
 
   const handleDelete = () => {
     if (window.confirm('Are you sure you want to delete the user?')) {
@@ -108,15 +106,9 @@ function Profile({ setOpenDialog }) {
 
               </div>
             </div>
-            
+
             <div
-              className=' absolute bottom-8 sm:-bottom-1 left-0 px-4 text-red-600 space-y-2'>
-              <div
-                onClick={handleDelete}
-                className='flex items-center space-x-2 cursor-pointer hover:translate-x-1 duration-300'>
-                <MdDeleteForever className='text-2xl' />
-                <span>Delete Account</span>
-              </div>
+              className=' w-full flex items-center justify-between absolute bottom-8 sm:-bottom-1 left-0 px-4 text-red-600'>
               <div onClick={() => {
                 dispatch(logoutUser());
                 navigate("/loginpage");
@@ -126,7 +118,12 @@ function Profile({ setOpenDialog }) {
                 <PiSignOutBold className='text-2xl' />
                 <span >Sign Out</span>
               </div>
-
+              <div
+                onClick={handleDelete}
+                className='flex items-center space-x-2 cursor-pointer hover:-translate-x-1 duration-300'>
+                <MdDeleteForever className='text-2xl' />
+                <span>Delete Account</span>
+              </div>
             </div>
 
           </div>

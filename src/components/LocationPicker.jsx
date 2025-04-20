@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import governorates from "../Data/egyptLocations";
 import { GoCheck } from "react-icons/go";
 import { FaArrowLeft } from "react-icons/fa";
-// import Swal from 'sweetalert2';
 
-function LocationPicker({ formData, setFormData, handleSubmit, setIsEditlocation }) {
+function LocationPicker({ userData, setuserData, handleSubmit, setIsEditlocation }) {
 
 
   const [localData, setLocalData] = useState({
-    governorate: formData.governorate || "",
-    city: formData.city || "",
+    conservatism: userData.donation.conservatism || "",
+    city: userData.donation.city || "",
   });
 
   const handleSelectChange = (e) => {
@@ -17,19 +16,15 @@ function LocationPicker({ formData, setFormData, handleSubmit, setIsEditlocation
   };
 
   const handleSave = () => {
-    setFormData((prevData) => ({
+    setuserData((prevData) => ({
       ...prevData,
-      ...localData,
+      donation: {
+        ...prevData.donation,
+        conservatism: localData.conservatism,
+        city: localData.city,
+      },
     }));
-
-    // Swal.fire({
-    //   position: "center",
-    //   icon: "success",
-    //   title: "Your Password updated successfully!",
-    //   showConfirmButton: false,
-    //   timer: 2000
-    // });
-
+    setIsEditlocation(false);
   };
 
 
@@ -48,7 +43,7 @@ function LocationPicker({ formData, setFormData, handleSubmit, setIsEditlocation
 
       <div onSubmit={handleSubmit}>
         <div className=' space-y-3'>
-          <select name="governorate" value={localData.governorate} onChange={handleSelectChange}
+          <select name="conservatism" value={localData.conservatism} onChange={handleSelectChange}
             className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 " required
           >
             <option value="">Select Governorate</option>
@@ -58,12 +53,12 @@ function LocationPicker({ formData, setFormData, handleSubmit, setIsEditlocation
 
           </select>
 
-          {localData.governorate && (
+          {localData.conservatism && (
             <select name="city" value={localData.city} onChange={handleSelectChange}
               className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0" required
             >
               <option value="">Select City</option>
-              {governorates[localData.governorate].map((city) => (
+              {governorates[localData.conservatism].map((city) => (
                 <option key={city} value={city}>{city}</option>
               ))}
             </select>
