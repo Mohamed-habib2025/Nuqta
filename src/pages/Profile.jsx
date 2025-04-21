@@ -128,7 +128,7 @@ function Profile({ setOpenDialog }) {
 
           </div>
         ) : (
-          <EditProfile setIsEditing={setIsEditing} />
+          <EditProfile setIsEditing={setIsEditing} setOpenDialog={setOpenDialog} />
         )
       }
 

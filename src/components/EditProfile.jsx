@@ -10,9 +10,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../rtk/slices/userid';
 
 
-function EditProfile({ setIsEditing }) {
+function EditProfile({ setIsEditing, setOpenDialog }) {
 
   const { user } = useSelector(state => state.userid);
+
   const dispatch = useDispatch();
 
   const [userData, setuserData] = useState(user);
@@ -66,7 +67,6 @@ function EditProfile({ setIsEditing }) {
     setPhoneChanged(false);
   };
 
-
   const isFormValid = () => {
     if (!userData.username || !userData.phoneNumber) {
       toast.warning("Please make sure to complete your data.", {
@@ -116,7 +116,7 @@ function EditProfile({ setIsEditing }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateUser({id:userId ,userData}));
+    // dispatch(updateUser({ id: userId, ...userData }));
     setIsEditlocation(false);
   };
 
@@ -136,10 +136,10 @@ function EditProfile({ setIsEditing }) {
               />
             ) : (
               isEditpassword ? (<ChangePasswordprofile
-                handleSubmit={handleSubmit}
-                userData={userData}
-                // setUserData={setUserData}
-                setuserData={setuserData}
+                // handleSubmit={handleSubmit}
+                // userData={userData}
+                setOpenDialog={setOpenDialog}
+                // setuserData={setuserData}
                 setIsEditing={setIsEditing}
                 setIsEditpassword={setIsEditpassword}
                 onClose={() => setIsEditpassword(false)}
@@ -173,7 +173,7 @@ function EditProfile({ setIsEditing }) {
                   <div
                     onClick={() => setIsEditpassword(true)}
                     className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300 cursor-pointer'>
-                    <input type="password" name="password" value={userData.password} onChange={handleChange} className=' w-[50%] py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                    <div className='w-[50%] py-2 border-none bg-transparent font-normal text-[10px]'>●●●●●●●●●●●●●●●●</div>
                     <div className=' flex items-center gap-1'>
                       <span className='text-gray-500 text-sm'>Change Password</span>
                       <HiChevronRight className='text-lg text-gray-500' />

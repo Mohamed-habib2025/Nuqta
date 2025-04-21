@@ -79,6 +79,36 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const changePassword = createAsyncThunk(
+  'profile/changePassword',
+  async (data, thunkAPI) => {
+    try {
+      const token = localStorage.getItem('userToken');
+      const userId = localStorage.getItem('userid');
+      const dataSend = {
+        userId,
+        data,
+      };
+      const response = await axios.post(
+        'https://nuqta-production.up.railway.app/api/user/changePassword',
+          dataSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to change password'
+      );
+    }
+  }
+);
+
+
 const userid = createSlice({
   name: 'userid',
   initialState: {
@@ -128,7 +158,20 @@ const userid = createSlice({
       .addCase(updateUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+
+      // changepassword
+      .addCase(changePassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(changePassword.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
   },
 });
 
