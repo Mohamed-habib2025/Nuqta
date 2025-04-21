@@ -8,7 +8,7 @@ import { IoMail } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { fetchUsers } from '../rtk/slices/usersSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const AboutUsSection = [
   {
@@ -43,7 +43,8 @@ function Home() {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  const user = false;
+  const { user } = useSelector(state => state.userid);
+
   const handleProtectedRoute = (e, to) => {
     if (!user) {
       e.preventDefault();

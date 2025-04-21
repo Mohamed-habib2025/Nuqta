@@ -28,7 +28,6 @@ export const loginUser = createAsyncThunk(
       const response = await axios.post(
         "https://nuqta-production.up.railway.app/api/auth/login/user",
         credentials
-        // config
       );
 
       if (response.data.token) {

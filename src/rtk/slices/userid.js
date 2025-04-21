@@ -81,24 +81,24 @@ export const updateUser = createAsyncThunk(
 
 export const changePassword = createAsyncThunk(
   'profile/changePassword',
-  async (data, thunkAPI) => {
+  async ({ userId, oldPassword, newPassword }, thunkAPI) => {
     try {
       const token = localStorage.getItem('userToken');
-      const userId = localStorage.getItem('userid');
-      const dataSend = {
-        userId,
-        data,
-      };
       const response = await axios.post(
-        'https://nuqta-production.up.railway.app/api/user/changePassword',
-          dataSend,
+        `https://nuqta-production.up.railway.app/api/user/changePassword`,
+        null,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+          params: {
+            userId,
+            oldPassword,
+            newPassword
           },
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
       );
+      console.log("RESPONSE FROM CHANGE PASSWORD:", response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(

@@ -36,6 +36,11 @@ function LoginPage() {
     },
   });
 
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
   const [showPassword, setShowPassword] = useState({
     old: false,
     new: false,
@@ -48,7 +53,13 @@ function LoginPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (["blood_type", "donation_date", "last_donation", "amount", "payment_offered", "status", "weight", "city", "governorate"].includes(name)) {
+
+    if(name === "email" || name === "password") {
+      setLoginData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    } else if (["blood_type", "donation_date", "last_donation", "amount", "payment_offered", "status", "weight", "city", "governorate"].includes(name)) {
       setFormData((prev) => ({
         ...prev,
         donation: {
@@ -96,8 +107,8 @@ function LoginPage() {
     try {
       const res = await dispatch(
         loginUser({
-          email: formData.email,
-          password: formData.password,
+          email: loginData.email,
+          password: loginData.password,
         })
       ).unwrap();
       if (res?.token) {
@@ -109,7 +120,6 @@ function LoginPage() {
           autoClose: 2000,
           hideProgressBar: true,
         });
-        console.log("LOGIN SUCCESS:", res);
       } else {
         toast.error("Login failed. Please try again");
         console.error("Login failed, no token received.");
@@ -193,11 +203,11 @@ function LoginPage() {
             <span className="text-[18px]">or use your email password</span>
             <div className="space-y-2 mt-2 w-full">
               <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
-                <input type="email" name='email' placeholder="Email" value={formData.email} onChange={handleChange} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
+                <input type="email" name='email' placeholder="Email" value={loginData.email} onChange={handleChange} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
                 <MdOutlineMail className='text-[20px] text-gray-500 ' />
               </div>
               <div className=' py-2 px-3 bg-gray-200 rounded-lg flex items-center justify-between'>
-                <input type={showPassword.new ? "text" : "password"} name='password' placeholder="Password" value={formData.password} onChange={handleChange} className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
+                <input type={showPassword.new ? "text" : "password"} name='password' placeholder="Password" value={loginData.password} onChange={handleChange} className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
                 <div className=' flex items-center justify-between w-fit cursor-pointer' onClick={() => togglePasswordVisibility("new")}>
                   <button className='text-gray-500' type='button'>
                     {showPassword.new ? <IoEyeOutline /> : <IoEyeOffOutline />}
