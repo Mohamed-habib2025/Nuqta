@@ -58,7 +58,7 @@ function LocationPicker({ userData, setuserData, handleSubmit, setIsEditlocation
               className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0" required
             >
               <option value="">Select City</option>
-              {governorates[localData.conservatism].map((city) => (
+              {governorates[localData.conservatism]?.map((city) => (
                 <option key={city} value={city}>{city}</option>
               ))}
             </select>

@@ -9,10 +9,10 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../rtk/slices/userid';
 
-
 function EditProfile({ setIsEditing, setOpenDialog }) {
 
   const { user } = useSelector(state => state.userid);
+  console.log(user)
 
   const dispatch = useDispatch();
 
@@ -29,7 +29,9 @@ function EditProfile({ setIsEditing, setOpenDialog }) {
     setIsChanged(
       userData.username !== user.username ||
       userData.phoneNumber !== user.phoneNumber ||
-      userData.donation.blood_type !== user.donation.blood_type
+      userData.donation.blood_type !== user.donation.blood_type ||
+      userData.donation.conservatism !== user.donation.conservatism ||
+      userData.donation.city !== user.donation.city
     );
   }, [userData, user]);
 
@@ -56,6 +58,13 @@ function EditProfile({ setIsEditing, setOpenDialog }) {
   };
 
   const confirmPhoneChange = () => {
+
+    if (userData.phoneNumber === user.phoneNumber) {
+      setPhoneConfirm(false);
+      setPhoneChanged(false);
+      return;
+    }
+
     setPhoneConfirm(true);
     setPhoneChanged(false);
     setIsChanged(true);
@@ -92,32 +101,59 @@ function EditProfile({ setIsEditing, setOpenDialog }) {
         hideProgressBar: true,
         className: "text-red-500 font-bold"
       });
-      return;
+      return false;
     }
 
     return true;
   }
 
   const isupdate = () => {
+    if (isFormValid()) {
+      setIsUpdating(true);
+      dispatch(updateUser(userData)).unwrap()
+        .then(() => {
+          setIsUpdating(false);
+          setIsEditing(false);
+        })
+        .catch((error) => {
+          console.error("Update failed:", error);
+          setIsUpdating(false);
+        });
+    } else {
+      setIsEditing(true);
+    }
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!isChanged) {
+      toast.info("No changes detected to update.", {
+        autoClose: 1500,
+        hideProgressBar: true,
+        className: "text-blue-500 font-bold"
+      });
+      return;
+    }
 
     if (isFormValid()) {
       setIsUpdating(true);
-      setTimeout(() => {
-        setIsUpdating(false)
-        setIsEditing(false)
-      }, 1000);
-    } else {
-      setIsEditing(true)
+      try {
+        const res = await dispatch(updateUser(userData)).unwrap();
+        toast.success("Profile updated successfully!", {
+          autoClose: 1500,
+          className: "text-green-500 font-bold"
+        });
+        setIsEditing(false);
+      } catch (error) {
+        console.error("Update failed:", error);
+        toast.error(error || "Something went wrong", {
+          autoClose: 1500,
+          className: "text-red-500 font-bold"
+        });
+      }
     }
-
-  };
-
-  const [userId] = useState(localStorage.getItem('userid'));
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // dispatch(updateUser({ id: userId, ...userData }));
-    setIsEditlocation(false);
   };
 
   return (
@@ -166,7 +202,7 @@ function EditProfile({ setIsEditing, setOpenDialog }) {
                   </div>
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="username" value={userData.username} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                    <input autoComplete="off" type="text" name="username" value={userData.username} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <span className='text-gray-500 text-sm'>User Name</span>
                   </div>
 
@@ -181,7 +217,7 @@ function EditProfile({ setIsEditing, setOpenDialog }) {
                   </div>
 
                   <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                    <input type="text" name="phoneNumber" maxLength='11' value={userData.phoneNumber} onChange={handlePhoneChange} className=' w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                    <input autoComplete="off" type="text" name="phoneNumber" maxLength='11' value={userData.phoneNumber} onChange={handlePhoneChange} className=' w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                     <span className='text-gray-500 text-sm'>phone number</span>
                   </div>
 
@@ -229,7 +265,7 @@ function EditProfile({ setIsEditing, setOpenDialog }) {
                     onClick={() => setIsEditlocation(true)}
                     className=' w-full flex items-center justify-between mb-4 border-b-[1px] border-gray-300 cursor-pointer'>
                     <div className='w-full flex items-center'>
-                      <input disabled type="text" name="conservatism" value={userData.donation.conservatism} onChange={handleChange} className=' w-16 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required /> -
+                      <input style={{ width: `${userData.donation.conservatism.length + 1}ch` }} disabled type="text" name="conservatism" value={userData.donation.conservatism} onChange={handleChange} className=' p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />-
                       <input disabled type="text" name="city" value={userData.donation.city} onChange={handleChange} className=' w-36 p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' required />
                     </div>
                     <div className=' flex items-center gap-1'>

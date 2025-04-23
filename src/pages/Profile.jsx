@@ -7,6 +7,8 @@ import { MdEdit } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 import male from "../Images/male.jpg";
+import female from "../Images/female.png";
+import orga from "../Images/Hospital.png";
 import EditProfile from '../components/EditProfile';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../rtk/slices/userSlice';
@@ -16,6 +18,7 @@ import { MdDeleteForever } from "react-icons/md";
 function Profile({ setOpenDialog }) {
 
   const [isEditing, setIsEditing] = useState(false);
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,7 +30,7 @@ function Profile({ setOpenDialog }) {
     if (!user && userId) {
       dispatch(fetchUserid(userId));
     }
-  }, [dispatch, userId , user]);
+  }, [dispatch, userId, user]);
 
   const handleDelete = () => {
     if (window.confirm('Are you sure you want to delete the user?')) {
@@ -43,7 +46,7 @@ function Profile({ setOpenDialog }) {
     }
   };
 
-  if (loading || !user) {
+  if ((!user || loading) && !isEditing) {
     return <p className=' p-10 text-green-400 text-lg'>Loading profile...</p>;
   }
 
@@ -73,7 +76,15 @@ function Profile({ setOpenDialog }) {
                 <div onClick={() => setIsEditing(true)} className=' cursor-pointer text-2xl absolute bottom-4 left-1 w-8 h-8 flex items-center justify-center rounded-full bg-slate-200'>
                   <MdEdit className=' text-2xl ' />
                 </div>
-                <img src={male} alt="Profile phote" className='w-44 h-44 rounded-full' />
+                {/* {
+                  user.donation.status == "VALID" ? <div className=' bg-green-400 cursor-pointer text-2xl absolute top-4 right-4 w-5 h-5 flex items-center justify-center rounded-full'></div> :
+                    <div className=' bg-red-600 cursor-pointer text-2xl absolute top-4 right-4 w-5 h-5 flex items-center justify-center rounded-full'></div>
+                } */}
+                <img
+                  src={user.scope === "USER" ? (user.gender === "MALE" ? male : female) : (orga)}
+                  className={`w-44 h-44 rounded-full border-[3px] ${user.donation.status === "VALID" ? " border-green-500" : "border-red-500"}`}
+                  alt="Profile phote"
+                />
               </div>
 
               <p className='text-xl text-blue-600 font-bold'>{user.username}</p>
@@ -102,10 +113,25 @@ function Profile({ setOpenDialog }) {
                   <span>0</span>
                 </p>
               </div>
-              <div>
+            </div>
 
+            <div className="mt-8 px-6 flex flex-col items-center gap-4 text-lg">
+              <div className="flex items-center gap-1">
+                <span className="inline-block h-3 w-3 bg-green-500 rounded-full border border-green-700"></span>
+                <span className="text-gray-700">Valid - Eligible to donate</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="inline-block h-3 w-3 bg-red-500 rounded-full border border-red-700"></span>
+                <span className="text-gray-700">Not Valid - Cannot donate</span>
               </div>
             </div>
+
+            {/* <div className='mt-8 px-6 w-full'>
+              <div className=' relative flex items-center space-x-10 w-[100px]'> 
+                <span>Valid</span>
+                <span className='h-1 w-8 bg-green-400 absolute'></span>
+              </div>
+            </div> */}
 
             <div
               className=' w-full flex items-center justify-between absolute bottom-8 sm:-bottom-1 left-0 px-4 text-red-600'>

@@ -19,6 +19,8 @@ function ChangePasswordprofile({ setIsEditpassword, setOpenDialog }) {
   const [confirmPassword, setconfirmPassword] = useState("");
   const [erroroldPassword, seterroroldPassword] = useState(false);
   const [errorconfirmPassword, seterrorconfirmPassword] = useState(false);
+  const [samePasswordError, setSamePasswordError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [showPassword, setShowPassword] = useState({
     old: false,
@@ -40,13 +42,22 @@ function ChangePasswordprofile({ setIsEditpassword, setOpenDialog }) {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
-  const userId = localStorage.getItem('userid');
+  useEffect(() => {
+    if (oldPassword !== newPassword && samePasswordError) {
+      setSamePasswordError(false);
+    }
+  }, [oldPassword, newPassword]);
 
   const handleSelectChange = (e) => {
     e.preventDefault();
 
+    if (isLoading) return;
+
+    setIsLoading(true);
+
     if (newPassword !== confirmPassword) {
       seterrorconfirmPassword(true);
+      setIsLoading(false);
       return;
     } else {
       seterrorconfirmPassword(false);
@@ -54,7 +65,16 @@ function ChangePasswordprofile({ setIsEditpassword, setOpenDialog }) {
 
     if (!isPasswordValid) {
       toast.error("New password does not meet the requirements");
+      setIsLoading(false);
       return;
+    }
+
+    if (oldPassword === newPassword) {
+      setSamePasswordError(true);
+      setIsLoading(false);
+      return;
+    } else {
+      setSamePasswordError(false);
     }
 
     const userId = Number(localStorage.getItem('userid'));
@@ -74,11 +94,13 @@ function ChangePasswordprofile({ setIsEditpassword, setOpenDialog }) {
         localStorage.removeItem('userid');
         navigate("/loginpage");
         setOpenDialog(false);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log("Error:", error);
         toast.error("Failed to change password");
         seterroroldPassword(true);
+        setIsLoading(false);
       });
   };
 
@@ -98,6 +120,8 @@ function ChangePasswordprofile({ setIsEditpassword, setOpenDialog }) {
           </button>
         </div>
 
+        {isLoading && <p className="px-2 text-green-400 ">Updating Password...</p>}
+
         {
           erroroldPassword && (<p className='text-red-600 px-2'>The old password is not correct!.
           </p>)
@@ -105,6 +129,11 @@ function ChangePasswordprofile({ setIsEditpassword, setOpenDialog }) {
         {
           errorconfirmPassword && (<p className='text-red-600 px-2'>  The new password is not equal confirm password !</p>)
         }
+        {samePasswordError && (
+          <p className='text-red-600 px-2'>
+            The new password must be different from the old password!
+          </p>
+        )}
 
         <div className=' flex items-center justify-between border-b-[1px]'>
           <input
