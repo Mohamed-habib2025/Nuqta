@@ -8,10 +8,10 @@ export const registerOrg = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const state = thunkAPI.getState();
-      const { userType } = state.userType;
+      const { userType } = state.userType.scope;
       const fullData = {
         ...userData,
-        userType
+        scope : userType
       }
       const response = await axios.post('https://nuqta-production.up.railway.app/api/auth/register/org', fullData);
       return response.data;
@@ -26,14 +26,13 @@ export const loginOrg = createAsyncThunk(
   'organization/login',
   async (credentials, thunkAPI) => {
     try {
-      const token = localStorage.getItem("organizationToken");
-      const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-
       const response = await axios.post('https://nuqta-production.up.railway.app/api/auth/login/org',
-        credentials, config);
+        credentials
+      );
 
       if (response.data.token) {
         localStorage.setItem("organizationToken", response.data.token);
+        localStorage.setItem("orgaid", response.data.org_id);
       }
 
       return response.data;
@@ -58,6 +57,7 @@ const organizationSlice = createSlice({
     logoutOrg: (state) => {
       state.org = null;
       state.token = null;
+      state.org_id = null;
       localStorage.removeItem('organizationToken');
       localStorage.removeItem('orgaid');
     },
@@ -79,8 +79,6 @@ const organizationSlice = createSlice({
       .addCase(registerOrg.fulfilled, (state, action) => {
         state.loading = false;
         state.org = action.payload;
-        // state.token = action.payload.token;
-        // localStorage.setItem('org_token', action.payload.token);
       })
       .addCase(registerOrg.rejected, (state, action) => {
         state.loading = false;
@@ -94,8 +92,9 @@ const organizationSlice = createSlice({
       })
       .addCase(loginOrg.fulfilled, (state, action) => {
         state.loading = false;
-        state.org = action.payload;
         state.token = action.payload.token;
+        state.org_id = action.payload.org_id;
+        state.org = action.payload;
         localStorage.setItem('organizationToken', action.payload.token);
         localStorage.setItem("orgaid", action.payload.org_id);
       })

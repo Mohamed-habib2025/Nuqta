@@ -28,7 +28,7 @@ function Header() {
     { name: 'Donate', to: '/donors', protected: true },
     {
       name: 'Request',
-      to: usertyperequest === 'organization' ? '/RequstOrganization' : '/bloodRequest',
+      to: usertyperequest === 'ORGANIZATION' ? '/RequstOrganization' : '/bloodRequest',
       protected: true
     },
     { name: 'About Us', to: '/#aboutus', smooth: true },
@@ -57,7 +57,10 @@ function Header() {
   // start Active link 
   const Location = useLocation();
   const [activebtn, setActivebtn] = useState(Location.pathname);
-  const getButtonClasses = (active) => (activebtn === active ? 'text-red-600' : '');
+
+  const getButtonClasses = (active) => {
+    return (navLinks && navLinks.length > 0 && activebtn === active) ? 'text-red-600' : '';
+  };
 
   useEffect(() => {
     setActivebtn(Location.pathname + Location.hash);
@@ -97,18 +100,21 @@ function Header() {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(setUserType("user"));
+        dispatch(setUserType("USER"));
+        localStorage.setItem("scope", "USER");
         navigate("/loginpage");
       } else if (result.isDenied) {
-        dispatch(setUserType("organization"));
+        dispatch(setUserType("ORGANIZATION"));
+        localStorage.setItem("scope", "ORGANIZATION");
         navigate("/loginpageorganisation");
       }
     });
-
   };
 
-  const user = useSelector((state) => state.userid);
-  const token = useSelector((state) => state.user.token);
+  const token = useSelector((state) =>
+    state.user.token || state.organization.token
+  );
+
 
   const handleProtectedRoute = (event, to, linkname) => {
     if (!token) {
@@ -171,7 +177,7 @@ function Header() {
 
           <div className="flex">
             <div className=' flex items-center space-x-5 '>
-              {user && token ?
+              {token ?
                 <div>
                   <CgProfile onClick={handleProfileClick} className=' cursor-pointer text-2xl' />
                 </div>

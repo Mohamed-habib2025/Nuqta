@@ -17,11 +17,14 @@ function ChangePasswordprofile({ setIsEditpassword, setOpenDialog }) {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
-  const [erroroldPassword, seterroroldPassword] = useState(false);
-  const [errorconfirmPassword, seterrorconfirmPassword] = useState(false);
-  const [samePasswordError, setSamePasswordError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
+  const [errors, setErrors] = useState({
+    oldPassword: false,
+    confirmPassword: false,
+    samePassword: false,
+    rules: false
+  });
   const [showPassword, setShowPassword] = useState({
     old: false,
     new: false,
@@ -42,53 +45,37 @@ function ChangePasswordprofile({ setIsEditpassword, setOpenDialog }) {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
-  useEffect(() => {
-    if (oldPassword !== newPassword && samePasswordError) {
-      setSamePasswordError(false);
-    }
-  }, [oldPassword, newPassword]);
-
-  const handleSelectChange = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (isLoading) return;
-
     setIsLoading(true);
 
-    if (newPassword !== confirmPassword) {
-      seterrorconfirmPassword(true);
-      setIsLoading(false);
-      return;
-    } else {
-      seterrorconfirmPassword(false);
-    }
+    const newErrors = {
+      oldPassword: false,
+      confirmPassword: newPassword !== confirmPassword,
+      samePassword: oldPassword === newPassword,
+      rules: !isPasswordValid,
+    };
 
-    if (!isPasswordValid) {
-      toast.error("New password does not meet the requirements");
-      setIsLoading(false);
-      return;
-    }
+    setErrors(newErrors);
 
-    if (oldPassword === newPassword) {
-      setSamePasswordError(true);
+    const hasErrors = Object.values(newErrors).some(Boolean);
+    if (hasErrors) {
       setIsLoading(false);
       return;
-    } else {
-      setSamePasswordError(false);
     }
 
     const userId = Number(localStorage.getItem('userid'));
     if (!userId || isNaN(userId)) {
       toast.error("User ID is missing or invalid");
+      setIsLoading(false);
       return;
     }
 
-    dispatch(changePassword({
-      userId,
-      oldPassword,
-      newPassword
-    })).unwrap()
-      .then((res) => {
+    dispatch(changePassword({ userId, oldPassword, newPassword }))
+      .unwrap()
+      .then(() => {
         toast.success("Password changed successfully");
         localStorage.removeItem('userToken');
         localStorage.removeItem('userid');
@@ -96,10 +83,8 @@ function ChangePasswordprofile({ setIsEditpassword, setOpenDialog }) {
         setOpenDialog(false);
         setIsLoading(false);
       })
-      .catch((error) => {
-        console.log("Error:", error);
-        toast.error("Failed to change password");
-        seterroroldPassword(true);
+      .catch(() => {
+        setErrors(prev => ({ ...prev, oldPassword: true }));
         setIsLoading(false);
       });
   };
@@ -115,25 +100,17 @@ function ChangePasswordprofile({ setIsEditpassword, setOpenDialog }) {
             <FaArrowLeft className='text-lg cursor-pointer' onClick={() => setIsEditpassword(false)} />
             <span className='text-xl'>Change Password</span>
           </div>
-          <button onClick={handleSelectChange} >
+          <button onClick={handleSubmit} >
             <GoCheck className=' cursor-pointer text-3xl text-[#212245] ' />
           </button>
         </div>
 
         {isLoading && <p className="px-2 text-green-400 ">Updating Password...</p>}
 
-        {
-          erroroldPassword && (<p className='text-red-600 px-2'>The old password is not correct!.
-          </p>)
-        }
-        {
-          errorconfirmPassword && (<p className='text-red-600 px-2'>  The new password is not equal confirm password !</p>)
-        }
-        {samePasswordError && (
-          <p className='text-red-600 px-2'>
-            The new password must be different from the old password!
-          </p>
-        )}
+        {errors.oldPassword && <p className='text-red-600 px-2'>The old password is not correct!.</p>}
+        {errors.confirmPassword && <p className='text-red-600 px-2'>Passwords do not match!</p>}
+        {errors.samePassword && <p className='text-red-600 px-2'>Passwords must be different!</p>}
+        {errors.rules && <p className='text-red-600 px-2'>Password doesn't meet requirements!</p>}
 
         <div className=' flex items-center justify-between border-b-[1px]'>
           <input

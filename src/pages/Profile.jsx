@@ -14,44 +14,84 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../rtk/slices/userSlice';
 import { deleteUserById, fetchUserid } from '../rtk/slices/userid';
 import { MdDeleteForever } from "react-icons/md";
+import { deleteorgById, fetchorgid } from '../rtk/slices/orgid';
+import { logoutOrg } from '../rtk/slices/orgSlice';
+import Swal from "sweetalert2";
+import { setUserType } from '../rtk/slices/userTypeSlice';
 
 function Profile({ setOpenDialog }) {
 
   const [isEditing, setIsEditing] = useState(false);
-
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const { user, loading, error } = useSelector(state => state.userid);
-
+  const scope = useSelector((state) => state.userType.scope);
+  const { user, loadinguser } = useSelector(state => state.userid);
+  const { org, loadingorg } = useSelector(state => state.orgid);
   const [userId] = useState(localStorage.getItem('userid'));
+  const [orgId] = useState(localStorage.getItem('orgaid'));
+
   useEffect(() => {
-    if (!user && userId) {
+    if (userId) {
       dispatch(fetchUserid(userId));
     }
-  }, [dispatch, userId, user]);
+  }, [dispatch, userId]);
 
-  const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete the user?')) {
-      dispatch(deleteUserById(userId)).then((res) => {
-        if (res.meta.requestStatus === 'fulfilled') {
-          alert('User deleted successfully');
-          setOpenDialog(false);
-          navigate("/loginpage");
-        } else {
-          alert('Failed to delete user: ' + res.payload);
-        }
+  useEffect(() => {
+    if (orgId) {
+      dispatch(fetchorgid(orgId));
+    }
+  }, [dispatch, orgId]);
+
+  const handleDelete = async () => {
+    const result = await Swal.fire({
+      title: "Are you sure you want to delete the account?",
+      showCancelButton: true,
+      confirmButtonColor: "#e3342f",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Yes",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      if (scope === "USER") {
+        await dispatch(deleteUserById(userId)).unwrap();
+        localStorage.removeItem("userid")
+        localStorage.removeItem("userToken")
+      } else {
+        await dispatch(deleteorgById(orgId)).unwrap();
+        localStorage.removeItem("orgaid")
+        localStorage.removeItem("organizationToken")
+      }
+
+      localStorage.removeItem("scope")
+      await Swal.fire({
+        title: "Deleted!",
+        text: "User has been deleted successfully.",
+        icon: "success",
+      });
+
+      setOpenDialog(false);
+      navigate("/");
+    } catch (error) {
+      await Swal.fire({
+        title: "Failed!",
+        text: `Failed to delete user: ${error?.message || error}`,
+        icon: "error",
       });
     }
   };
 
-  if ((!user || loading) && !isEditing) {
-    return <p className=' p-10 text-green-400 text-lg'>Loading profile...</p>;
-  }
+  const handlesignout = () => {
+    scope === 'USER' ? dispatch(logoutUser()) : dispatch(logoutOrg())
+    setOpenDialog(false);
+    navigate("/");
+    localStorage.removeItem("scope");
+  };
 
-  if (error) {
-    return <p className='text-red-500'>Error: {error}</p>;
+
+  if ((scope === 'USER' && (!user || loadinguser)) || (scope === 'ORGANIZATION' && (!org || loadingorg))) {
+    return <p className=' p-10 text-green-400 text-lg'>Loading profile...</p>;
   }
 
   return (
@@ -71,75 +111,100 @@ function Profile({ setOpenDialog }) {
               />
             </div>
 
-            <div className='flex flex-col items-center justify-center gap-5'>
-              <div className=' relative'>
-                <div onClick={() => setIsEditing(true)} className=' cursor-pointer text-2xl absolute bottom-4 left-1 w-8 h-8 flex items-center justify-center rounded-full bg-slate-200'>
-                  <MdEdit className=' text-2xl ' />
+            {
+              scope === "USER" ? (
+                <div className='flex flex-col items-center justify-center gap-5'>
+                  <div className=' relative'>
+                    <div onClick={() => setIsEditing(true)} className=' cursor-pointer text-2xl absolute bottom-4 left-1 w-8 h-8 flex items-center justify-center rounded-full bg-slate-200'>
+                      <MdEdit className=' text-2xl ' />
+                    </div>
+                    <img
+                      src={user.gender === "MALE" ? male : female}
+                      className={`w-44 h-44 rounded-full border-[4px] ${user.donation.status === "VALID" ? " border-green-400" : "border-red-500"}`}
+                      alt="Profile phote"
+                    />
+                  </div>
+
+                  <p className={`text-xl text-blue-600 font-bold ${user.donation.status === "VALID" ? "text-green-500" : " text-red-500"} `}>{user.username}</p>
+
+                  <div className='flex items-center gap-2'>
+                    <IoLocationOutline className={`text-3xl ${user.donation.status === "VALID" ? "text-green-500" : " text-red-500"}`} />
+                    <p className='text-lg'><span>{user.donation.conservatism}</span> - <span>{user.donation.city}</span> </p>
+                  </div>
+
+                  <div className='flex items-center gap-2'>
+                    <LuPhone className={`text-2xl ${user.donation.status === "VALID" ? "text-green-500" : " text-red-500"}`} />
+                    <span className='text-lg'>{user.phoneNumber}</span>
+                  </div>
+
+                  <div className='mt-2 flex items-center space-x-2'>
+                    <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500" : "border-red-300 bg-red-200 text-red-500"}`}>
+                      <span>Donate</span>
+                      <span>0</span>
+                    </p>
+                    <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500" : "border-red-300 bg-red-200 text-red-500"}`}>
+                      <span>Blood Type</span>
+                      <span>{user.donation.blood_type}</span>
+                    </p>
+                    <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500" : "border-red-300 bg-red-200 text-red-500"}`}>
+                      <span>Requests</span>
+                      <span>0</span>
+                    </p>
+                  </div>
+
+                  <div className="mt-8 px-6 flex flex-col items-center gap-4 text-lg">
+                    <div className="flex items-center gap-1">
+                      <span className="inline-block h-3 w-3 bg-green-400 rounded-full border border-green-700"></span>
+                      <span className="text-gray-700">Valid - Eligible to donate</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="inline-block h-3 w-3 bg-red-400 rounded-full border border-red-700"></span>
+                      <span className="text-gray-700">Not Valid - Cannot donate</span>
+                    </div>
+                  </div>
                 </div>
-                {/* {
-                  user.donation.status == "VALID" ? <div className=' bg-green-400 cursor-pointer text-2xl absolute top-4 right-4 w-5 h-5 flex items-center justify-center rounded-full'></div> :
-                    <div className=' bg-red-600 cursor-pointer text-2xl absolute top-4 right-4 w-5 h-5 flex items-center justify-center rounded-full'></div>
-                } */}
-                <img
-                  src={user.scope === "USER" ? (user.gender === "MALE" ? male : female) : (orga)}
-                  className={`w-44 h-44 rounded-full border-[3px] ${user.donation.status === "VALID" ? " border-green-500" : "border-red-500"}`}
-                  alt="Profile phote"
-                />
-              </div>
+              ) : (
+                <div className='flex flex-col items-center justify-center gap-5'>
+                  <div className=' relative'>
+                    <div onClick={() => setIsEditing(true)} className=' cursor-pointer text-2xl absolute bottom-4 left-1 w-8 h-8 flex items-center justify-center rounded-full bg-slate-200'>
+                      <MdEdit className=' text-2xl ' />
+                    </div>
+                    <img
+                      src={orga}
+                      className='w-44 h-44 rounded-full border'
+                      alt="Profile phote"
+                    />
+                  </div>
 
-              <p className='text-xl text-blue-600 font-bold'>{user.username}</p>
+                  <p className={`text-xl text-blue-600 font-bold`}>{org.orgName}</p>
 
-              <div className='flex items-center gap-2'>
-                <IoLocationOutline className='text-3xl text-red-600' />
-                <p className='text-lg'><span>{user.donation.conservatism}</span> - <span>{user.donation.city}</span> </p>
-              </div>
+                  <div className='flex items-center gap-2'>
+                    <IoLocationOutline className='text-3xl text-blue-500' />
+                    <p className='text-lg'><span>{org.conservatism}</span> - <span>{org.city}</span> </p>
+                  </div>
 
-              <div className='flex items-center gap-2'>
-                <LuPhone className='text-2xl text-red-600' />
-                <span className='text-lg'>{user.phoneNumber}</span>
-              </div>
+                  <div className='flex items-center gap-2'>
+                    <LuPhone className='text-2xl text-blue-500' />
+                    <span className='text-lg'>{org.phoneNumber}</span>
+                  </div>
 
-              <div className='mt-2 flex items-center space-x-2'>
-                <p className=' w-28 p-2 text-red-500 flex flex-col items-center bg-red-200 border-[2px] border-red-300 rounded-lg'>
-                  <span>Donate</span>
-                  <span>0</span>
-                </p>
-                <p className=' w-28 p-2 text-red-500 flex flex-col items-center bg-red-200 border-[2px] border-red-300 rounded-lg'>
-                  <span>Blood Type</span>
-                  <span>{user.donation.blood_type}</span>
-                </p>
-                <p className=' w-28 p-2 text-red-500 flex flex-col items-center bg-red-200 border-[2px] border-red-300 rounded-lg'>
-                  <span>Requests</span>
-                  <span>0</span>
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-8 px-6 flex flex-col items-center gap-4 text-lg">
-              <div className="flex items-center gap-1">
-                <span className="inline-block h-3 w-3 bg-green-500 rounded-full border border-green-700"></span>
-                <span className="text-gray-700">Valid - Eligible to donate</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="inline-block h-3 w-3 bg-red-500 rounded-full border border-red-700"></span>
-                <span className="text-gray-700">Not Valid - Cannot donate</span>
-              </div>
-            </div>
-
-            {/* <div className='mt-8 px-6 w-full'>
-              <div className=' relative flex items-center space-x-10 w-[100px]'> 
-                <span>Valid</span>
-                <span className='h-1 w-8 bg-green-400 absolute'></span>
-              </div>
-            </div> */}
+                  <div className='mt-2 flex items-center space-x-2'>
+                    <p className='w-28 p-2 flex flex-col items-center border-[2px] rounded-lg  border-blue-300 bg-blue-200 text-blue-500'>
+                      <span>Requests</span>
+                      <span>0</span>
+                    </p>
+                    <p className='w-28 p-2 flex flex-col items-center border-[2px] rounded-lg  border-blue-300 bg-blue-200 text-blue-500'>
+                      <span>Donate</span>
+                      <span>0</span>
+                    </p>
+                  </div>
+                </div>
+              )
+            }
 
             <div
               className=' w-full flex items-center justify-between absolute bottom-8 sm:-bottom-1 left-0 px-4 text-red-600'>
-              <div onClick={() => {
-                dispatch(logoutUser());
-                navigate("/loginpage");
-                setOpenDialog(false);
-              }}
+              <div onClick={handlesignout}
                 className='flex items-center space-x-2 cursor-pointer hover:translate-x-1 duration-300'>
                 <PiSignOutBold className='text-2xl' />
                 <span >Sign Out</span>
@@ -154,7 +219,7 @@ function Profile({ setOpenDialog }) {
 
           </div>
         ) : (
-          <EditProfile setIsEditing={setIsEditing} setOpenDialog={setOpenDialog} />
+          <EditProfile setIsEditing={setIsEditing} setOpenDialog={setOpenDialog} scope={scope} />
         )
       }
 

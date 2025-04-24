@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const userTypeSlice = createSlice({
   name:'userType',
   initialState:{
-    scope:null,
+    scope:localStorage.getItem("scope") || null,
   },
   reducers:{
     setUserType:(state , action) => {

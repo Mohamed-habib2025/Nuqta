@@ -1,19 +1,25 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userTypeReducer from './slices/userTypeSlice'
-
-import userReducer from './slices/userSlice'
-import orgReducer from './slices/orgSlice'
 import usersReducer from './slices/usersSlice';
-import organizationsReducer from './slices/organizationsSlice';
+import userReducer from './slices/userSlice'
 import useridReducer from './slices/userid';
+import organizationsReducer from './slices/organizationsSlice';
+import orgReducer from './slices/orgSlice'
+import orgidReducer from './slices/orgid'
+
+// import requestsUser from './slices/RequestsUser';
 
 export const store = configureStore({
   reducer: {
     userType: userTypeReducer,
+    users: usersReducer,
     user: userReducer,
     userid: useridReducer,
-    organization: orgReducer,
-    users: usersReducer,
     organizations: organizationsReducer,
+    organization: orgReducer,
+    orgid: orgidReducer,
+
+
+    // requestsUser:requestsUser,
   }
 })

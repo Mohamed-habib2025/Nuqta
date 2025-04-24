@@ -3,12 +3,21 @@ import governorates from "../Data/egyptLocations";
 import { GoCheck } from "react-icons/go";
 import { FaArrowLeft } from "react-icons/fa";
 
-function LocationPicker({ userData, setuserData, handleSubmit, setIsEditlocation }) {
+function LocationPicker({ userData, setuserData, handleSubmit, setIsEditlocation, scope }) {
 
+  const [localData, setLocalData] = useState(() => {
 
-  const [localData, setLocalData] = useState({
-    conservatism: userData.donation.conservatism || "",
-    city: userData.donation.city || "",
+    if (scope === "USER") {
+      return {
+        conservatism: userData?.donation?.conservatism || "",
+        city: userData?.donation?.city || "",
+      };
+    } else {
+      return {
+        conservatism: userData?.conservatism || "",
+        city: userData?.city || "",
+      };
+    }
   });
 
   const handleSelectChange = (e) => {
@@ -16,17 +25,25 @@ function LocationPicker({ userData, setuserData, handleSubmit, setIsEditlocation
   };
 
   const handleSave = () => {
-    setuserData((prevData) => ({
-      ...prevData,
-      donation: {
-        ...prevData.donation,
+
+    if (scope === "USER") {
+      setuserData((prevData) => ({
+        ...prevData,
+        donation: {
+          ...prevData.donation,
+          conservatism: localData.conservatism,
+          city: localData.city,
+        },
+      }));
+    } else {
+      setuserData((prevData) => ({
+        ...prevData,
         conservatism: localData.conservatism,
         city: localData.city,
-      },
-    }));
+      }));
+    }
     setIsEditlocation(false);
   };
-
 
   return (
     <div>
@@ -41,30 +58,59 @@ function LocationPicker({ userData, setuserData, handleSubmit, setIsEditlocation
         </button>
       </div>
 
-      <div onSubmit={handleSubmit}>
-        <div className=' space-y-3'>
-          <select name="conservatism" value={localData.conservatism} onChange={handleSelectChange}
-            className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 " required
-          >
-            <option value="">Select Governorate</option>
-            {Object.keys(governorates).map((gov) => (
-              <option key={gov} value={gov}>{gov}</option>
-            ))}
+      {
+        scope === "USER" ?
+          <div onSubmit={handleSubmit}>
+            <div className=' space-y-3'>
+              <select name="conservatism" value={localData.conservatism} onChange={handleSelectChange}
+                className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 " required
+              >
+                <option value="">Select Governorate</option>
+                {Object.keys(governorates).map((gov) => (
+                  <option key={gov} value={gov}>{gov}</option>
+                ))}
 
-          </select>
+              </select>
 
-          {localData.conservatism && (
-            <select name="city" value={localData.city} onChange={handleSelectChange}
-              className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0" required
-            >
-              <option value="">Select City</option>
-              {governorates[localData.conservatism]?.map((city) => (
-                <option key={city} value={city}>{city}</option>
-              ))}
-            </select>
-          )}
-        </div>
-      </div>
+              {localData.conservatism && (
+                <select name="city" value={localData.city} onChange={handleSelectChange}
+                  className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0" required
+                >
+                  <option value="">Select City</option>
+                  {governorates[localData.conservatism]?.map((city) => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+          </div> :
+
+          <div onSubmit={handleSubmit}>
+            <div className=' space-y-3'>
+              <select name="conservatism" value={localData.conservatism} onChange={handleSelectChange}
+                className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 " required
+              >
+                <option value="">Select Governorate</option>
+                {Object.keys(governorates).map((gov) => (
+                  <option key={gov} value={gov}>{gov}</option>
+                ))}
+
+              </select>
+
+              {localData.conservatism && (
+                <select name="city" value={localData.city} onChange={handleSelectChange}
+                  className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0" required
+                >
+                  <option value="">Select City</option>
+                  {governorates[localData.conservatism]?.map((city) => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+          </div>
+      }
+
     </div>
 
   )

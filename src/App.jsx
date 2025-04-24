@@ -8,6 +8,12 @@ function App() {
 
   const { pathname } = useLocation();
 
+  // localStorage.removeItem("orgaid")
+  // localStorage.removeItem("organizationToken")
+  // localStorage.removeItem("userid")
+  // localStorage.removeItem("userToken")
+  // localStorage.removeItem("scope")
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);

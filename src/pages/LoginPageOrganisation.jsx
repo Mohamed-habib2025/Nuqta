@@ -9,6 +9,10 @@ import { toast } from 'react-toastify';
 
 function LoginPageOrganisation() {
 
+  const Navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { scope } = useSelector((state) => state.userType);
+
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
     orgName: '',
@@ -22,6 +26,11 @@ function LoginPageOrganisation() {
     fcmToken: "abc123xyz"
   });
 
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
   const [showPassword, setShowPassword] = useState({
     old: false,
     new: false,
@@ -32,17 +41,27 @@ function LoginPageOrganisation() {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
-  const handleChange = (e) => {
+  const handleChangeregister = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+
   };
 
-  const Navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { scope } = useSelector((state) => state.userType);
+  const handleChangelogin = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "email" || name === "password") {
+      setLoginData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
 
   const handleSubmitSignUp = async (e) => {
     e.preventDefault();
@@ -67,8 +86,8 @@ function LoginPageOrganisation() {
     e.preventDefault();
     try {
       const res = await dispatch(loginOrg({
-        email: formData.email,
-        password: formData.password
+        email: loginData.email,
+        password: loginData.password
       })).unwrap();
       if (res?.token) {
         dispatch(setorgToken(res.token));
@@ -76,11 +95,9 @@ function LoginPageOrganisation() {
         Navigate("/");
         toast.success("LOGIN Successful");
         console.log("LOGIN SUCCESS:", res);
-      } else {
-        toast.error("Login failed. Please try again");
-        console.error("Login failed, no token received.");
       }
     } catch (error) {
+      toast.error("Login failed, Make sure your data");
       const errorMessage = error?.response?.data?.message || error?.message || "An unknown error occurred.";
       console.error("LOGIN ERROR:", errorMessage);
     }
@@ -95,29 +112,29 @@ function LoginPageOrganisation() {
             <h1 className="text-2xl font-bold mb-2">Create Account</h1>
             <span className="text-[17px] font-bold text-gray-800">or use your email for registration</span>
             <div className="space-y-2 mt-5 w-full">
-              <input type="text" name='orgName' placeholder="Organization Name" value={formData.orgName} onChange={handleChange} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
-              <input type="text" name="licenseNumber" placeholder="License Number" value={formData.licenseNumber} onChange={handleChange} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
-              <input type="number" name="phoneNumber" placeholder="phone Number" value={formData.phoneNumber} onChange={handleChange} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+              <input type="text" name='orgName' placeholder="Organization Name" value={formData.orgName} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+              <input type="text" name="licenseNumber" placeholder="License Number" value={formData.licenseNumber} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+              <input type="number" name="phoneNumber" placeholder="phone Number" value={formData.phoneNumber} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
-                <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
+                <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChangeregister} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
                 <MdOutlineMail className='text-[20px] text-gray-500 ' />
               </div>
               <div className=' p-2 bg-gray-200 rounded-lg flex items-center justify-between'>
-                <input type={showPassword.new ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleChange} className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
+                <input type={showPassword.new ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleChangeregister} className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
                 <div className=' flex items-center justify-between w-fit cursor-pointer' onClick={() => togglePasswordVisibility("new")}>
                   <button className='text-gray-500' type='button'>
                     {showPassword.new ? <IoEyeOutline /> : <IoEyeOffOutline />}
                   </button>
                 </div>
               </div>
-              <select name="conservatism" value={formData.conservatism} onChange={handleChange} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+              <select name="conservatism" value={formData.conservatism} onChange={handleChangeregister} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
                 <option value=""> conservatism</option>
                 {Object.keys(governorates).map((gov) => (
                   <option key={gov} value={gov}>{gov}</option>
                 ))}
               </select>
               {formData.conservatism && (
-                <select name="city" value={formData.city} onChange={handleChange} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                <select name="city" value={formData.city} onChange={handleChangeregister} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
                   <option value="">Select City</option>
                   {governorates[formData.conservatism].map((city) => (
                     <option key={city} value={city}>{city}</option>
@@ -136,11 +153,11 @@ function LoginPageOrganisation() {
             <span className="text-[18px]">or use your email password</span>
             <div className="space-y-2 mt-2 w-full  ">
               <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
-                <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
+                <input type="email" name="email" placeholder="Email" value={loginData.email} onChange={handleChangelogin} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
                 <MdOutlineMail className='text-[20px] text-gray-500 ' />
               </div>
               <div className=' p-2 bg-gray-200 rounded-lg flex items-center justify-between'>
-                <input type={showPassword.new ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} placeholder="Password" className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
+                <input type={showPassword.new ? "text" : "password"} name="password" value={loginData.password} onChange={handleChangelogin} placeholder="Password" className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
                 <div className=' flex items-center justify-between w-fit cursor-pointer' onClick={() => togglePasswordVisibility("new")}>
                   <button className='text-gray-500' type='button'>
                     {showPassword.new ? <IoEyeOutline /> : <IoEyeOffOutline />}

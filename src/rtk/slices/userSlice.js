@@ -23,7 +23,6 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (credentials, thunkAPI) => {
-    console.log("loginUser called with:", credentials);
     try {
       const response = await axios.post(
         "https://nuqta-production.up.railway.app/api/auth/login/user",
@@ -56,6 +55,8 @@ const userSlice = createSlice({
   reducers: {
     logoutUser: (state) => {
       state.token = null;
+      state.user = null;
+      state.user_id = null;
       localStorage.removeItem("userToken");
       localStorage.removeItem("userid");
     },
@@ -92,6 +93,7 @@ const userSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token;
         state.user_id = action.payload.user_id;
+        state.user = action.payload.user;
         localStorage.setItem("userToken", action.payload.token);
         localStorage.setItem("userid", action.payload.user_id);
       })

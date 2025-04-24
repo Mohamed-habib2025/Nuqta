@@ -13,6 +13,7 @@ export const fetchOrganizations = createAsyncThunk(
           'Accept-Language': 'en',
         },
       });
+      console.log("🚀 Organizations from API:", response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(

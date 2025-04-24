@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { fetchUsers } from '../rtk/slices/usersSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { fetchOrganizations } from '../rtk/slices/organizationsSlice'
 
 const AboutUsSection = [
   {
@@ -41,6 +42,10 @@ function Home() {
 
   useEffect(() => {
     dispatch(fetchUsers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchOrganizations());
   }, [dispatch]);
 
   const { user } = useSelector(state => state.userid);

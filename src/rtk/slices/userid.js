@@ -6,9 +6,6 @@ export const fetchUserid = createAsyncThunk(
   'profile/fetchUserid',
   async (userId, thunkAPI) => {
     try {
-      // const state = thunkAPI.getState();
-      // const userId = state.user.user_id;
-      // const userId = localStorage.getItem('userid');
       const token = localStorage.getItem('userToken');
       const response = await axios.get(
         `https://nuqta-production.up.railway.app/api/user/${userId}`,

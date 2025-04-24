@@ -12,7 +12,9 @@ import { toast } from 'react-toastify';
 
 function LoginPage() {
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { scope } = useSelector((state) => state.userType);
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
@@ -69,6 +71,7 @@ function LoginPage() {
       }));
     }
   };
+
   const handleChangelogin = (e) => {
     const { name, value } = e.target;
 
@@ -80,10 +83,6 @@ function LoginPage() {
     }
   };
 
-  const dispatch = useDispatch();
-
-  const { scope } = useSelector((state) => state.userType);
-
   const handleSubmitRegister = async (e) => {
     e.preventDefault();
 
@@ -94,7 +93,7 @@ function LoginPage() {
 
     const AllFormData = {
       ...formData,
-      scope: scope.toUpperCase(),
+      scope: scope,
     };
     try {
       const res = await dispatch(registerUser(AllFormData)).unwrap();
@@ -116,8 +115,6 @@ function LoginPage() {
           password: loginData.password,
         })
       ).unwrap();
-
-
       if (res?.token) {
         dispatch(setUserToken(res.token));
         localStorage.setItem("userToken", res.token);
