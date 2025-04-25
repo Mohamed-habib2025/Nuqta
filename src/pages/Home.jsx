@@ -40,13 +40,13 @@ function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchUsers());
+  // }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(fetchOrganizations());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchOrganizations());
+  // }, [dispatch]);
 
   const { user } = useSelector(state => state.userid);
 

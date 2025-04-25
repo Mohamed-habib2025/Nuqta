@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowRight } from "react-icons/fa6";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useDispatch } from 'react-redux';
-import { ForgotPassword, resetPassword } from '../rtk/slices/ForgotPassword';
+import { ForgotPassword, resetPassword, verifyOtp } from '../rtk/slices/ForgotPassword';
 
 function Forgetpassword() {
 
@@ -25,6 +25,29 @@ function Forgetpassword() {
     confirm: false,
   });
   const [successfully, setsuccessfully] = useState(false);
+
+  const [counter, setCounter] = useState(60);
+  const [isResendDisabled, setIsResendDisabled] = useState(true);
+
+  useEffect(() => {
+    let timer;
+    if (step === 2) {
+      setIsResendDisabled(true);
+      setCounter(60);
+
+      timer = setInterval(() => {
+        setCounter(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setIsResendDisabled(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [step]);
 
   const resetForms = () => {
     navigate('/loginpage')
@@ -56,14 +79,18 @@ function Forgetpassword() {
       if (email === "") {
         setemailerror(1)
       } else {
-        // console.log(email)
         await dispatch(ForgotPassword(email)).unwrap();
       }
       setStep(2);
     } catch (error) {
       setemailerror(2);
     }
+  };
 
+  const handleResend = () => {
+    setStep(1);
+    setCounter(60);
+    setIsResendDisabled(true);
   };
 
   const handleOtpChange = (index, value) => {
@@ -81,7 +108,7 @@ function Forgetpassword() {
     const enteredOtp = otp.join("").trim();
     try {
       if (enteredOtp) {
-        await dispatch(resetPassword({ email, otp: enteredOtp, newPassword })).unwrap();
+        await dispatch(verifyOtp({ email, otp: enteredOtp })).unwrap();
         setotperror(false);
         setStep(3);
       } else {
@@ -92,8 +119,10 @@ function Forgetpassword() {
     }
   };
 
-  const handleChangePassword = async  (e) => {
+  const handleChangePassword = async (e) => {
     e.preventDefault();
+
+    const enteredOtp = otp.join("").trim();
 
     if (newPassword !== confirmPassword) {
       setPassworderror(true);
@@ -109,12 +138,11 @@ function Forgetpassword() {
       setPasswordrule(false);
     }
     try {
-      await dispatch(resetPassword({ email: email, otp: otp.join(''), newPassword: newPassword })).unwrap();
+      await dispatch(resetPassword({ email: email, otp: enteredOtp, newPassword })).unwrap();
       setsuccessfully(true);
-
+      resetForms();
       setTimeout(() => {
         setsuccessfully(false);
-        resetForms();
       }, 1000);
     } catch (error) {
       console.error('Error resetting password:', error);
@@ -217,7 +245,13 @@ function Forgetpassword() {
           </button>
           <div className=' mt-3 flex items-center justify-center space-x-1'>
             <p>Didn't receive code? </p>
-            <Link className='text-red-600 hover:text-red-800 duration-200'> Resend </Link>
+            <button
+              onClick={handleResend}
+              className={`text-red-600 hover:text-red-800 duration-200 ${isResendDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+              disabled={isResendDisabled}
+            >
+              Resend {isResendDisabled && `(${counter}s)`}
+            </button>
           </div>
         </div>
       )}
