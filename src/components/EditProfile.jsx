@@ -126,8 +126,10 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
   };
 
 
-  const handleSubmit = async (e) => {
+  const handleSubmituser = async (e) => {
     e.preventDefault();
+
+
 
     if (!isChanged) {
       toast.info("No changes detected to update.", {
@@ -155,6 +157,8 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
         });
       }
     }
+
+
   };
 
   return (
@@ -162,11 +166,12 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
       {
         scope === "USER" ? (
           <div className='flex flex-col items-center'>
-            <form onSubmit={handleSubmit} className='w-full space-y-3'>
+            <form onSubmit={handleSubmituser} className='w-full space-y-3'>
               {
                 isEditlocation ? (
                   <LocationPicker
-                    handleSubmit={handleSubmit}
+                    scope={scope}
+                    handleSubmituser={handleSubmituser}
                     userData={userData}
                     setuserData={setuserData}
                     setIsEditing={setIsEditing}

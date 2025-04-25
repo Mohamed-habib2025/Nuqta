@@ -3,7 +3,7 @@ import governorates from "../Data/egyptLocations";
 import { GoCheck } from "react-icons/go";
 import { FaArrowLeft } from "react-icons/fa";
 
-function LocationPicker({ userData, setuserData, handleSubmit, setIsEditlocation, scope }) {
+function LocationPicker({ userData, setuserData, handleSubmituser, handleSubmitorg , setIsEditlocation, scope }) {
 
   const [localData, setLocalData] = useState(() => {
 
@@ -60,7 +60,7 @@ function LocationPicker({ userData, setuserData, handleSubmit, setIsEditlocation
 
       {
         scope === "USER" ?
-          <div onSubmit={handleSubmit}>
+          <div onSubmit={handleSubmituser}>
             <div className=' space-y-3'>
               <select name="conservatism" value={localData.conservatism} onChange={handleSelectChange}
                 className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 " required
@@ -85,7 +85,7 @@ function LocationPicker({ userData, setuserData, handleSubmit, setIsEditlocation
             </div>
           </div> :
 
-          <div onSubmit={handleSubmit}>
+          <div onSubmit={handleSubmitorg}>
             <div className=' space-y-3'>
               <select name="conservatism" value={localData.conservatism} onChange={handleSelectChange}
                 className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 " required

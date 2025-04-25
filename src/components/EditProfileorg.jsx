@@ -7,6 +7,7 @@ import ChangePasswordprofile from './ChangePasswordprofile';
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from 'react-redux'
 import { updateOrg } from '../rtk/slices/orgid';
+import ChangePasswordprofileorg from './ChangePasswordprofileorg';
 
 function EditProfileorg({ setIsEditing, setOpenDialog, scope }) {
 
@@ -108,7 +109,7 @@ function EditProfileorg({ setIsEditing, setOpenDialog, scope }) {
   //   }
   // };
 
-  const handleSubmit = async (e) => {
+  const handleSubmitorg = async (e) => {
     e.preventDefault();
 
     if (!isChanged) {
@@ -140,12 +141,14 @@ function EditProfileorg({ setIsEditing, setOpenDialog, scope }) {
   };
 
 
+
   return (
     <div>
-      <form onSubmit={handleSubmit} className='w-full space-y-3'>
+      <form onSubmit={handleSubmitorg} className='w-full space-y-3'>
         {
           isEditlocation ? (
             <LocationPicker
+              handleSubmitorg={handleSubmitorg}
               scope={scope}
               userData={userData}
               setuserData={setuserData}
@@ -154,7 +157,7 @@ function EditProfileorg({ setIsEditing, setOpenDialog, scope }) {
               onClose={() => setIsEditlocation(false)}
             />
           ) : (
-            isEditpassword ? (<ChangePasswordprofile
+            isEditpassword ? (<ChangePasswordprofileorg
               setOpenDialog={setOpenDialog}
               setIsEditing={setIsEditing}
               setIsEditpassword={setIsEditpassword}
