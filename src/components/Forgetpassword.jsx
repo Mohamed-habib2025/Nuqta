@@ -2,15 +2,20 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowRight } from "react-icons/fa6";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { useDispatch } from 'react-redux';
+import { ForgotPassword, resetPassword } from '../rtk/slices/ForgotPassword';
 
 function Forgetpassword() {
 
+  const navigate = useNavigate()
+  const dispatch = useDispatch();
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
+  const [emailerror, setemailerror] = useState(0);
+
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [emailerror, setemailerror] = useState(0);
   const [Passworderror, setPassworderror] = useState(false);
   const [otperror, setotperror] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
@@ -20,7 +25,6 @@ function Forgetpassword() {
     confirm: false,
   });
   const [successfully, setsuccessfully] = useState(false);
-  const navigate = useNavigate()
 
   const resetForms = () => {
     navigate('/loginpage')
@@ -46,20 +50,18 @@ function Forgetpassword() {
   };
 
 
-  const handleEmailSubmit = (e) => {
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
-
-    if (email === "test@gmail.com") {
-      setemailerror(3)
-      setTimeout(() => {
-        setStep(2);
-        setemailerror(0)
-      }, 1000);
-
-    } else if (email === "") {
-      setemailerror(1)
-    } else {
-      setemailerror(2)
+    try {
+      if (email === "") {
+        setemailerror(1)
+      } else {
+        // console.log(email)
+        await dispatch(ForgotPassword(email)).unwrap();
+      }
+      setStep(2);
+    } catch (error) {
+      setemailerror(2);
     }
 
   };
@@ -75,16 +77,22 @@ function Forgetpassword() {
     }
   };
 
-  const handleOtpSubmit = () => {
-    if (otp.join("").trim() === "123456") {
-      setotperror(false)
-      setStep(3);
-    } else {
-      setotperror(true)
+  const handleOtpSubmit = async () => {
+    const enteredOtp = otp.join("").trim();
+    try {
+      if (enteredOtp) {
+        await dispatch(resetPassword({ email, otp: enteredOtp, newPassword })).unwrap();
+        setotperror(false);
+        setStep(3);
+      } else {
+        setotperror(true);
+      }
+    } catch (error) {
+      setotperror(true);
     }
   };
 
-  const handleChangePassword = (e) => {
+  const handleChangePassword = async  (e) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
@@ -100,13 +108,17 @@ function Forgetpassword() {
     } else {
       setPasswordrule(false);
     }
+    try {
+      await dispatch(resetPassword({ email: email, otp: otp.join(''), newPassword: newPassword })).unwrap();
+      setsuccessfully(true);
 
-    setsuccessfully(true);
-
-    setTimeout(() => {
-      setsuccessfully(false);
-      resetForms();
-    }, 1000);
+      setTimeout(() => {
+        setsuccessfully(false);
+        resetForms();
+      }, 1000);
+    } catch (error) {
+      console.error('Error resetting password:', error);
+    }
   };
 
   return (
@@ -237,8 +249,6 @@ function Forgetpassword() {
                 </div>
               )
             }
-
-
 
             <div className=' w-full flex items-center justify-between mb-2 border-b-[1px]'>
               <input
