@@ -1,16 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import male from "../Images/male.jpg";
 import female from "../Images/female.png";
 import governorates from "../Data/egyptLocations";
 import RequestsList from '../components/RequestsList';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserid } from '../rtk/slices/userid';
+import { addRequest, updateRequest } from '../rtk/slices/RequestsUser';
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 function BloodRequest() {
-  const [requests, setRequests] = useState([]);
-  const [showForm, setShowForm] = useState(true);
+
+  const dispatch = useDispatch();
+  const { user } = useSelector(state => state.userid);
+  // const { requests } = useSelector(state => state.requestsUser);
+  // console.log(requests)
+  const [userId] = useState(localStorage.getItem('userid'));
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserid(userId));
+    }
+  }, [dispatch, userId]);
+
+  const [requestsuser, setRequests] = useState([]);
+
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
-    id: null, name: "", governorate: "", city: "", phone: "", quantity: "", age: "", gender: "", urgency: "normal", bloodType: "", status: 'Open', image: null
+    conservatism: "",
+    city: "",
+    amount: "",
+    urgency_level: "",
+    blood_type_needed: "",
+    status: "OPEN",
+    request_date: "2024-12-01",
+    payment_available: true,
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [currentRequestId, setCurrentRequestId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setRequests(user.uploadedRequests);
+      // console.log(user.uploadedRequests)
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     if (e.target.name === "gender") {
@@ -21,28 +55,74 @@ function BloodRequest() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isEditing) {
-      setRequests(requests.map((req) => (req.id === formData.id ? { ...formData } : req)));
-      setIsEditing(false);
+    setIsLoading(true);
 
-    } else {
-      setRequests([...requests, { ...formData, id: Date.now(), image: formData.image }]);
-      setShowForm(false);
+    const requestPayload = {
+      amount: formData.amount,
+      blood_type_needed: formData.blood_type_needed,
+      request_date: "2024-12-01",
+      urgency_level: formData.urgency_level,
+      status: formData.status,
+      payment_available: formData.payment_available,
+      city: formData.city,
+      conservatism: formData.conservatism,
+    };
+
+    try {
+      if (isEditing) {
+        const updatedRequest = await dispatch(updateRequest({
+          ...requestPayload,
+          id: currentRequestId
+        })).unwrap();
+
+        setRequests(prev => prev.map(request =>
+          request.id === currentRequestId ? updatedRequest : request
+        ));
+  
+        setShowForm(false);
+        setIsEditing(false);
+        setCurrentRequestId(null);
+        
+        toast.success("updated request Successful");
+      } else {
+        const newRequest = await dispatch(addRequest({
+          ...requestPayload,
+          userId: userId
+        })).unwrap();
+        setRequests(prev => [...prev, newRequest]);
+        setShowForm(false);
+        toast.success("Added request Successful");
+      }
+      setFormData({
+        conservatism: "", city: "", amount: "", urgency_level: "", blood_type_needed: "", status: 'OPEN', request_date: "2024-12-01"
+      });
+
+    } catch (error) {
+      console.log(error)
+      Swal.fire({
+        title: "Error!",
+        text: "Something went wrong. Please try again.",
+        icon: "error"
+      });
+    } finally {
+      setIsLoading(false);
     }
-    setShowForm(false);
-    setFormData({ id: null, name: "", governorate: "", city: "", gender: "", phone: "", quantity: "", age: "", urgency: "normal", bloodType: "", status: 'Open', image: null });
   };
+
+  if (!user) {
+    return <p className='p-20 text-green-400 text-lg'>Loading ...</p>;
+  }
 
   return (
     <div className="w-[85%] mx-auto mt-4 py-6 ">
-      {!showForm && requests.length > 0 && (
+      {requestsuser.length > 0 && !showForm && (
         <div className='w-full flex items-center justify-between'>
           <h3 className="text-2xl font-bold mb-4">Your Requests</h3>
           <button onClick={() => {
             setShowForm(true);
-            setFormData({ id: null, name: "", governorate: "", city: "", phone: "", quantity: "", age: "", gender: "", urgency: "normal", bloodType: "", status: 'Open', image: null });
+            setFormData({ conservatism: "", city: "", amount: "", urgency_level: "", blood_type_needed: "", status: 'OPEN' });
           }}
             className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded mb-4">New Request</button>
         </div>
@@ -54,44 +134,23 @@ function BloodRequest() {
             className=" mx-auto bg-white shadow-lg rounded-xl p-6 border border-gray-300 space-y-4"
           >
             <h2 className="text-xl font-semibold text-center text-gray-700">Request Blood Donation</h2>
-
             <div className="flex flex-col gap-3">
-              <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange}
-                className="w-full p-3 border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px] " required
-              />
-
               <div className="flex gap-3">
-                <input type='text' minLength='11' maxLength='11' name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
-                />
-                <input type="number" name="age" min='18' max='30' placeholder="Age" value={formData.age} onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
-                />
-              </div>
-
-              <div className="flex gap-3">
-                <input type="number" name="quantity" min='100' max='500' placeholder="Blood Quantity" value={formData.quantity} onChange={handleChange}
+                <input type="number" name="amount" min='100' max='500' placeholder="Blood Quantity" value={formData.amount} onChange={handleChange}
                   className="w-1/2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
                 />
-                <select name="urgency" value={formData.urgency} onChange={handleChange}
+                <select name="urgency_level" value={formData.urgency_level} onChange={handleChange}
                   className=" cursor-pointer w-1/2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]"
                 >
                   <option value="">Urgency</option>
-                  <option value="Urgent">Urgent</option>
-                  <option value="Not Urgent">Not Urgent</option>
+                  <option value="HIGH">HIGH</option>
+                  <option value="LOW">Low</option>
                 </select>
               </div>
 
               <div className="flex gap-3">
-                <select name="gender" value={formData.gender} onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]"
-                >
-                  <option value="">Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
 
-                <select name="bloodType" value={formData.bloodType} onChange={handleChange}
+                <select name="blood_type_needed" value={formData.blood_type_needed} onChange={handleChange}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
                 >
                   <option value="">Blood Type</option>
@@ -107,7 +166,7 @@ function BloodRequest() {
               </div>
 
               <div className="flex gap-3">
-                <select name="governorate" value={formData.governorate} onChange={handleChange}
+                <select name="conservatism" value={formData.conservatism} onChange={handleChange}
                   className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
                 >
                   <option value="">Select Governorate</option>
@@ -117,12 +176,12 @@ function BloodRequest() {
 
                 </select>
 
-                {formData.governorate && (
+                {formData.conservatism && (
                   <select name="city" value={formData.city} onChange={handleChange}
                     className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
                   >
                     <option value="">Select City</option>
-                    {governorates[formData.governorate].map((city) => (
+                    {governorates[formData.conservatism].map((city) => (
                       <option key={city} value={city}>{city}</option>
                     ))}
                   </select>
@@ -131,12 +190,13 @@ function BloodRequest() {
 
               <div className="flex items-center justify-between gap-3">
                 <button
-                  className="bg-red-600 hover:bg-red-800 text-white text-sm text-nowrap sm:text-[16px] p-3 rounded-lg w-full sm:w-auto transition duration-300"
+                  disabled={isLoading}
+                  className={`hover:bg-red-800 text-white text-sm text-nowrap sm:text-[16px] p-3 rounded-lg w-full sm:w-auto transition duration-300 ${isLoading ? "bg-red-500" : "bg-red-600"}`}
                 >
-                  {isEditing ? 'Edit Request' : 'Upload Request'}
+                  {isLoading ? 'Loading...' : isEditing ? 'Edit Request' : 'Upload Request'}
                 </button>
 
-                {requests.length > 0 && (
+                {requestsuser.length > 0 && (
                   <button onClick={() => setShowForm(false)}
                     className="bg-gray-500 hover:bg-gray-700 text-white text-sm sm:text-base py-3 px-6 sm:px-10 rounded-lg w-full sm:w-auto  transition duration-300"
                   >
@@ -148,7 +208,7 @@ function BloodRequest() {
           </form>
         </div>
       )}
-      <RequestsList requests={requests} setRequests={setRequests} setFormData={setFormData} setIsEditing={setIsEditing} setShowForm={setShowForm} />
+      <RequestsList requestsuser={requestsuser} setCurrentRequestId={setCurrentRequestId} setRequests={setRequests} formData={formData} setFormData={setFormData} setIsEditing={setIsEditing} setShowForm={setShowForm} />
     </div>
   );
 }

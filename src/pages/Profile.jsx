@@ -148,7 +148,7 @@ function Profile({ setOpenDialog }) {
                     </p>
                     <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500" : "border-red-300 bg-red-200 text-red-500"}`}>
                       <span>Requests</span>
-                      <span>0</span>
+                      <span>{user.uploadedRequests.length}</span>
                     </p>
                   </div>
 
