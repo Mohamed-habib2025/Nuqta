@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // Add request
-export const addRequest = createAsyncThunk(
-  'requests/addRequest',
+export const addRequestOrg = createAsyncThunk(
+  'requests/addRequestOrg',
   async (newRequest, thunkAPI) => {
     try {
-      const token = localStorage.getItem('userToken') || localStorage.getItem('organizationToken');
+      const token = localStorage.getItem('organizationToken');
       const response = await axios.post(
         'https://nuqta-production.up.railway.app/api/request', newRequest,
         {
@@ -27,12 +27,12 @@ export const addRequest = createAsyncThunk(
 );
 
 // Update request
-export const updateRequest = createAsyncThunk(
-  'requests/updateRequest',
+export const updateRequestOrg = createAsyncThunk(
+  'requests/updateRequestOrg',
   async (updatedRequest, thunkAPI) => {
     try {
       console.log(updatedRequest)
-      const token = localStorage.getItem('userToken') || localStorage.getItem('organizationToken');
+      const token = localStorage.getItem('organizationToken');
       const response = await axios.put(
         'https://nuqta-production.up.railway.app/api/request',
         updatedRequest,
@@ -55,11 +55,11 @@ export const updateRequest = createAsyncThunk(
 );
 
 // Delete request
-export const deleteRequest = createAsyncThunk(
-  'requests/deleteRequest',
+export const deleteRequestOrga = createAsyncThunk(
+  'requests/deleteRequestOrg',
   async (id, thunkAPI) => {
     try {
-      const token = localStorage.getItem('userToken') || localStorage.getItem('organizationToken');
+      const token = localStorage.getItem('organizationToken');
       await axios.delete(
         `https://nuqta-production.up.railway.app/api/request/${id}`,
         {
@@ -79,8 +79,8 @@ export const deleteRequest = createAsyncThunk(
   }
 );
 
-const bloodRequestSlice = createSlice({
-  name: 'bloodRequests',
+const bloodRequestSliceOrg = createSlice({
+  name: 'bloodRequestsorg',
   initialState: {
     requests: [],
     loading: false,
@@ -91,49 +91,49 @@ const bloodRequestSlice = createSlice({
     builder
 
       // Add request
-      .addCase(addRequest.pending, (state) => {
+      .addCase(addRequestOrg.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(addRequest.fulfilled, (state, action) => {
+      .addCase(addRequestOrg.fulfilled, (state, action) => {
         state.loading = false;
         state.requests = action.payload;
       })
-      .addCase(addRequest.rejected, (state, action) => {
+      .addCase(addRequestOrg.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
       // Update request
-      .addCase(updateRequest.pending, (state) => {
+      .addCase(updateRequestOrg.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateRequest.fulfilled, (state, action) => {
+      .addCase(updateRequestOrg.fulfilled, (state, action) => {
         state.loading = false;
         state.requests = action.payload;
       })
-      .addCase(updateRequest.rejected, (state, action) => {
+      .addCase(updateRequestOrg.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
       // Delete request
-      .addCase(deleteRequest.pending, (state) => {
+      .addCase(deleteRequestOrga.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteRequest.fulfilled, (state, action) => {
+      .addCase(deleteRequestOrga.fulfilled, (state, action) => {
         state.requests = action.payload;
         state.loading = false;
       })
-      .addCase(deleteRequest.rejected, (state, action) => {
+      .addCase(deleteRequestOrga.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
-export const { resetRequests } = bloodRequestSlice.actions;
+export const { resetRequests } = bloodRequestSliceOrg.actions;
 
-export default bloodRequestSlice.reducer;
+export default bloodRequestSliceOrg.reducer;

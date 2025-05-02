@@ -20,7 +20,8 @@ import { setUserType } from '../../rtk/slices/userTypeSlice';
 
 function Header() {
 
-  const usertyperequest = useSelector((state) => state.user.scope);
+  const usertyperequest = useSelector((state) => state.userType.scope);
+  // const scope = localStorage.getItem("scope");
   const dispatch = useDispatch();
 
   const navLinks = [

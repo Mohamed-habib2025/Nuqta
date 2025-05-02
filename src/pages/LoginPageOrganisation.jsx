@@ -78,7 +78,7 @@ function LoginPageOrganisation() {
       setIsSignUp(false);
     } catch (error) {
       toast.error("REGISTER failed. Please try again");
-      console.error("REGISTER ERROR:", error);
+      // console.error("REGISTER ERROR:", error);
     }
   };
 

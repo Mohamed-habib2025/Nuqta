@@ -6,14 +6,15 @@ import axios from 'axios';
 export const registerOrg = createAsyncThunk(
   'organization/register',
   async (userData, thunkAPI) => {
+    console.log(userData)
     try {
       const state = thunkAPI.getState();
-      const { userType } = state.userType.scope;
-      const fullData = {
-        ...userData,
-        scope : userType
-      }
-      const response = await axios.post('https://nuqta-production.up.railway.app/api/auth/register/org', fullData);
+      // const { userType } = state.userType.scope;
+      // const fullData = {
+      //   ...userData,
+      //   scope : userType
+      // }
+      const response = await axios.post('https://nuqta-production.up.railway.app/api/auth/register/org', userData);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Registration failed");

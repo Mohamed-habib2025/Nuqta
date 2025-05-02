@@ -12,8 +12,6 @@ function BloodRequest() {
 
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.userid);
-  // const { requests } = useSelector(state => state.requestsUser);
-  // console.log(requests)
   const [userId] = useState(localStorage.getItem('userid'));
 
   useEffect(() => {
@@ -42,7 +40,6 @@ function BloodRequest() {
   useEffect(() => {
     if (user) {
       setRequests(user.uploadedRequests);
-      // console.log(user.uploadedRequests)
     }
   }, [user]);
 
@@ -208,7 +205,7 @@ function BloodRequest() {
           </form>
         </div>
       )}
-      <RequestsList requestsuser={requestsuser} setCurrentRequestId={setCurrentRequestId} setRequests={setRequests} formData={formData} setFormData={setFormData} setIsEditing={setIsEditing} setShowForm={setShowForm} />
+      <RequestsList requestsuser={requestsuser || requestsorg} setCurrentRequestId={setCurrentRequestId} setRequests={setRequests} formData={formData} setFormData={setFormData} setIsEditing={setIsEditing} setShowForm={setShowForm} />
     </div>
   );
 }
