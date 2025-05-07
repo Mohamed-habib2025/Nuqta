@@ -4,6 +4,8 @@ import { FaArrowRight } from "react-icons/fa6";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useDispatch } from 'react-redux';
 import { ForgotPassword, resetPassword, verifyOtp } from '../rtk/slices/ForgotPassword';
+import { toast } from 'react-toastify';
+import { ScaleLoader } from "react-spinners";
 
 function Forgetpassword() {
 
@@ -24,6 +26,8 @@ function Forgetpassword() {
     confirm: false,
   });
   const [successfully, setsuccessfully] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [counter, setCounter] = useState(60);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
@@ -74,6 +78,7 @@ function Forgetpassword() {
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       if (email === "") {
         setemailerror(1)
@@ -83,6 +88,8 @@ function Forgetpassword() {
       setStep(2);
     } catch (error) {
       setemailerror(2);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -105,6 +112,7 @@ function Forgetpassword() {
 
   const handleOtpSubmit = async () => {
     const enteredOtp = otp.join("").trim();
+    setIsLoading(true);
     try {
       if (enteredOtp) {
         await dispatch(verifyOtp({ email, otp: enteredOtp })).unwrap();
@@ -115,11 +123,14 @@ function Forgetpassword() {
       }
     } catch (error) {
       setotperror(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const enteredOtp = otp.join("").trim();
 
@@ -138,6 +149,7 @@ function Forgetpassword() {
     }
     try {
       await dispatch(resetPassword({ email: email, otp: enteredOtp, newPassword })).unwrap();
+      toast.success("changed password Successfully");
       setsuccessfully(true);
       resetForms();
       setTimeout(() => {
@@ -145,6 +157,8 @@ function Forgetpassword() {
       }, 1000);
     } catch (error) {
       console.error('Error resetting password:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -185,6 +199,7 @@ function Forgetpassword() {
 
             <div className=' mb-2 border-b-[1px]'>
               <input
+                disabled={isLoading}
                 type="email"
                 className="border-none p-2 w-full rounded focus:outline-none focus:ring-0"
                 placeholder="Enter Your Email"
@@ -196,7 +211,9 @@ function Forgetpassword() {
               className="bg-red-500 text-white p-2 w-full mt-2 rounded hover:bg-red-700 duration-200"
               type='submit'
             >
-              Continue
+              {isLoading ? <ScaleLoader color="#fff" height={15} width={2} radius={2} margin={2} /> :
+                "Continue"}
+
             </button>
           </div>
         </form>
@@ -237,10 +254,13 @@ function Forgetpassword() {
             }
           </div>
           <button
+            disabled={isLoading}
             className="bg-red-500 text-sm text-white p-2 w-[75%] mt-2 rounded hover:bg-red-700 duration-200"
             onClick={handleOtpSubmit}
           >
-            Verify OTP
+            {isLoading ? <ScaleLoader color="#fff" height={15} width={2} radius={2} margin={2} /> :
+              "Verify OTP"}
+
           </button>
           <div className=' mt-3 flex items-center justify-center space-x-1'>
             <p>Didn't receive code? </p>
@@ -312,10 +332,12 @@ function Forgetpassword() {
               </div>
             </div>
             <button
+              disabled={isLoading}
               className="bg-red-500 text-white p-2 w-[70%] mt-2 rounded"
               type='submit'
             >
-              change password
+              {isLoading ? <ScaleLoader color="#fff" height={15} width={2} radius={2} margin={2} /> :
+                "change password"}
             </button>
 
             {

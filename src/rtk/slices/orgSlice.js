@@ -6,7 +6,7 @@ import axios from 'axios';
 export const registerOrg = createAsyncThunk(
   'organization/register',
   async (userData, thunkAPI) => {
-    console.log(userData)
+    // console.log(userData)
     try {
       const state = thunkAPI.getState();
       // const { userType } = state.userType.scope;

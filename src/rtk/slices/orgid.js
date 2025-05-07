@@ -146,18 +146,18 @@ const orgid = createSlice({
       })
 
       // update
-      .addCase(updateOrg.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateOrg.fulfilled, (state, action) => {
-        state.loading = false;
-        state.org = action.payload;
-      })
-      .addCase(updateOrg.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
+      // .addCase(updateOrg.pending, (state) => {
+      //   state.loading = true;
+      //   state.error = null;
+      // })
+      // .addCase(updateOrg.fulfilled, (state, action) => {
+      //   state.loading = false;
+      //   state.org = action.payload;
+      // })
+      // .addCase(updateOrg.rejected, (state, action) => {
+      //   state.loading = false;
+      //   state.error = action.payload;
+      // })
 
       // changepassword
       .addCase(changePasswordorg.pending, (state) => {

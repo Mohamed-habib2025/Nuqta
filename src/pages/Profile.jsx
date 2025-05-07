@@ -17,7 +17,8 @@ import { MdDeleteForever } from "react-icons/md";
 import { deleteorgById, fetchorgid } from '../rtk/slices/orgid';
 import { logoutOrg } from '../rtk/slices/orgSlice';
 import Swal from "sweetalert2";
-import { setUserType } from '../rtk/slices/userTypeSlice';
+import { GridLoader  } from "react-spinners";
+// import { setUserType } from '../rtk/slices/userTypeSlice';
 
 function Profile({ setOpenDialog }) {
 
@@ -26,15 +27,17 @@ function Profile({ setOpenDialog }) {
   const dispatch = useDispatch();
   const scope = useSelector((state) => state.userType.scope);
   const { user, loadinguser } = useSelector(state => state.userid);
+
+  // console.log(user.uploadedRequests)
   const { org, loadingorg } = useSelector(state => state.orgid);
   const [userId] = useState(localStorage.getItem('userid'));
-  const [orgId] = useState(localStorage.getItem('orgaid'));
+  const [orgId] = useState(localStorage.getItem('orgaid')); 
 
-  useEffect(() => {
-    if (userId) {
-      dispatch(fetchUserid(userId));
-    }
-  }, [dispatch, userId]);
+  // useEffect(() => {
+  //   if (userId) {
+  //     dispatch(fetchUserid(userId));
+  //   }
+  // }, [dispatch, userId]);
 
   useEffect(() => {
     if (orgId) {
@@ -91,7 +94,9 @@ function Profile({ setOpenDialog }) {
 
 
   if ((scope === 'USER' && (!user || loadinguser)) || (scope === 'ORGANIZATION' && (!org || loadingorg))) {
-    return <p className=' p-10 text-green-400 text-lg'>Loading profile...</p>;
+    return <div className=' h-full flex items-center justify-center '>
+      <GridLoader  size={20} color="red" />
+    </div>;
   }
 
   return (
@@ -138,17 +143,19 @@ function Profile({ setOpenDialog }) {
                   </div>
 
                   <div className='mt-2 flex items-center space-x-2'>
-                    <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500" : "border-red-300 bg-red-200 text-red-500"}`}>
+                    <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500 hover:bg-green-300 duration-200" : "border-red-300 bg-red-200 text-red-500 hover:bg-red-300 duration-200"}`}>
                       <span>Donate</span>
                       <span>0</span>
                     </p>
-                    <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500" : "border-red-300 bg-red-200 text-red-500"}`}>
+                    <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500 hover:bg-green-300 duration-200" : "border-red-300 bg-red-200 text-red-500 hover:bg-red-300 duration-200"}`}>
                       <span>Blood Type</span>
                       <span>{user.donation.blood_type}</span>
                     </p>
-                    <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500" : "border-red-300 bg-red-200 text-red-500"}`}>
+                    <p onClick={() => { navigate("/bloodRequest"); setOpenDialog(false); }} className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500 hover:bg-green-300 duration-200" : "border-red-300 bg-red-200 text-red-500 hover:bg-red-300 duration-200"}`}>
                       <span>Requests</span>
-                      <span>{user.uploadedRequests.length}</span>
+                      <span>{user.uploadedRequests?.length ?? 0}</span>
+                      {/* <span>{user.uploadedRequests.length}</span> */}
+                      {/* <span>0</span> */}
                     </p>
                   </div>
 
@@ -189,11 +196,11 @@ function Profile({ setOpenDialog }) {
                   </div>
 
                   <div className='mt-2 flex items-center space-x-2'>
-                    <p className='w-28 p-2 flex flex-col items-center border-[2px] rounded-lg  border-blue-300 bg-blue-200 text-blue-500'>
+                    <p onClick={() => { navigate("/RequstOrganization"); setOpenDialog(false); }} s className='w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer border-blue-300 bg-blue-200 text-blue-500 hover:bg-blue-300'>
                       <span>Requests</span>
-                      <span>0</span>
+                      <span>{org.uploadedRequests?.length ?? 0}</span>
                     </p>
-                    <p className='w-28 p-2 flex flex-col items-center border-[2px] rounded-lg  border-blue-300 bg-blue-200 text-blue-500'>
+                    <p className='w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer border-blue-300 bg-blue-200 text-blue-500 hover:bg-blue-300'>
                       <span>Donate</span>
                       <span>0</span>
                     </p>

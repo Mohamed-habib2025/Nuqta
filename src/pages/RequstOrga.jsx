@@ -6,6 +6,7 @@ import { addRequest, updateRequest } from '../rtk/slices/RequestsUser';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { fetchorgid } from '../rtk/slices/orgid';
+import { ScaleLoader, ClockLoader, SyncLoader } from "react-spinners";
 
 function RequstOrga() {
 
@@ -108,12 +109,14 @@ function RequstOrga() {
   };
 
   if (!org) {
-    return <p className='p-20 text-green-400 text-lg'>Loading ...</p>;
+    return <div className=' h-96 flex items-center justify-center'>
+      <SyncLoader color="red" size={20} speedMultiplier={1}  />
+    </div>;
   }
 
   return (
     <div className="w-[85%] mx-auto mt-4 py-6 ">
-      {requestsorg.length > 0 && !showForm && (
+      {!showForm && (
         <div className='w-full flex items-center justify-between'>
           <h3 className="text-2xl font-bold mb-4">Your Requests</h3>
           <button onClick={() => {
@@ -189,7 +192,8 @@ function RequstOrga() {
                   disabled={isLoading}
                   className={`hover:bg-red-800 text-white text-sm text-nowrap sm:text-[16px] p-3 rounded-lg w-full sm:w-auto transition duration-300 ${isLoading ? "bg-red-500" : "bg-red-600"}`}
                 >
-                  {isLoading ? 'Loading...' : isEditing ? 'Edit Request' : 'Upload Request'}
+                  {isLoading ? <ScaleLoader color="#fff" height={15} width={2} radius={2} margin={2} /> : isEditing ?
+                    'Edit Request' : 'Upload Request'}
                 </button>
 
                 {requestsorg.length > 0 && (
@@ -204,7 +208,7 @@ function RequstOrga() {
           </form>
         </div>
       )}
-      <RequestsList requestsuser={ requestsorg || requestsuser} setCurrentRequestId={setCurrentRequestId} setRequests={setRequests} formData={formData} setFormData={setFormData} setIsEditing={setIsEditing} setShowForm={setShowForm} />
+      <RequestsList requestsuser={requestsorg} setCurrentRequestId={setCurrentRequestId} setRequests={setRequests} formData={formData} setFormData={setFormData} setIsEditing={setIsEditing} setShowForm={setShowForm} />
     </div>
   );
 };

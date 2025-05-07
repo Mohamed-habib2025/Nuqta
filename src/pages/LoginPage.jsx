@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser, loginUser } from "../rtk/slices/userSlice";
 import { setUserToken } from '../rtk/slices/userSlice'
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import { ScaleLoader } from "react-spinners";
 // import { fetchUsers } from '../rtk/slices/usersSlice';
 
 function LoginPage() {
@@ -49,6 +51,8 @@ function LoginPage() {
     confirm: false,
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const togglePasswordVisibility = (field) => {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
@@ -85,6 +89,7 @@ function LoginPage() {
 
   const handleSubmitRegister = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!scope) {
       toast.error("Please select a user type first.");
@@ -98,16 +103,25 @@ function LoginPage() {
     try {
       const res = await dispatch(registerUser(AllFormData)).unwrap();
       toast.success("Registration Successful");
-      console.log("REGISTER SUCCESS:", res);
       setIsSignUp(false);
+      setTimeout(() => {
+        Swal.fire({
+          title: "verify your email",
+          html: `A verification email was sent to <span style="color: #007BFF; margin: 15px 0; font-weight: bold;">${AllFormData.email}</span>`,
+          icon: "info"
+        });
+      }, 500)
     } catch (error) {
       toast.error("REGISTER failed. Please try again");
-      console.error("REGISTER ERROR:", error);
+      // console.error("REGISTER ERROR:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const res = await dispatch(
         loginUser({
@@ -124,11 +138,14 @@ function LoginPage() {
           autoClose: 2000,
           hideProgressBar: true,
         });
+        // console.log("LOGIN SUCCESS:", res);
       }
     } catch (error) {
       toast.error("Login failed, Make sure your data");
       const errorMessage = error?.response?.data?.message || error?.message || "An unknown error occurred.";
-      console.error("LOGIN ERROR:", errorMessage);
+      // console.error("LOGIN ERROR:", errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -193,8 +210,16 @@ function LoginPage() {
                 </div>
               </div>
             </div>
-            <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign Up</button>
-            {/* {error && <p className="text-red-500 mt-2">{error}</p>} */}
+            {/* <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign Up</button> */}
+            <button
+              disabled={isLoading}
+              className="mt-3 bg-red-600 text-white rounded-lg px-6 py-2 hover:bg-red-800 duration-200 flex items-center justify-center min-h-[42px]">
+              {
+                isLoading
+                  ? <ScaleLoader color="#fff" height={15} width={2} radius={2} margin={2} />
+                  : "Sign Up"
+              }
+            </button>
           </form>
         </div>
 
@@ -218,7 +243,15 @@ function LoginPage() {
               </div>
             </div>
             <Link to='/forgetpassword' className="text-[14px] hover:text-red-600 duration-200 text-gray-500 mt-2">Forget Your Password?</Link>
-            <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign In</button>
+            <button
+              disabled={isLoading}
+              className="mt-3 bg-red-600 text-white rounded-lg px-6 py-2 hover:bg-red-800 duration-200 flex items-center justify-center min-h-[42px]">
+              {
+                isLoading
+                  ? <ScaleLoader color="#fff" height={15} width={2} radius={2} margin={2} />
+                  : "Sign In"
+              }
+            </button>
           </form>
         </div>
 

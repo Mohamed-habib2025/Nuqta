@@ -48,12 +48,11 @@ function Home() {
   //   dispatch(fetchOrganizations());
   // }, [dispatch]);
 
-  // const { user } = useSelector(state => state.userid);
-
-  const scope = localStorage.getItem("scope")
+  const Token = localStorage.getItem("userToken") || localStorage.getItem("organizationToken");
+  // const scope = localStorage.getItem("scope")
 
   const handleProtectedRoute = (e, to) => {
-    if (!scope) {
+    if (!Token) {
       e.preventDefault();
       toast.warning("You need to login first to access this page.", {
         position: "top-right",

@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerOrg, loginOrg, setorgToken } from '../rtk/slices/orgSlice';
 import { toast } from 'react-toastify';
+import { ScaleLoader } from "react-spinners";
+import Swal from 'sweetalert2';
 
 function LoginPageOrganisation() {
 
@@ -37,6 +39,8 @@ function LoginPageOrganisation() {
     confirm: false,
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const togglePasswordVisibility = (field) => {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
@@ -65,6 +69,7 @@ function LoginPageOrganisation() {
 
   const handleSubmitSignUp = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const AllFormData = {
       ...formData,
@@ -76,14 +81,24 @@ function LoginPageOrganisation() {
       toast.success("Registration Successful");
       console.log("REGISTER SUCCESS:", res);
       setIsSignUp(false);
+      setTimeout(() => {
+        Swal.fire({
+          title: "verify your email",
+          html: `A verification email was sent to <span style="color: #007BFF; font-weight: bold;">${AllFormData.email}</span>`,
+          icon: "info"
+        });
+      }, 500)
     } catch (error) {
       toast.error("REGISTER failed. Please try again");
       // console.error("REGISTER ERROR:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSubmitSignIn = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const res = await dispatch(loginOrg({
         email: loginData.email,
@@ -93,13 +108,19 @@ function LoginPageOrganisation() {
         dispatch(setorgToken(res.token));
         localStorage.setItem("organizationToken", res.token);
         Navigate("/");
-        toast.success("LOGIN Successful");
-        console.log("LOGIN SUCCESS:", res);
+        toast.success("LOGIN Successful", {
+          duration: 3000,
+          autoClose: 2000,
+          hideProgressBar: true,
+        });
+        // console.log("LOGIN SUCCESS:", res);
       }
     } catch (error) {
       toast.error("Login failed, Make sure your data");
       const errorMessage = error?.response?.data?.message || error?.message || "An unknown error occurred.";
-      console.error("LOGIN ERROR:", errorMessage);
+      // console.error("LOGIN ERROR:", errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -142,7 +163,15 @@ function LoginPageOrganisation() {
                 </select>
               )}
             </div>
-            <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign Up</button>
+            <button
+              disabled={isLoading}
+              className="mt-3 bg-red-600 text-white rounded-lg px-6 py-2 hover:bg-red-800 duration-200 flex items-center justify-center min-h-[42px]">
+              {
+                isLoading
+                  ? <ScaleLoader color="#fff" height={15} width={2} radius={2} margin={2} />
+                  : "Sign Up"
+              }
+            </button>
           </form>
         </div>
 
@@ -166,7 +195,15 @@ function LoginPageOrganisation() {
               </div>
             </div>
             <Link to='/forgetpassword' className="text-[14px] hover:text-red-600 duration-200 text-gray-500 mt-2">Forget Your Password?</Link>
-            <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign In</button>
+            <button
+              disabled={isLoading}
+              className="mt-3 bg-red-600 text-white rounded-lg px-6 py-2 hover:bg-red-800 duration-200 flex items-center justify-center min-h-[42px]">
+              {
+                isLoading
+                  ? <ScaleLoader color="#fff" height={15} width={2} radius={2} margin={2} />
+                  : "Sign In"
+              }
+            </button>
           </form>
         </div>
 

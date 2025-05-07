@@ -6,19 +6,23 @@ import RequestsList from '../components/RequestsList';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserid } from '../rtk/slices/userid';
 import { addRequest, updateRequest } from '../rtk/slices/RequestsUser';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import { ScaleLoader, SyncLoader } from "react-spinners";
+
+
+
 function BloodRequest() {
 
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.userid);
   const [userId] = useState(localStorage.getItem('userid'));
 
-  useEffect(() => {
-    if (userId) {
-      dispatch(fetchUserid(userId));
-    }
-  }, [dispatch, userId]);
+  // useEffect(() => {
+  //   if (userId) {
+  //     dispatch(fetchUserid(userId));
+  //   }
+  // }, [dispatch, userId]);
 
   const [requestsuser, setRequests] = useState([]);
 
@@ -77,11 +81,11 @@ function BloodRequest() {
         setRequests(prev => prev.map(request =>
           request.id === currentRequestId ? updatedRequest : request
         ));
-  
+
         setShowForm(false);
         setIsEditing(false);
         setCurrentRequestId(null);
-        
+
         toast.success("updated request Successful");
       } else {
         const newRequest = await dispatch(addRequest({
@@ -98,23 +102,20 @@ function BloodRequest() {
 
     } catch (error) {
       console.log(error)
-      Swal.fire({
-        title: "Error!",
-        text: "Something went wrong. Please try again.",
-        icon: "error"
-      });
     } finally {
       setIsLoading(false);
     }
   };
 
   if (!user) {
-    return <p className='p-20 text-green-400 text-lg'>Loading ...</p>;
+    return <div className=' h-96 flex items-center justify-center '>
+      <SyncLoader color="red" size={20} speedMultiplier={1} />
+    </div>;
   }
 
   return (
     <div className="w-[85%] mx-auto mt-4 py-6 ">
-      {requestsuser.length > 0 && !showForm && (
+      {!showForm && (
         <div className='w-full flex items-center justify-between'>
           <h3 className="text-2xl font-bold mb-4">Your Requests</h3>
           <button onClick={() => {
@@ -190,7 +191,8 @@ function BloodRequest() {
                   disabled={isLoading}
                   className={`hover:bg-red-800 text-white text-sm text-nowrap sm:text-[16px] p-3 rounded-lg w-full sm:w-auto transition duration-300 ${isLoading ? "bg-red-500" : "bg-red-600"}`}
                 >
-                  {isLoading ? 'Loading...' : isEditing ? 'Edit Request' : 'Upload Request'}
+                  {isLoading ? <ScaleLoader color="#fff" height={15} width={2} radius={2} margin={2} /> : isEditing ?
+                    'Edit Request' : 'Upload Request'}
                 </button>
 
                 {requestsuser.length > 0 && (
@@ -205,7 +207,7 @@ function BloodRequest() {
           </form>
         </div>
       )}
-      <RequestsList requestsuser={requestsuser || requestsorg} setCurrentRequestId={setCurrentRequestId} setRequests={setRequests} formData={formData} setFormData={setFormData} setIsEditing={setIsEditing} setShowForm={setShowForm} />
+      <RequestsList requestsuser={requestsuser} setCurrentRequestId={setCurrentRequestId} setRequests={setRequests} formData={formData} setFormData={setFormData} setIsEditing={setIsEditing} setShowForm={setShowForm} />
     </div>
   );
 }

@@ -35,6 +35,7 @@ function Header() {
     { name: 'About Us', to: '/#aboutus', smooth: true },
   ];
 
+
   const [openDialog, setOpenDialog] = useState(false)
 
   const handleProfileClick = () => {
@@ -240,7 +241,7 @@ function Header() {
               }}
               className=" w-full sm:w-[500px] h-screen bg-gray-100 shadow-lg rounded-l-3xl absolute top-0 right-0 z-[990]"
             >
-              <Profile openDialog={openDialog} setOpenDialog={setOpenDialog} />
+              <Profile setOpenDialog={setOpenDialog} />
             </motion.div>
 
           )}
