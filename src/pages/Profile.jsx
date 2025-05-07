@@ -28,16 +28,15 @@ function Profile({ setOpenDialog }) {
   const scope = useSelector((state) => state.userType.scope);
   const { user, loadinguser } = useSelector(state => state.userid);
 
-  // console.log(user.uploadedRequests)
   const { org, loadingorg } = useSelector(state => state.orgid);
   const [userId] = useState(localStorage.getItem('userid'));
   const [orgId] = useState(localStorage.getItem('orgaid')); 
 
-  // useEffect(() => {
-  //   if (userId) {
-  //     dispatch(fetchUserid(userId));
-  //   }
-  // }, [dispatch, userId]);
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserid(userId));
+    }
+  }, [dispatch, userId]);
 
   useEffect(() => {
     if (orgId) {

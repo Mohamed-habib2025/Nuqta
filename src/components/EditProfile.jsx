@@ -6,7 +6,6 @@ import LocationPicker from './LocationPicker';
 import ChangePasswordprofile from './ChangePasswordprofile';
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from 'react-redux';
-// import { fetchUserid, updateUser } from '../rtk/slices/userid';
 import EditProfileorg from './EditProfileorg';
 import { updateUser } from '../rtk/slices/userid';
 
