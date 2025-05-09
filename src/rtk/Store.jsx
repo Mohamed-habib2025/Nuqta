@@ -8,6 +8,7 @@ import orgReducer from './slices/orgSlice'
 import orgidReducer from './slices/orgid'
 import ForgotPasswordReducer from './slices/ForgotPassword'
 import RequestsUserReducer from './slices/RequestsUser'
+import RequestsReducer from './slices/Requests'
 
 export const store = configureStore({
   reducer: {
@@ -24,5 +25,7 @@ export const store = configureStore({
     forgetpassword:ForgotPasswordReducer,
 
     requestsUser:RequestsUserReducer,
+
+    Requests:RequestsReducer,
   }
 })
