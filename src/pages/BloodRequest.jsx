@@ -18,15 +18,16 @@ function BloodRequest() {
   const { user } = useSelector(state => state.userid);
   const [userId] = useState(localStorage.getItem('userid'));
 
-  // useEffect(() => {
-  //   if (userId) {
-  //     dispatch(fetchUserid(userId));
-  //   }
-  // }, [dispatch, userId]);
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserid(userId));
+    }
+  }, [dispatch, userId]);
+
 
   const [requestsuser, setRequests] = useState([]);
 
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(true);
   const [formData, setFormData] = useState({
     conservatism: "",
     city: "",
@@ -108,14 +109,14 @@ function BloodRequest() {
   };
 
   if (!user) {
-    return <div className=' h-96 flex items-center justify-center '>
+    return <div className=' h-lvh flex items-center justify-center '>
       <SyncLoader color="red" size={20} speedMultiplier={1} />
     </div>;
   }
 
   return (
     <div className="w-[85%] mx-auto mt-4 py-6 ">
-      {!showForm && (
+      {requestsuser.length > 0 && (
         <div className='w-full flex items-center justify-between'>
           <h3 className="text-2xl font-bold mb-4">Your Requests</h3>
           <button onClick={() => {
@@ -125,7 +126,7 @@ function BloodRequest() {
             className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded mb-4">New Request</button>
         </div>
       )}
-      {showForm && (
+      {requestsuser.length == 0 && (
         <div className='w-full md:w-[80%] lg:w-[60%] mx-auto'>
           <form
             onSubmit={handleSubmit}

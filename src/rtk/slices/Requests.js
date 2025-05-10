@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const fetchRequests  = createAsyncThunk(
+export const fetchRequests = createAsyncThunk(
   'requests/fetch',
   async (_, thunkAPI) => {
     try {
@@ -15,7 +15,6 @@ export const fetchRequests  = createAsyncThunk(
           },
         }
       )
-      console.log("requests from API:", response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
@@ -24,6 +23,53 @@ export const fetchRequests  = createAsyncThunk(
     }
   }
 );
+
+export const acceptRequest = createAsyncThunk(
+  'donation/acceptRequest',
+  async ({ donationId, requestId }, thunkAPI) => {
+    try {
+      const token = localStorage.getItem('userToken') || localStorage.getItem('organizationToken');
+      const response = await axios.post(
+        'https://nuqta-production.up.railway.app/api/donation/acceptRequest', { donationId, requestId } ,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to fetch accept Request'
+      );
+    }
+  }
+);
+
+export const deleteRequest = createAsyncThunk(
+  'donation/deleteRequest',
+  async ({ donationId, requestId }, thunkAPI) => {
+    try {
+      const token = localStorage.getItem('userToken') || localStorage.getItem('organizationToken');
+      const response = await axios.delete(
+        'https://nuqta-production.up.railway.app/api/donation/acceptRequest', { donationId, requestId } ,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to fetch accept Request'
+      );
+    }
+  }
+);
+
 
 const requestsSlice = createSlice({
   name: 'requests',

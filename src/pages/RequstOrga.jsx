@@ -22,7 +22,7 @@ function RequstOrga() {
 
   const [requestsorg, setRequests] = useState([]);
 
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(true);
   const [formData, setFormData] = useState({
     conservatism: "",
     city: "",
@@ -126,7 +126,7 @@ function RequstOrga() {
             className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded mb-4">New Request</button>
         </div>
       )}
-      {showForm && (
+      {requestsorg.length == 0 && (
         <div className='w-full md:w-[80%] lg:w-[60%] mx-auto'>
           <form
             onSubmit={handleSubmit}

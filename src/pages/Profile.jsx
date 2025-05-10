@@ -158,7 +158,7 @@ function Profile({ setOpenDialog }) {
                     </p>
                   </div>
 
-                  <div className="mt-8 px-6 flex flex-col items-center gap-4 text-lg">
+                  <div className="mt-2 px-6 flex flex-col items-center gap-4 text-lg">
                     <div className="flex items-center gap-1">
                       <span className="inline-block h-3 w-3 bg-green-400 rounded-full border border-green-700"></span>
                       <span className="text-gray-700">Valid - Eligible to donate</span>
@@ -209,7 +209,7 @@ function Profile({ setOpenDialog }) {
             }
 
             <div
-              className=' w-full flex items-center justify-between absolute bottom-8 sm:-bottom-1 left-0 px-4 text-red-600'>
+              className=' w-full flex items-center justify-between absolute bottom-4 sm:-bottom-1 left-0 px-4 text-red-600'>
               <div onClick={handlesignout}
                 className='flex items-center space-x-2 cursor-pointer hover:translate-x-1 duration-300'>
                 <PiSignOutBold className='text-2xl' />

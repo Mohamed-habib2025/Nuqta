@@ -5,7 +5,7 @@ export const fetchUsers = createAsyncThunk(
   'users/fetchUsers',
   async (_, thunkAPI) => {
     try {
-      const token = localStorage.getItem('userToken') || "";
+      const token = localStorage.getItem('userToken') || localStorage.getItem('organizationToken');
       const response = await axios.get(
         'https://nuqta-production.up.railway.app/api/user',
         {
