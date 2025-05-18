@@ -8,7 +8,7 @@ export const fetchorgid = createAsyncThunk(
     try {
       const token = localStorage.getItem('organizationToken');
       const response = await axios.get(
-        `https://nuqta-production.up.railway.app/api/org/${orgId}`,
+        `https://nuqta-02f0fc9e8c38.herokuapp.com/api/org/${orgId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -32,7 +32,7 @@ export const deleteorgById = createAsyncThunk(
     try {
       const token = localStorage.getItem('organizationToken');
       const response = await axios.delete(
-        `https://nuqta-production.up.railway.app/api/org/${orgId}`,
+        `https://nuqta-02f0fc9e8c38.herokuapp.com/api/org/${orgId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -55,7 +55,7 @@ export const updateOrg = createAsyncThunk(
     try {
       const token = localStorage.getItem("organizationToken");
       const response = await axios.put(
-        "https://nuqta-production.up.railway.app/api/org",
+        "https://nuqta-02f0fc9e8c38.herokuapp.com/api/org",
         updatedData,
         {
           headers: {
@@ -82,7 +82,7 @@ export const changePasswordorg = createAsyncThunk(
     try {
       const token = localStorage.getItem('organizationToken');
       const response = await axios.post(
-        `https://nuqta-production.up.railway.app/api/org/changePassword`,
+        `https://nuqta-02f0fc9e8c38.herokuapp.com/api/org/changePassword`,
         null,
         {
           params: {

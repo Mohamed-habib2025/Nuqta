@@ -7,7 +7,7 @@ export const fetchRequests = createAsyncThunk(
     try {
       const token = localStorage.getItem('userToken') || localStorage.getItem('organizationToken');
       const response = await axios.get(
-        'https://nuqta-production.up.railway.app/api/request',
+        'https://nuqta-02f0fc9e8c38.herokuapp.com/api/request',
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -30,7 +30,7 @@ export const acceptRequest = createAsyncThunk(
     try {
       const token = localStorage.getItem('userToken') || localStorage.getItem('organizationToken');
       const response = await axios.post(
-        'https://nuqta-production.up.railway.app/api/donation/acceptRequest', { donationId, requestId } ,
+        'https://nuqta-02f0fc9e8c38.herokuapp.com/api/donation/acceptRequest', { donationId, requestId },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,7 +53,7 @@ export const deleteRequest = createAsyncThunk(
     try {
       const token = localStorage.getItem('userToken') || localStorage.getItem('organizationToken');
       const response = await axios.delete(
-        'https://nuqta-production.up.railway.app/api/donation/acceptRequest', { donationId, requestId } ,
+        'https://nuqta-02f0fc9e8c38.herokuapp.com/api/donation/acceptRequest', { donationId, requestId },
         {
           headers: {
             Authorization: `Bearer ${token}`,

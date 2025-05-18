@@ -11,7 +11,7 @@ export const registerUser = createAsyncThunk(
         ...userData,
         userType
       };
-      const response = await axios.post("https://nuqta-production.up.railway.app/api/auth/register/user", fullData);
+      const response = await axios.post("https://nuqta-02f0fc9e8c38.herokuapp.com/api/auth/register/user", fullData);
       return response.data;
     } catch (error) {
       console.log("LOGIN ERROR:", error);
@@ -25,7 +25,7 @@ export const loginUser = createAsyncThunk(
   async (credentials, thunkAPI) => {
     try {
       const response = await axios.post(
-        "https://nuqta-production.up.railway.app/api/auth/login/user",
+        "https://nuqta-02f0fc9e8c38.herokuapp.com/api/auth/login/user",
         credentials
       );
 

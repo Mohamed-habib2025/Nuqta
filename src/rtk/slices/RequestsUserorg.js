@@ -8,7 +8,7 @@ export const addRequestOrg = createAsyncThunk(
     try {
       const token = localStorage.getItem('organizationToken');
       const response = await axios.post(
-        'https://nuqta-production.up.railway.app/api/request', newRequest,
+        'https://nuqta-02f0fc9e8c38.herokuapp.com/api/request', newRequest,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -34,7 +34,7 @@ export const updateRequestOrg = createAsyncThunk(
       console.log(updatedRequest)
       const token = localStorage.getItem('organizationToken');
       const response = await axios.put(
-        'https://nuqta-production.up.railway.app/api/request',
+        'https://nuqta-02f0fc9e8c38.herokuapp.com/api/request',
         updatedRequest,
         {
           headers: {
@@ -61,7 +61,7 @@ export const deleteRequestOrga = createAsyncThunk(
     try {
       const token = localStorage.getItem('organizationToken');
       await axios.delete(
-        `https://nuqta-production.up.railway.app/api/request/${id}`,
+        `https://nuqta-02f0fc9e8c38.herokuapp.com/api/request/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -22,7 +22,7 @@ function RequstOrga() {
 
   const [requestsorg, setRequests] = useState([]);
 
-  const [showForm, setShowForm] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     conservatism: "",
     city: "",
@@ -42,6 +42,9 @@ function RequstOrga() {
   useEffect(() => {
     if (org) {
       setRequests(org.uploadedRequests);
+      if ((org.uploadedRequests || []).length === 0) {
+        setShowForm(true);
+      }
     }
   }, [org]);
 
@@ -98,11 +101,6 @@ function RequstOrga() {
 
     } catch (error) {
       console.log(error)
-      Swal.fire({
-        title: "Error!",
-        text: "Something went wrong. Please try again.",
-        icon: "error"
-      });
     } finally {
       setIsLoading(false);
     }
@@ -110,13 +108,13 @@ function RequstOrga() {
 
   if (!org) {
     return <div className=' h-96 flex items-center justify-center'>
-      <SyncLoader color="red" size={20} speedMultiplier={1}  />
+      <SyncLoader color="red" size={20} speedMultiplier={1} />
     </div>;
   }
 
   return (
     <div className="w-[85%] mx-auto mt-4 py-6 ">
-      {!showForm && (
+      {requestsorg.length > 0 && (
         <div className='w-full flex items-center justify-between'>
           <h3 className="text-2xl font-bold mb-4">Your Requests</h3>
           <button onClick={() => {
@@ -126,7 +124,7 @@ function RequstOrga() {
             className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded mb-4">New Request</button>
         </div>
       )}
-      {requestsorg.length == 0 && (
+      {showForm && (
         <div className='w-full md:w-[80%] lg:w-[60%] mx-auto'>
           <form
             onSubmit={handleSubmit}

@@ -12,7 +12,7 @@ const governorates = {
   "Ismailia": ["Ismailia", "Fayed", "Qantara East", "Qantara West", "Tell El Kebir"],
   "Menofia": ["Shebin El Kom", "Menouf", "Tala", "Ashmoun", "Quesna"],
   "Minya": ["Minya", "Mallawi", "Bani Mazar", "Samalut", "Maghagha"],
-  "Qaliubiya": ["Banha", "Shibin El-Qanater" , "Shubra El Kheima", "Qalyub", "Khanka", "Toukh"],
+  "Qaliubiya": ["Benha", "Shibin El-Qanater" , "Shubra El Kheima", "Qalyub", "Khanka", "Toukh"],
   "New Valley": ["Kharga", "Dakhla", "Farafra", "Paris", "Balat"],
   "Suez": ["Suez", "Ain Sokhna", "Al-Adabiya", "Ataka", "Port Tawfiq"],
   "Aswan": ["Aswan", "Kom Ombo", "Edfu", "Drau", "Nasr El Nuba"],

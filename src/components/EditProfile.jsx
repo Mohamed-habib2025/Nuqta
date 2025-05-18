@@ -16,16 +16,16 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
 
   // const [userData, setuserData] = useState(user);
   const [userData, setuserData] = useState({
-    id: user.id || "",
-    username: user.username || "",
-    email: user.email || "",
-    phoneNumber: user.phoneNumber || "",
+    id: user?.id || "",
+    username: user?.username || "",
+    email: user?.email || "",
+    phoneNumber: user?.phoneNumber || "",
     donation: {
-      id: user.donation.id || "",
-      status: user.donation.status || "",
-      city: user.donation.city || "",
-      conservatism: user.donation.conservatism || "",
-      blood_type: user.donation.blood_type || "",
+      id: user?.donation.id || "",
+      status: user?.donation.status || "VALID",
+      city: user?.donation.city || "",
+      conservatism: user?.donation.conservatism || "",
+      blood_type: user?.donation.blood_type || "",
     }
   });
   

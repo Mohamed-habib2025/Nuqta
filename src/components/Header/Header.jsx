@@ -17,6 +17,7 @@ import { FaRegUser, FaRegHospital } from "react-icons/fa";
 import ReactDOMServer from "react-dom/server";
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserType } from '../../rtk/slices/userTypeSlice';
+import logo from "../../Images/Logo.png"
 
 function Header() {
 
@@ -25,7 +26,7 @@ function Header() {
 
   const navLinks = [
     { name: 'Home', to: '/' },
-    { name: 'Donate', to: '/donors', protected: true },
+    { name: 'Donation', to: '/donors', protected: true },
     {
       name: 'Request',
       to: usertyperequest === 'ORGANIZATION' ? '/RequstOrganization' : '/bloodRequest',
@@ -38,6 +39,11 @@ function Header() {
   const [openDialog, setOpenDialog] = useState(false)
 
   const handleProfileClick = () => {
+
+    if (!token) {
+      return;
+    }
+
     if (window.innerWidth >= 720) {
       setOpenDialog(true);
     } else {
@@ -161,6 +167,7 @@ function Header() {
         <Navbar className=' w-[85%] mx-auto pt-5 !px-0'>
           <Link to="/" className='flex flex-col items-center'>
             <span className="text-3xl font-semibold">Nu<span className=' text-red-600'>q</span>ta</span>
+            {/* <img src={logo} alt="logo" className='w-24 bg-slate-800 rounded-lg' /> */}
           </Link>
           <div className=' w-[50%] hidden lg:flex items-center justify-around'>
             {navLinks.map((link) => (

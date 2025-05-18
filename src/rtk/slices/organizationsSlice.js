@@ -6,7 +6,7 @@ export const fetchOrganizations = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const token = localStorage.getItem('organizationToken') || "";
-      const response = await axios.get('https://nuqta-production.up.railway.app/api/org', {
+      const response = await axios.get('https://nuqta-02f0fc9e8c38.herokuapp.com/api/org', {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

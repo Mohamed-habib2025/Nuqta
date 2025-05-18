@@ -7,7 +7,7 @@ export const fetchUsers = createAsyncThunk(
     try {
       const token = localStorage.getItem('userToken') || localStorage.getItem('organizationToken');
       const response = await axios.get(
-        'https://nuqta-production.up.railway.app/api/user',
+        'https://nuqta-02f0fc9e8c38.herokuapp.com/api/user',
         {
           headers: {
             Authorization: `Bearer ${token}`,

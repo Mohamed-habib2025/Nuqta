@@ -7,7 +7,7 @@ export const ForgotPassword = createAsyncThunk(
     console.log(email)
     try {
       const response = await axios.post(
-        `https://nuqta-production.up.railway.app/api/auth/forgotPassword?email=${email}`, null,
+        `https://nuqta-02f0fc9e8c38.herokuapp.com/api/auth/forgotPassword?email=${email}`, null,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export const verifyOtp = createAsyncThunk(
   async ({ email, otp }, thunkAPI) => {
     try {
       const response = await axios.post(
-        `https://nuqta-production.up.railway.app/api/auth/verifyOtp?otp=${otp}&email=${email}`, null,
+        `https://nuqta-02f0fc9e8c38.herokuapp.com/api/auth/verifyOtp?otp=${otp}&email=${email}`, null,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export const resetPassword = createAsyncThunk(
   async ({ email, otp, newPassword }, thunkAPI) => {
     try {
       const response = await axios.post(
-        'https://nuqta-production.up.railway.app/api/auth/resetPassword', null,
+        'https://nuqta-02f0fc9e8c38.herokuapp.com/api/auth/resetPassword', null,
         {
           params: {
             email,

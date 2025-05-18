@@ -27,6 +27,7 @@ function Profile({ setOpenDialog }) {
   const dispatch = useDispatch();
   const scope = useSelector((state) => state.userType.scope);
   const { user, loadinguser } = useSelector(state => state.userid);
+  const { users} = useSelector(state => state.users);
 
   const { org, loadingorg } = useSelector(state => state.orgid);
   const [userId] = useState(localStorage.getItem('userid'));
@@ -93,13 +94,13 @@ function Profile({ setOpenDialog }) {
 
 
   if ((scope === 'USER' && (!user || loadinguser)) || (scope === 'ORGANIZATION' && (!org || loadingorg))) {
-    return <div className=' h-full flex items-center justify-center '>
+    return <div className=' h-lvh flex items-center justify-center '>
       <GridLoader  size={20} color="red" />
     </div>;
   }
 
   return (
-    <div className='w-full h-screen relative sm:h-[95%] '>
+    <div className='w-full h-screen relative sm:h-[95%]'>
       {
         !isEditing ? (
           <div>
@@ -200,8 +201,8 @@ function Profile({ setOpenDialog }) {
                       <span>{org.uploadedRequests?.length ?? 0}</span>
                     </p>
                     <p className='w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer border-blue-300 bg-blue-200 text-blue-500 hover:bg-blue-300'>
-                      <span>Donate</span>
-                      <span>0</span>
+                      <span>Donors</span>
+                      <span>{users.length}</span>
                     </p>
                   </div>
                 </div>

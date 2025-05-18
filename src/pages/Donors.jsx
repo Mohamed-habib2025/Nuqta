@@ -3,8 +3,7 @@ import quantity from '../Images/quantity blood .png';
 import { IoLocationOutline } from 'react-icons/io5';
 import { LuPhone } from 'react-icons/lu';
 import { MdBloodtype } from 'react-icons/md';
-import { BsChatDots } from "react-icons/bs";
-// import { IoCallOutline } from "react-icons/io5";
+import { FaWhatsapp } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { acceptRequest, fetchRequests } from '../rtk/slices/Requests';
 import orgimg from "../Images/Hospital.png";
@@ -24,7 +23,7 @@ function Donors() {
     dispatch(fetchRequests());
   }, []);
 
-  const { requests } = useSelector(state => state.Requests);
+  const { requests, loading } = useSelector(state => state.Requests);
 
   const [allrequests, setallrequests] = useState([]);
   const [filterType, setFilterType] = useState("all");
@@ -48,6 +47,11 @@ function Donors() {
   }, [dispatch, userId]);
 
   const filteredRequests = sortedRequests.filter((req) => {
+
+    const MyRequest = user?.uploadedRequests?.some((uploadedReq) => uploadedReq.id === req.id);
+    if (MyRequest) return false;
+
+
     if (filterType === "Conservatism") {
       return req.conservatism === user.donation.conservatism;
     } else if (filterType === "Conservatism_City") {
@@ -59,6 +63,8 @@ function Donors() {
     return true;
   });
 
+  console.log(filteredRequests)
+
   const handeleaccept = (reqid) => {
     dispatch(acceptRequest({ donationId: userId, requestId: reqid }))
       .unwrap()
@@ -67,7 +73,7 @@ function Donors() {
       });
   };
 
-  if (!user && !requests) {
+  if (loading) {
     return <div className=' h-lvh flex items-center justify-center '>
       <SyncLoader color="red" size={20} speedMultiplier={1} />
     </div>;
@@ -77,7 +83,7 @@ function Donors() {
     <>
       {
         scope === "USER" ?
-          <div className="w-[85%] mx-auto pt-5">
+          <div className=" w-[90%] lg:w-[85%] mx-auto pt-5 min-h-[400px]">
             <div className=' mx-3 flex flex-col lg:flex-row items-center justify-between '>
               <h2 className="text-3xl font-bold mb-2 text-red-700">Available Requests</h2>
               <div className="mb-6 mt-4 text-center space-y-2 md:space-y-0 ">
@@ -93,41 +99,54 @@ function Donors() {
                 </select>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredRequests.map((request) => (
-                <div key={request.id} className="bg-gray-100 border border-gray-300 shadow-lg rounded-lg p-4 flex flex-col items-center text-center transition-transform hover:scale-105 cursor-pointer">
-                  <img src={request.organization ? orgimg : request.user.gender === "MALE" ? male : female} alt="Donor" className="w-24 h-24 rounded-full mb-3" />
-                  <p className="flex items-center text-lg font-semibold text-red-600">{request.organization ? request.organization?.orgName : request.user?.username}</p>
-                  <p className="flex items-center text-lg"><IoLocationOutline className="mr-2" />{request.conservatism} - {request.city}</p>
-                  <p className="flex items-center "><LuPhone className="mr-2" />{request.organization ? request.organization?.phoneNumber : user?.donation.status === 'VALID' ? request.user.phoneNumber : null}</p>
-                  <p className="flex items-center text-lg">{request.request_date}</p>
-                  <div className='flex items-center space-x-5'>
-                    <div className="flex items-center gap-1 text-lg font-semibold mt-2">
-                      <MdBloodtype className="text-2xl text-red-600" />
-                      <span className="">{request.blood_type_needed}</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 gap-6">
+              {
+                filteredRequests.length > 0 ? (
+                  filteredRequests.map((request) => (
+                    <div key={request.id} className=" bg-gray-100 border border-gray-300 shadow-lg rounded-lg p-4 flex flex-col gap-1 items-center text-center transition-transform hover:scale-105 cursor-pointer">
+                      <img src={request.organization ? orgimg : request.user.gender === "MALE" ? male : female} alt="Donor" className="w-24 h-24 rounded-full mb-3" />
+                      <p className="flex items-center text-lg font-semibold text-red-600">{request.organization ? request.organization?.orgName : request.user?.username}</p>
+                      <p className="flex items-center text-lg"><IoLocationOutline className="mr-2 text-2xl" />{request.conservatism} - {request.city}</p>
+                      <p className="flex items-center text-xl"><LuPhone className="mr-2 text-xl" />{request.organization ? request.organization?.phoneNumber : request.user?.phoneNumber}</p>
+                      <div className='flex items-center space-x-5'>
+                        <div className="flex items-center gap-1 text-lg font-semibold mt-2">
+                          <MdBloodtype className="text-2xl text-red-600" />
+                          <span className="">{request.blood_type_needed}</span>
+                        </div>
+                        <p className="flex items-center  mt-2 font-bold"><img src={quantity} alt="Blood quantity" className="w-6 mr-1" />{request.amount} ml</p>
+                      </div>
+                      {user?.donation.status === 'VALID' && (
+                        <div className='flex items-center gap-2 mt-4'>
+                          <button
+                            onClick={() => handeleaccept(request.id)}
+                            disabled={donatedRequests.includes(request.id)}
+                            className={`px-4 py-2 rounded-lg transition duration-200 ${donatedRequests.includes(request.id) ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-800 text-white'}`}
+                          >
+                            {donatedRequests.includes(request.id) ? 'Donated' : 'Donate'}
+                          </button>
+                          <a
+                            href={`https://wa.me/${request.user ? request.user?.phoneNumber : request.organization?.phoneNumber}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <button
+                              className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition duration-200"
+                            >
+                              <FaWhatsapp className="text-xl" />
+                              <span>Chat</span>
+                            </button>
+                          </a>
+                        </div>
+                      )}
                     </div>
-                    <p className="flex items-center  mt-2 font-bold"><img src={quantity} alt="Blood quantity" className="w-6 mr-1" />{request.amount} Kg</p>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center text-2xl text-red-600 font-semibold py-10">
+                    No requests for the specified location.
                   </div>
-                  {user?.donation.status === 'VALID' && (
-                    <div className='flex items-center gap-2 mt-4'>
-                      <button
-                        onClick={() => handeleaccept(request.id)}
-                        disabled={donatedRequests.includes(request.id)}
-                        className={`px-4 py-2 rounded-lg transition duration-200 ${donatedRequests.includes(request.id) ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-800 text-white'}`}
-                      >
-                        {donatedRequests.includes(request.id) ? 'Donated' : 'Donate'}
-                      </button>
+                )
+              }
 
-                      <button
-                        className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition duration-200"
-                      >
-                        <BsChatDots className='text-xl' />
-                        <span>Chat</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ))}
             </div>
           </div> : <Donorsorg />
 

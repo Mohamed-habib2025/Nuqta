@@ -8,7 +8,7 @@ export const fetchUserid = createAsyncThunk(
     try {
       const token = localStorage.getItem('userToken');
       const response = await axios.get(
-        `https://nuqta-production.up.railway.app/api/user/${userId}`,
+        `https://nuqta-02f0fc9e8c38.herokuapp.com/api/user/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -32,7 +32,7 @@ export const deleteUserById = createAsyncThunk(
     try {
       const token = localStorage.getItem('userToken');
       const response = await axios.delete(
-        `https://nuqta-production.up.railway.app/api/user/${userId}`,
+        `https://nuqta-02f0fc9e8c38.herokuapp.com/api/user/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -55,7 +55,7 @@ export const updateUser = createAsyncThunk(
     try {
       const token = localStorage.getItem("userToken");
       const response = await axios.put(
-        "https://nuqta-production.up.railway.app/api/user",
+        "https://nuqta-02f0fc9e8c38.herokuapp.com/api/user",
         updatedData,
         {
           headers: {
@@ -82,7 +82,7 @@ export const changePassword = createAsyncThunk(
     try {
       const token = localStorage.getItem('userToken');
       const response = await axios.post(
-        `https://nuqta-production.up.railway.app/api/user/changePassword`,
+        `https://nuqta-02f0fc9e8c38.herokuapp.com/api/user/changePassword`,
         null,
         {
           params: {

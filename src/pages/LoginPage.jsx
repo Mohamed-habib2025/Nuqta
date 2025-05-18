@@ -142,7 +142,7 @@ function LoginPage() {
       }
     } catch (error) {
       toast.error("Login failed, Make sure your data");
-      const errorMessage = error?.response?.data?.message || error?.message || "An unknown error occurred.";
+      // const errorMessage = error?.response?.data?.message || error?.message || "An unknown error occurred.";
       // console.error("LOGIN ERROR:", errorMessage);
     } finally {
       setIsLoading(false);
@@ -150,12 +150,12 @@ function LoginPage() {
   };
 
   return (
-    <div className={` w-full flex items-center justify-center sm:h-[720px]  ${isSignUp ? 'h-[650px]' : 'h-[550px] '}`}>
+    <div className={` w-full flex items-center justify-center sm:h-[720px]  ${isSignUp ? 'h-[700px]' : 'h-[550px] '}`}>
       <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden mx-5">
         {/* Sign Up Form */}
         <div className={`absolute transition-all duration-700 bottom-0 sm:top-0 right-0 w-full sm:w-1/2 h-[70%] sm:h-full ${isSignUp ? 'opacity-100 ' : 'opacity-0 '}`}>
           <form onSubmit={handleSubmitRegister} className="flex flex-col items-center justify-center h-full p-5 sm:p-8">
-            <h1 className="text-2xl font-bold">Create Account</h1>
+            <h1 className="text-2xl font-bold mt-4">Create Account</h1>
             <span className="text-[18px]">or use your email for registration</span>
             <div className="space-y-2 mt-2 w-full">
               <input type="text" name='username' placeholder="Username" value={formData.username} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
@@ -213,7 +213,7 @@ function LoginPage() {
             {/* <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign Up</button> */}
             <button
               disabled={isLoading}
-              className="mt-3 bg-red-600 text-white rounded-lg px-6 py-2 hover:bg-red-800 duration-200 flex items-center justify-center min-h-[42px]">
+              className="my-4 bg-red-600 text-white rounded-lg px-6 py-2 hover:bg-red-800 duration-200 flex items-center justify-center min-h-[42px]">
               {
                 isLoading
                   ? <ScaleLoader color="#fff" height={15} width={2} radius={2} margin={2} />

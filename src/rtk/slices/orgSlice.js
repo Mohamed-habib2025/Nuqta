@@ -14,7 +14,7 @@ export const registerOrg = createAsyncThunk(
       //   ...userData,
       //   scope : userType
       // }
-      const response = await axios.post('https://nuqta-production.up.railway.app/api/auth/register/org', userData);
+      const response = await axios.post('https://nuqta-02f0fc9e8c38.herokuapp.com/api/auth/register/org', userData);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Registration failed");
@@ -27,7 +27,7 @@ export const loginOrg = createAsyncThunk(
   'organization/login',
   async (credentials, thunkAPI) => {
     try {
-      const response = await axios.post('https://nuqta-production.up.railway.app/api/auth/login/org',
+      const response = await axios.post('https://nuqta-02f0fc9e8c38.herokuapp.com/api/auth/login/org',
         credentials
       );
 

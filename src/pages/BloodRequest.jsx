@@ -27,7 +27,7 @@ function BloodRequest() {
 
   const [requestsuser, setRequests] = useState([]);
 
-  const [showForm, setShowForm] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     conservatism: "",
     city: "",
@@ -45,6 +45,9 @@ function BloodRequest() {
   useEffect(() => {
     if (user) {
       setRequests(user.uploadedRequests);
+      if ((user.uploadedRequests || []).length === 0) {
+        setShowForm(true); 
+      }
     }
   }, [user]);
 
@@ -126,7 +129,7 @@ function BloodRequest() {
             className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded mb-4">New Request</button>
         </div>
       )}
-      {requestsuser.length == 0 && (
+      {showForm && (
         <div className='w-full md:w-[80%] lg:w-[60%] mx-auto'>
           <form
             onSubmit={handleSubmit}
