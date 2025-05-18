@@ -154,14 +154,14 @@ function LoginPage() {
       <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden mx-5">
         {/* Sign Up Form */}
         <div className={`absolute transition-all duration-700 bottom-0 sm:top-0 right-0 w-full sm:w-1/2 h-[70%] sm:h-full ${isSignUp ? 'opacity-100 ' : 'opacity-0 '}`}>
-          <form onSubmit={handleSubmitRegister} className="flex flex-col items-center justify-center h-full p-5 sm:p-8">
+          <form onSubmit={handleSubmitRegister} className="flex flex-col items-center justify-center h-full p-3 sm:p-8">
             <h1 className="text-2xl font-bold mt-4">Create Account</h1>
             <span className="text-[18px]">or use your email for registration</span>
             <div className="space-y-2 mt-2 w-full">
               <input type="text" name='username' placeholder="Username" value={formData.username} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
-              <div className="flex justify-between w-full">
-                <input type="date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-[49%] p-2 focus:ring-0" required />
-                <input type="number" name='weight' placeholder='Weight' value={formData.donation.weight} onChange={handleChangeregister} className=" rounded bg-gray-200 border-none w-[49%] p-2 focus:ring-0" required />
+              <div className="flex justify-between gap-2 w-full">
+                <input type="date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+                <input type="number" name='weight' placeholder='Weight' value={formData.donation.weight} onChange={handleChangeregister} className=" rounded bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               </div>
               <div className="flex items-center justify-between w-full space-x-2">
                 <select name="governorate" value={formData.donation.conservatism} onChange={handleChangeregister} className=" w-full cursor-pointer p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
@@ -224,10 +224,10 @@ function LoginPage() {
         </div>
 
         {/* Sign In Form */}
-        <div className={`absolute transition-all duration-700 top-0 left-0 w-full sm:w-1/2 h-[50%] sm:h-full ${isSignUp ? 'opacity-0 ' : 'opacity-100'}`}>
+        <div className={`absolute transition-all duration-700 top-0 left-0 w-full sm:w-1/2 h-[50%] sm:h-full ${isSignUp ? 'opacity-0 hidden' : 'opacity-100 '}`}>
           <form onSubmit={handleSubmitLogin} className="flex flex-col items-center justify-center sm:h-full p-10">
             <h1 className="text-2xl font-bold">Sign In</h1>
-            <span className="text-[18px]">or use your email password</span>
+            <span className="text-[18px] ">or use your email password</span>
             <div className="space-y-2 mt-2 w-full">
               <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
                 <input type="email" name='email' placeholder="Email" value={loginData.email} onChange={handleChangelogin} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
