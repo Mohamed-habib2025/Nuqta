@@ -40,7 +40,7 @@ function Header() {
 
   const handleProfileClick = () => {
 
-    if (!token) {
+    if (!usertyperequest) {
       return;
     }
 

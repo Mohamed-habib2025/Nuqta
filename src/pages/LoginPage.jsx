@@ -160,8 +160,8 @@ function LoginPage() {
             <div className="space-y-2 mt-2 w-full">
               <input type="text" name='username' placeholder="Username" value={formData.username} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               <div className="flex justify-between gap-2 w-full">
-                <input type="date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-full p-2 focus:ring-0" required />
-                <input type="number" name='weight' placeholder='Weight' value={formData.donation.weight} onChange={handleChangeregister} className=" rounded bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+                <input type="date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-1/2 min-w-[140px] p-2 focus:ring-0" required />
+                <input type="number" name='weight' placeholder='Weight' value={formData.donation.weight} onChange={handleChangeregister} className=" rounded bg-gray-200 border-none w-1/2 min-w-[140px] p-2 focus:ring-0" required />
               </div>
               <div className="flex items-center justify-between w-full space-x-2">
                 <select name="governorate" value={formData.donation.conservatism} onChange={handleChangeregister} className=" w-full cursor-pointer p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
