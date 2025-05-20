@@ -17,7 +17,7 @@ import { MdDeleteForever } from "react-icons/md";
 import { deleteorgById, fetchorgid } from '../rtk/slices/orgid';
 import { logoutOrg } from '../rtk/slices/orgSlice';
 import Swal from "sweetalert2";
-import { GridLoader  } from "react-spinners";
+import { GridLoader } from "react-spinners";
 // import { setUserType } from '../rtk/slices/userTypeSlice';
 
 function Profile({ setOpenDialog }) {
@@ -27,11 +27,11 @@ function Profile({ setOpenDialog }) {
   const dispatch = useDispatch();
   const scope = useSelector((state) => state.userType.scope);
   const { user, loadinguser } = useSelector(state => state.userid);
-  const { users} = useSelector(state => state.users);
+  const { users } = useSelector(state => state.users);
 
   const { org, loadingorg } = useSelector(state => state.orgid);
   const [userId] = useState(localStorage.getItem('userid'));
-  const [orgId] = useState(localStorage.getItem('orgaid')); 
+  const [orgId] = useState(localStorage.getItem('orgaid'));
 
   useEffect(() => {
     if (userId) {
@@ -95,16 +95,16 @@ function Profile({ setOpenDialog }) {
 
   if ((scope === 'USER' && (!user || loadinguser)) || (scope === 'ORGANIZATION' && (!org || loadingorg))) {
     return <div className=' h-lvh flex items-center justify-center '>
-      <GridLoader  size={20} color="red" />
+      <GridLoader size={20} color="red" />
     </div>;
   }
 
   return (
-    <div className='w-full h-screen relative sm:h-[95%]'>
+    <div >
       {
         !isEditing ? (
-          <div>
-            <div className="px-6 py-8 flex items-center justify-between">
+          <div className='w-full h-svh relative '>
+            <div className="px-6 py-4 flex items-center justify-between">
               <span className='text-xl'>My Profile</span>
               <FaArrowRight
                 onClick={() => setOpenDialog ? setOpenDialog(false) : navigate(-1)}
@@ -210,7 +210,7 @@ function Profile({ setOpenDialog }) {
             }
 
             <div
-              className=' w-full flex items-center justify-between absolute bottom-4 sm:-bottom-1 left-0 px-4 text-red-600'>
+              className=' absolute bottom-4 sm:bottom-6 left-0 w-full flex items-center justify-between px-4 text-red-600'>
               <div onClick={handlesignout}
                 className='flex items-center space-x-2 cursor-pointer hover:translate-x-1 duration-300'>
                 <PiSignOutBold className='text-2xl' />

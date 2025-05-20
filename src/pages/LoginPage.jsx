@@ -138,12 +138,9 @@ function LoginPage() {
           autoClose: 2000,
           hideProgressBar: true,
         });
-        // console.log("LOGIN SUCCESS:", res);
       }
     } catch (error) {
       toast.error("Login failed, Make sure your data");
-      // const errorMessage = error?.response?.data?.message || error?.message || "An unknown error occurred.";
-      // console.error("LOGIN ERROR:", errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -151,9 +148,9 @@ function LoginPage() {
 
   return (
     <div className={` w-full flex items-center justify-center sm:h-[720px]  ${isSignUp ? 'h-[700px]' : 'h-[550px] '}`}>
-      <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden mx-5">
+      <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden mx-3">
         {/* Sign Up Form */}
-        <div className={`absolute transition-all duration-700 bottom-0 sm:top-0 right-0 w-full sm:w-1/2 h-[70%] sm:h-full ${isSignUp ? 'opacity-100 ' : 'opacity-0 '}`}>
+        <div className={`absolute transition-all duration-700 bottom-0 sm:top-0 right-0 w-full sm:w-1/2 h-[70%] sm:h-full ${isSignUp ? 'opacity-100 ' : 'opacity-0 hidden'}`}>
           <form onSubmit={handleSubmitRegister} className="flex flex-col items-center justify-center h-full p-3 sm:p-8">
             <h1 className="text-2xl font-bold mt-4">Create Account</h1>
             <span className="text-[18px]">or use your email for registration</span>
@@ -225,7 +222,7 @@ function LoginPage() {
 
         {/* Sign In Form */}
         <div className={`absolute transition-all duration-700 top-0 left-0 w-full sm:w-1/2 h-[50%] sm:h-full ${isSignUp ? 'opacity-0 hidden' : 'opacity-100 '}`}>
-          <form onSubmit={handleSubmitLogin} className="flex flex-col items-center justify-center sm:h-full p-10">
+          <form onSubmit={handleSubmitLogin} className="flex flex-col items-center justify-center sm:h-full p-5 md:p-10">
             <h1 className="text-2xl font-bold">Sign In</h1>
             <span className="text-[18px] ">or use your email password</span>
             <div className="space-y-2 mt-2 w-full">

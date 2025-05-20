@@ -22,6 +22,9 @@ import logo from "../../Images/Logo.png"
 function Header() {
 
   const usertyperequest = useSelector((state) => state.userType.scope);
+  const userToken = useSelector((state) => state.user?.token);
+  const orgToken = useSelector((state) => state.organization?.token);
+  const token = userToken || orgToken;
   const dispatch = useDispatch();
 
   const navLinks = [
@@ -38,13 +41,28 @@ function Header() {
 
   const [openDialog, setOpenDialog] = useState(false)
 
+
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 620);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 620);
+      if (window.innerWidth < 620) {
+        setOpenDialog(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleProfileClick = () => {
 
-    if (!usertyperequest) {
+    if (!token) {
       return;
     }
 
-    if (window.innerWidth >= 720) {
+    if (isLargeScreen) {
       setOpenDialog(true);
     } else {
       navigate("/profile");
@@ -118,9 +136,6 @@ function Header() {
     });
   };
 
-  const token = useSelector((state) =>
-    state.user.token || state.organization.token
-  );
 
 
   const handleProtectedRoute = (event, to, linkname) => {
@@ -236,7 +251,7 @@ function Header() {
 
 
         <AnimatePresence>
-          {openDialog && window.innerWidth >= 720 && (
+          {openDialog && (
             <motion.div
               initial={{ x: 480 }}
               whileInView={{ x: 0 }}

@@ -175,7 +175,7 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
   };
 
   return (
-    <div className='px-6'>
+    <div className='px-3'>
       {
         scope === "USER" ? (
           <div className='flex flex-col items-center'>
@@ -200,7 +200,7 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
                   />) : (
                     <div>
                       {/* header edit profile */}
-                      <div className="sm:px-4 py-10 flex items-center justify-between">
+                      <div className="sm:px-4 py-6 flex items-center justify-between">
                         <div className='flex items-center gap-3'>
                           <FaArrowLeft className='text-lg cursor-pointer' onClick={() => setIsEditing(false)} />
                           <span className='text-xl'>Edit Profile</span>
@@ -215,12 +215,12 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
                       )}
 
                       <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                        <input type="text" name="email" disabled value={userData.email} className='w-3/4 py-2 text-gray-400 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                        <input type="text" name="email" disabled value={userData.email} className='w-[85%] py-2 text-gray-400 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                         <span className='text-gray-500 text-sm'> Email</span>
                       </div>
 
                       <div className=' flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
-                        <input autoComplete="off" type="text" name="username" value={userData.username} onChange={handleChange} className=' py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
+                        <input autoComplete="off" type="text" name="username" value={userData.username} onChange={handleChange} className='w-[75%] py-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none' />
                         <span className='text-gray-500 text-sm'>User Name</span>
                       </div>
 

@@ -5,14 +5,14 @@ import { LuPhone } from 'react-icons/lu';
 import { MdBloodtype } from 'react-icons/md';
 import { FaWhatsapp } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
-import { acceptRequest, fetchRequests } from '../rtk/slices/Requests';
+import { acceptRequest, deleteRequest, fetchRequests } from '../rtk/slices/Requests';
 import orgimg from "../Images/Hospital.png";
 import male from '../Images/male.jpg';
 import female from "../Images/female.png";
 import { fetchUserid } from '../rtk/slices/userid';
 import { SyncLoader } from 'react-spinners';
 import Donorsorg from './Donorsorg';
-
+import Swal from 'sweetalert2';
 
 function Donors() {
 
@@ -28,6 +28,11 @@ function Donors() {
   const [allrequests, setallrequests] = useState([]);
   const [filterType, setFilterType] = useState("all");
   const [donatedRequests, setDonatedRequests] = useState([]);
+
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("donatedRequests")) || [];
+    setDonatedRequests(saved);
+  }, []);
 
   const sortedRequests = [...allrequests].sort((a, b) => a.id - b.id);
 
@@ -63,14 +68,74 @@ function Donors() {
     return true;
   });
 
-  console.log(filteredRequests)
-
   const handeleaccept = (reqid) => {
-    dispatch(acceptRequest({ donationId: userId, requestId: reqid }))
-      .unwrap()
-      .then(() => {
-        setDonatedRequests(prev => [...prev, reqid]);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will not be able to undo unless you cancel the donation later.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, I want to donate.",
+      cancelButtonText: "cancel"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(acceptRequest({ donationId: userId, requestId: reqid }))
+          .unwrap()
+          .then(() => {
+            Swal.fire({
+              title: "Successfully",
+              text: "Thank you for your donation.",
+              icon: "success"
+            });
+            handleSaveDonation(reqid);
+          })
+          .catch(() => {
+            Swal.fire({
+              title: "Falid",
+              text: "An error occurred. Try again.",
+              icon: "error"
+            });
+          });
+      }
+    });
+  };
+
+  const handleCancelDonation = (reqid) => {
+    Swal.fire({
+      title: "Do you want to cancel the donation?",
+      text: "You may withdraw your donation to this request.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, cancel",
+      cancelButtonText: "No"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteRequest({ donationId: userId, requestId: reqid }))
+          .unwrap()
+          .then(() => {
+            const updated = donatedRequests.filter(id => id !== reqid);
+            setDonatedRequests(updated);
+            localStorage.removeItem("donatedRequest");
+            Swal.fire("Cancelled", "Your donation has been successfully cancelled.", "success");
+          })
+          .catch(() => {
+            Swal.fire("failed", "An error occurred while canceling the donation.", "error");
+          });
+      }
+    });
+  };
+
+  const handleSaveDonation = (reqid) => {
+    setDonatedRequests(reqid);
+    localStorage.setItem("donatedRequest", reqid);
+  };
+
+  const formatPhoneNumber = (phone) => {
+    if (phone.startsWith("0")) {
+      return `2${phone}`;
+    }
+    return phone;
   };
 
   if (loading) {
@@ -117,15 +182,25 @@ function Donors() {
                       </div>
                       {user?.donation.status === 'VALID' && (
                         <div className='flex items-center gap-2 mt-4'>
-                          <button
-                            onClick={() => handeleaccept(request.id)}
-                            disabled={donatedRequests.includes(request.id)}
-                            className={`px-4 py-2 rounded-lg transition duration-200 ${donatedRequests.includes(request.id) ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-800 text-white'}`}
-                          >
-                            {donatedRequests.includes(request.id) ? 'Donated' : 'Donate'}
-                          </button>
+                          {donatedRequests.includes(request.id) ? (
+                            <button
+                              onClick={() => handleCancelDonation(request.id)}
+                              className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition"
+                            >
+                              Cancel Donation
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handeleaccept(request.id)}
+                              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800 transition"
+                            >
+                              Donate
+                            </button>
+                          )}
                           <a
-                            href={`https://wa.me/${request.user ? request.user?.phoneNumber : request.organization?.phoneNumber}`}
+                            href={`https://wa.me/${formatPhoneNumber(
+                              request.user ? request.user?.phoneNumber : request.organization?.phoneNumber
+                            )}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -158,29 +233,3 @@ function Donors() {
 }
 
 export default Donors;
-
-{/* {selectedRequest && (
-        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h3 className="text-xl font-semibold mb-4 text-center">Upload Blood Test</h3>
-            <form onSubmit={handleUploadTest} className="space-y-4">
-              <input type="file" required className="border p-2 w-full rounded-lg" />
-              <div className="flex justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={() => setSelectedRequest(null)}
-                  className="bg-gray-500 text-white p-2 rounded-lg hover:bg-gray-600 transition duration-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-800 transition duration-200"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )} */}
