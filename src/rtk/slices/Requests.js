@@ -52,19 +52,21 @@ export const deleteRequest = createAsyncThunk(
   async ({ donationId, requestId }, thunkAPI) => {
     try {
       const token = localStorage.getItem('userToken') || localStorage.getItem('organizationToken');
-      const response = await axios.delete(
-        'https://nuqta-02f0fc9e8c38.herokuapp.com/api/donation/acceptRequest', { donationId, requestId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
+
+      const response = await axios({
+        method: 'delete',
+        url: 'https://nuqta-02f0fc9e8c38.herokuapp.com/api/donation/deleteRequest',
+        data: { donationId, requestId }, 
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         }
-      )
+      });
+
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Failed to fetch accept Request'
+        error.response?.data?.message || 'Failed to cancel donation'
       );
     }
   }

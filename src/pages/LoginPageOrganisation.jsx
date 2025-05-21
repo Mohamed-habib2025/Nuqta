@@ -117,8 +117,8 @@ function LoginPageOrganisation() {
       }
     } catch (error) {
       toast.error("Login failed, Make sure your data");
-      const errorMessage = error?.response?.data?.message || error?.message || "An unknown error occurred.";
-      // console.error("LOGIN ERROR:", errorMessage);
+      // const errorMessage = error?.response?.data?.message || error?.message || "An unknown error occurred.";
+      console.error( error);
     } finally {
       setIsLoading(false);
     }

@@ -14,6 +14,7 @@ import { ScaleLoader } from "react-spinners";
 
 function LoginPage() {
 
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { scope } = useSelector((state) => state.userType);
@@ -33,7 +34,7 @@ function LoginPage() {
       last_donation: "",
       amount: 0.5,
       payment_offered: true,
-      status: null,
+      status: "VALID",
       weight: '',
       city: "",
       conservatism: ""
@@ -141,6 +142,7 @@ function LoginPage() {
       }
     } catch (error) {
       toast.error("Login failed, Make sure your data");
+      // console.log(error)
     } finally {
       setIsLoading(false);
     }

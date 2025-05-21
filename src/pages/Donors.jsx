@@ -116,10 +116,11 @@ function Donors() {
           .then(() => {
             const updated = donatedRequests.filter(id => id !== reqid);
             setDonatedRequests(updated);
-            localStorage.removeItem("donatedRequest");
+            localStorage.removeItem("donatedRequests");
             Swal.fire("Cancelled", "Your donation has been successfully cancelled.", "success");
           })
-          .catch(() => {
+          .catch((error) => {
+            console.log(error)
             Swal.fire("failed", "An error occurred while canceling the donation.", "error");
           });
       }
@@ -127,8 +128,9 @@ function Donors() {
   };
 
   const handleSaveDonation = (reqid) => {
-    setDonatedRequests(reqid);
-    localStorage.setItem("donatedRequest", reqid);
+    const updated = [...donatedRequests, reqid];
+    setDonatedRequests(updated);
+    localStorage.setItem("donatedRequests", JSON.stringify([reqid]));
   };
 
   const formatPhoneNumber = (phone) => {
@@ -168,7 +170,7 @@ function Donors() {
               {
                 filteredRequests.length > 0 ? (
                   filteredRequests.map((request) => (
-                    <div key={request.id} className=" bg-gray-100 border border-gray-300 shadow-lg rounded-lg p-4 flex flex-col gap-1 items-center text-center transition-transform hover:scale-105 cursor-pointer">
+                    <div key={request.id} className=" bg-gray-100 border border-gray-300 shadow-lg rounded-lg p-4 flex flex-col gap-1 justify-center items-center text-center transition-transform hover:scale-105 cursor-pointer">
                       <img src={request.organization ? orgimg : request.user.gender === "MALE" ? male : female} alt="Donor" className="w-24 h-24 rounded-full mb-3" />
                       <p className="flex items-center text-lg font-semibold text-red-600">{request.organization ? request.organization?.orgName : request.user?.username}</p>
                       <p className="flex items-center text-lg"><IoLocationOutline className="mr-2 text-2xl" />{request.conservatism} - {request.city}</p>
@@ -180,39 +182,40 @@ function Donors() {
                         </div>
                         <p className="flex items-center  mt-2 font-bold"><img src={quantity} alt="Blood quantity" className="w-6 mr-1" />{request.amount} ml</p>
                       </div>
-                      {user?.donation.status === 'VALID' && (
-                        <div className='flex items-center gap-2 mt-4'>
-                          {donatedRequests.includes(request.id) ? (
-                            <button
-                              onClick={() => handleCancelDonation(request.id)}
-                              className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition"
-                            >
-                              Cancel Donation
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => handeleaccept(request.id)}
-                              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800 transition"
-                            >
-                              Donate
-                            </button>
-                          )}
-                          <a
-                            href={`https://wa.me/${formatPhoneNumber(
-                              request.user ? request.user?.phoneNumber : request.organization?.phoneNumber
-                            )}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                      <div className='flex items-center gap-2 mt-4'>
+                        {donatedRequests.includes(request.id) ? (
+                          <button
+                            onClick={() => handleCancelDonation(request.id)}
+                            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
                           >
-                            <button
-                              className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition duration-200"
-                            >
-                              <FaWhatsapp className="text-xl" />
-                              <span>Chat</span>
-                            </button>
-                          </a>
-                        </div>
-                      )}
+                            Cancel Donation
+                          </button>
+                        ) : (
+                          user?.donation.status === 'VALID' && donatedRequests.length === 0 && (
+                            <>
+                              <button
+                                onClick={() => handeleaccept(request.id)}
+                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800 transition"
+                              >
+                                Donate
+                              </button>
+
+                              {/* <a
+                                href={`https://wa.me/${formatPhoneNumber(
+                                  request.user ? request.user?.phoneNumber : request.organization?.phoneNumber
+                                )}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <button className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition duration-200">
+                                  <FaWhatsapp className="text-xl" />
+                                  <span>Chat</span>
+                                </button>
+                              </a> */}
+                            </>
+                          )
+                        )}
+                      </div>
                     </div>
                   ))
                 ) : (

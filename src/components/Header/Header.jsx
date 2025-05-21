@@ -200,7 +200,7 @@ function Header() {
 
           <div className="flex">
             <div className=' flex items-center space-x-5 '>
-              {token ?
+              {token && usertyperequest ?
                 <div>
                   <CgProfile onClick={handleProfileClick} className=' cursor-pointer text-2xl' />
                 </div>

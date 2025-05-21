@@ -215,7 +215,7 @@ function Home() {
                   <h1 className='text-2xl font-semibold mb-2'>Contact us today</h1>
                   <div className='flex items-center space-x-2'>
                     <IoMail className='text-2xl' />
-                    <span>nuqta@gmail.com</span>
+                    <span>nuqta.help@gmail.com</span>
                   </div>
                 </div>
               </div>
