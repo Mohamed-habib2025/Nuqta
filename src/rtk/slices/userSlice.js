@@ -14,7 +14,7 @@ export const registerUser = createAsyncThunk(
       const response = await axios.post("https://nuqta-02f0fc9e8c38.herokuapp.com/api/auth/register/user", fullData);
       return response.data;
     } catch (error) {
-      console.log("LOGIN ERROR:", error);
+      console.log(error)
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Registration failed");
     }
   }

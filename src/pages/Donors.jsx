@@ -3,7 +3,7 @@ import quantity from '../Images/quantity blood .png';
 import { IoLocationOutline } from 'react-icons/io5';
 import { LuPhone } from 'react-icons/lu';
 import { MdBloodtype } from 'react-icons/md';
-import { FaWhatsapp } from "react-icons/fa";
+// import { FaWhatsapp } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { acceptRequest, deleteRequest, fetchRequests } from '../rtk/slices/Requests';
 import orgimg from "../Images/Hospital.png";
@@ -27,12 +27,7 @@ function Donors() {
 
   const [allrequests, setallrequests] = useState([]);
   const [filterType, setFilterType] = useState("all");
-  const [donatedRequests, setDonatedRequests] = useState([]);
-
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("donatedRequests")) || [];
-    setDonatedRequests(saved);
-  }, []);
+  const [activeDonationId, setActiveDonationId] = useState(false);
 
   const sortedRequests = [...allrequests].sort((a, b) => a.id - b.id);
 
@@ -58,10 +53,10 @@ function Donors() {
 
 
     if (filterType === "Conservatism") {
-      return req.conservatism === user.donation.conservatism;
+      return req.conservatism === user?.donation.conservatism;
     } else if (filterType === "Conservatism_City") {
       return (
-        req.conservatism === user.donation.conservatism &&
+        req.conservatism === user?.donation.conservatism &&
         req.city === user.donation.city
       );
     }
@@ -101,6 +96,18 @@ function Donors() {
     });
   };
 
+  const handleSaveDonation = (reqid) => {
+    setActiveDonationId(reqid);
+    localStorage.setItem("activeDonationId", reqid);
+  };
+
+  useEffect(() => {
+    const saved = localStorage.getItem("activeDonationId");
+    if (saved) {
+      setActiveDonationId(saved);
+    }
+  }, []);
+
   const handleCancelDonation = (reqid) => {
     Swal.fire({
       title: "Do you want to cancel the donation?",
@@ -114,9 +121,8 @@ function Donors() {
         dispatch(deleteRequest({ donationId: userId, requestId: reqid }))
           .unwrap()
           .then(() => {
-            const updated = donatedRequests.filter(id => id !== reqid);
-            setDonatedRequests(updated);
-            localStorage.removeItem("donatedRequests");
+            setActiveDonationId(null);
+            localStorage.removeItem("activeDonationId");
             Swal.fire("Cancelled", "Your donation has been successfully cancelled.", "success");
           })
           .catch((error) => {
@@ -125,19 +131,6 @@ function Donors() {
           });
       }
     });
-  };
-
-  const handleSaveDonation = (reqid) => {
-    const updated = [...donatedRequests, reqid];
-    setDonatedRequests(updated);
-    localStorage.setItem("donatedRequests", JSON.stringify([reqid]));
-  };
-
-  const formatPhoneNumber = (phone) => {
-    if (phone.startsWith("0")) {
-      return `2${phone}`;
-    }
-    return phone;
   };
 
   if (loading) {
@@ -183,36 +176,23 @@ function Donors() {
                         <p className="flex items-center  mt-2 font-bold"><img src={quantity} alt="Blood quantity" className="w-6 mr-1" />{request.amount} ml</p>
                       </div>
                       <div className='flex items-center gap-2 mt-4'>
-                        {donatedRequests.includes(request.id) ? (
-                          <button
-                            onClick={() => handleCancelDonation(request.id)}
-                            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                          >
-                            Cancel Donation
-                          </button>
+                        {activeDonationId === request.id ? (
+                          user?.donation.confirm_Donate === true ? null : (
+                            <button
+                              onClick={() => handleCancelDonation(request.id)}
+                              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                            >
+                              Cancel Donation
+                            </button>
+                          )
                         ) : (
-                          user?.donation.status === 'VALID' && donatedRequests.length === 0 && (
-                            <>
-                              <button
-                                onClick={() => handeleaccept(request.id)}
-                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800 transition"
-                              >
-                                Donate
-                              </button>
-
-                              {/* <a
-                                href={`https://wa.me/${formatPhoneNumber(
-                                  request.user ? request.user?.phoneNumber : request.organization?.phoneNumber
-                                )}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <button className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition duration-200">
-                                  <FaWhatsapp className="text-xl" />
-                                  <span>Chat</span>
-                                </button>
-                              </a> */}
-                            </>
+                          user?.donation?.status === 'VALID' && (
+                            <button
+                              onClick={() => handeleaccept(request.id)}
+                              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800 transition"
+                            >
+                              Donate
+                            </button>
                           )
                         )}
                       </div>
@@ -236,3 +216,10 @@ function Donors() {
 }
 
 export default Donors;
+
+  // const formatPhoneNumber = (phone) => {
+  //   if (phone.startsWith("0")) {
+  //     return `2${phone}`;
+  //   }
+  //   return phone;
+  // };

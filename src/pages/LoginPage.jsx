@@ -37,7 +37,8 @@ function LoginPage() {
       status: "VALID",
       weight: '',
       city: "",
-      conservatism: ""
+      conservatism: "",
+      confirm_Donate: false
     },
   });
 
