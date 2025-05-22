@@ -38,7 +38,7 @@ function LoginPage() {
       weight: '',
       city: "",
       conservatism: "",
-      confirm_Donate: false
+      confirmDonate: false
     },
   });
 
@@ -142,8 +142,7 @@ function LoginPage() {
         });
       }
     } catch (error) {
-      toast.error("Login failed, Make sure your data");
-      // console.log(error)
+      toast.error(`Login failed: ${error}`);
     } finally {
       setIsLoading(false);
     }

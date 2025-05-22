@@ -27,7 +27,7 @@ function Donors() {
 
   const [allrequests, setallrequests] = useState([]);
   const [filterType, setFilterType] = useState("all");
-  const [activeDonationId, setActiveDonationId] = useState(false);
+  const [activeDonationId, setActiveDonationId] = useState(0);
 
   const sortedRequests = [...allrequests].sort((a, b) => a.id - b.id);
 
@@ -83,7 +83,8 @@ function Donors() {
               text: "Thank you for your donation.",
               icon: "success"
             });
-            handleSaveDonation(reqid);
+            setActiveDonationId(reqid);
+            localStorage.setItem("activeDonationId", reqid);
           })
           .catch(() => {
             Swal.fire({
@@ -96,15 +97,10 @@ function Donors() {
     });
   };
 
-  const handleSaveDonation = (reqid) => {
-    setActiveDonationId(reqid);
-    localStorage.setItem("activeDonationId", reqid);
-  };
-
   useEffect(() => {
     const saved = localStorage.getItem("activeDonationId");
     if (saved) {
-      setActiveDonationId(saved);
+      setActiveDonationId(Number(saved));
     }
   }, []);
 
@@ -121,7 +117,7 @@ function Donors() {
         dispatch(deleteRequest({ donationId: userId, requestId: reqid }))
           .unwrap()
           .then(() => {
-            setActiveDonationId(null);
+            setActiveDonationId(0);
             localStorage.removeItem("activeDonationId");
             Swal.fire("Cancelled", "Your donation has been successfully cancelled.", "success");
           })
@@ -177,7 +173,7 @@ function Donors() {
                       </div>
                       <div className='flex items-center gap-2 mt-4'>
                         {activeDonationId === request.id ? (
-                          user?.donation.confirm_Donate === true ? null : (
+                          user?.donation.confirmDonate === true ? null : (
                             <button
                               onClick={() => handleCancelDonation(request.id)}
                               className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
@@ -186,7 +182,7 @@ function Donors() {
                             </button>
                           )
                         ) : (
-                          user?.donation?.status === 'VALID' && (
+                          user?.donation?.status === 'VALID' && activeDonationId === 0 && (
                             <button
                               onClick={() => handeleaccept(request.id)}
                               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800 transition"
@@ -217,9 +213,9 @@ function Donors() {
 
 export default Donors;
 
-  // const formatPhoneNumber = (phone) => {
-  //   if (phone.startsWith("0")) {
-  //     return `2${phone}`;
-  //   }
-  //   return phone;
-  // };
+// const formatPhoneNumber = (phone) => {
+//   if (phone.startsWith("0")) {
+//     return `2${phone}`;
+//   }
+//   return phone;
+// };
