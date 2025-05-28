@@ -10,6 +10,7 @@ import Profile from '../pages/Profile';
 import Donors from '../pages/Donors';
 import Header from './Header/Header';
 import Banner from './Banner/Banner';
+import {jwtDecode} from "jwt-decode";
 import Home from '../pages/Home';
 import Footer from './Footer';
 import React, { useEffect } from 'react'
