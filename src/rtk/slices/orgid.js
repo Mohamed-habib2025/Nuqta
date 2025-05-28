@@ -133,12 +133,9 @@ const orgid = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteorgById.fulfilled, (state, action) => {
+      .addCase(deleteorgById.fulfilled, (state) => {
         state.loading = false;
         state.org = null;
-        localStorage.removeItem("orgaid")
-        localStorage.removeItem("organizationToken")
-        localStorage.removeItem("scope")
       })
       .addCase(deleteorgById.rejected, (state, action) => {
         state.loading = false;

@@ -10,10 +10,8 @@ import { setUserToken } from '../rtk/slices/userSlice'
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { ScaleLoader } from "react-spinners";
-// import { fetchUsers } from '../rtk/slices/usersSlice';
 
 function LoginPage() {
-
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -127,8 +125,7 @@ function LoginPage() {
         });
       }, 500)
     } catch (error) {
-      toast.error("REGISTER failed. Please try again");
-      // console.error("REGISTER ERROR:", error);
+      toast.error(`${error}`);
     } finally {
       setIsLoading(false);
     }
@@ -155,7 +152,7 @@ function LoginPage() {
         });
       }
     } catch (error) {
-      toast.error(`Login failed: ${error}`);
+      toast.error(`${error}`);
     } finally {
       setIsLoading(false);
     }
@@ -177,7 +174,7 @@ function LoginPage() {
               </div>
 
               <div className="flex gap-2">
-                <input type="date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+                <input type="date" placeholder="Birth Date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-full p-2 focus:ring-0" required />
                 <input type="number" name='weight' min="60" placeholder='Weight' value={formData.donation.weight} onChange={handleChangeregister} className=" rounded bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               </div>
 

@@ -133,7 +133,7 @@ function RequstOrga() {
             <h2 className="text-xl font-semibold text-center text-gray-700">Request Blood Donation</h2>
             <div className="flex flex-col gap-3">
               <div className="flex gap-3">
-                <input type="number" name="amount" min='100' max='500' placeholder="Blood Quantity" value={formData.amount} onChange={handleChange}
+                <input type="number" name="amount" min='10' max='100' placeholder="Blood Quantity" value={formData.amount} onChange={handleChange}
                   className="w-1/2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
                 />
                 <select name="urgency_level" value={formData.urgency_level} onChange={handleChange}

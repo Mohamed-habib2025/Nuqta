@@ -161,9 +161,9 @@ function Donors() {
                   filteredRequests.map((request) => (
                     <div key={request.id} className=" bg-gray-100 border border-gray-300 shadow-lg rounded-lg p-4 flex flex-col gap-1 justify-center items-center text-center transition-transform hover:scale-105 cursor-pointer">
                       <img src={request.organization ? orgimg : request.user.gender === "MALE" ? male : female} alt="Donor" className="w-24 h-24 rounded-full mb-3" />
-                      <p className="flex items-center text-lg font-semibold text-red-600">{request.organization ? request.organization?.orgName : request.user?.username}</p>
+                      <p className="flex items-center text-xl font-semibold text-red-600">{request.organization ? request.organization?.orgName : request.user?.username}</p>
                       <p className="flex items-center text-lg"><IoLocationOutline className="mr-2 text-2xl" />{request.conservatism} - {request.city}</p>
-                      <p className="flex items-center text-xl"><LuPhone className="mr-2 text-xl" />{request.organization ? request.organization?.phoneNumber : request.user?.phoneNumber}</p>
+                      {/* <p className="flex items-center text-xl"><LuPhone className="mr-2 text-xl" />{request.organization ? request.organization?.phoneNumber : request.user?.phoneNumber}</p> */}
                       <div className='flex items-center space-x-5'>
                         <div className="flex items-center gap-1 text-lg font-semibold mt-2">
                           <MdBloodtype className="text-2xl text-red-600" />
