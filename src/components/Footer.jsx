@@ -59,11 +59,11 @@ function Footer() {
                 </li>
                 <li className='w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold'>
                   <LuChevronsRight />
-                  <Link to='/donors'>Donors</Link>
+                  <Link to='/donors'>Donation</Link>
                 </li>
                 <li className='w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold'>
                   <LuChevronsRight />
-                  <Link to='/bloodRequest'>Blood Request</Link>
+                  <Link to='/bloodRequest'>Request</Link>
                 </li>
               </ul>
             </div>

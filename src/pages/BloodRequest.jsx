@@ -46,7 +46,7 @@ function BloodRequest() {
     if (user) {
       setRequests(user.uploadedRequests);
       if ((user.uploadedRequests || []).length === 0) {
-        setShowForm(true); 
+        setShowForm(true);
       }
     }
   }, [user]);
@@ -138,7 +138,7 @@ function BloodRequest() {
             <h2 className="text-xl font-semibold text-center text-gray-700">Request Blood Donation</h2>
             <div className="flex flex-col gap-3">
               <div className="flex gap-3">
-                <input type="number" name="amount" min='10' max='500' placeholder="Blood Quantity" value={formData.amount} onChange={handleChange}
+                <input type="number" name="amount" min='1' max='50' placeholder="Blood Quantity" value={formData.amount} onChange={handleChange}
                   className="w-1/2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
                 />
                 <select name="urgency_level" value={formData.urgency_level} onChange={handleChange}
@@ -147,23 +147,6 @@ function BloodRequest() {
                   <option value="">Urgency</option>
                   <option value="HIGH">HIGH</option>
                   <option value="LOW">Low</option>
-                </select>
-              </div>
-
-              <div className="flex gap-3">
-
-                <select name="blood_type_needed" value={formData.blood_type_needed} onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
-                >
-                  <option value="">Blood Type</option>
-                  <option value="A+">A+</option>
-                  <option value="A-">A-</option>
-                  <option value="B+">B+</option>
-                  <option value="B-">B-</option>
-                  <option value="O+">O+</option>
-                  <option value="O-">O-</option>
-                  <option value="AB+">AB+</option>
-                  <option value="AB-">AB-</option>
                 </select>
               </div>
 
@@ -189,6 +172,20 @@ function BloodRequest() {
                   </select>
                 )}
               </div>
+
+              <select name="blood_type_needed" value={formData.blood_type_needed} onChange={handleChange}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
+              >
+                <option value="">Blood Type</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+              </select>
 
               <div className="flex items-center justify-between gap-3">
                 <button

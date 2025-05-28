@@ -21,6 +21,8 @@ function LoginPage() {
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
     username: "",
     email: "",
     password: "",
@@ -91,15 +93,26 @@ function LoginPage() {
 
   const handleSubmitRegister = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+
+    const phoneRegex = /^(010|011|012|015)[0-9]{8}$/;
+    if (!phoneRegex.test(formData.phoneNumber)) {
+      Swal.fire({
+        icon: 'error',
+        text: 'The phone number must be 11 digits long and start with 010, 011, 012, 015 etc.',
+      });
+      return;
+    }
 
     if (!scope) {
       toast.error("Please select a user type first.");
       return;
     }
 
+    setIsLoading(true);
+
     const AllFormData = {
       ...formData,
+      username: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
       scope: scope,
     };
     try {
@@ -157,12 +170,34 @@ function LoginPage() {
             <h1 className="text-2xl font-bold mt-4">Create Account</h1>
             <span className="text-[18px]">or use your email for registration</span>
             <div className="space-y-2 mt-2 w-full">
-              <input type="text" name='username' placeholder="Username" value={formData.username} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
-              <div className="flex justify-between gap-2 w-full">
-                <input type="date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-1/2 min-w-[140px] p-2 focus:ring-0" required />
-                <input type="number" name='weight' placeholder='Weight' value={formData.donation.weight} onChange={handleChangeregister} className=" rounded bg-gray-200 border-none w-1/2 min-w-[140px] p-2 focus:ring-0" required />
+              {/* <input type="text" name='username' placeholder="Username" value={formData.username} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required /> */}
+              <div className="flex gap-2">
+                <input type="text" name='firstName' placeholder="First Name" value={formData.firstName} onChange={handleChangeregister} className="rounded bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+                <input type="text" name='lastName' placeholder="Last Name" value={formData.lastName} onChange={handleChangeregister} className="rounded bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               </div>
-              <div className="flex items-center justify-between w-full space-x-2">
+
+              <div className="flex gap-2">
+                <input type="date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+                <input type="number" name='weight' min="60" placeholder='Weight' value={formData.donation.weight} onChange={handleChangeregister} className=" rounded bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+              </div>
+
+              <div className='flex gap-2'>
+                <select name="blood_type" value={formData.donation.blood_type} onChange={handleChangeregister} className=" w-full cursor-pointer p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                  <option value="">Blood Type</option>
+                  {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map((type) => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+
+                <select name="gender" value={formData.gender} onChange={handleChangeregister} className=" w-full cursor-pointer  p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                  <option value="">Gender</option>
+                  {["Male", "Female"].map((type) => (
+                    <option key={type} value={type.toUpperCase()}>{type}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex gap-2">
                 <select name="governorate" value={formData.donation.conservatism} onChange={handleChangeregister} className=" w-full cursor-pointer p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
                   <option value=""> Governorate</option>
                   {Object.keys(governorates).map((gov) => (
@@ -178,23 +213,14 @@ function LoginPage() {
                   </select>
                 )}
               </div>
-              <div className='flex items-center justify-between w-full space-x-2'>
-                <select name="blood_type" value={formData.donation.blood_type} onChange={handleChangeregister} className=" w-full cursor-pointer p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
-                  <option value="">Blood Type</option>
-                  {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map((type) => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
-
-                <select name="gender" value={formData.gender} onChange={handleChangeregister} className=" w-full cursor-pointer  p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
-                  <option value="">Gender</option>
-                  {["Male", "Female"].map((type) => (
-                    <option key={type} value={type.toUpperCase()}>{type}</option>
-                  ))}
-                </select>
-              </div>
               <div className=' py-2 px-2 bg-gray-200 rounded-lg'>
-                <input type='number' name='phoneNumber' placeholder="Phone nummber" value={formData.phoneNumber} onChange={handleChangeregister} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
+                <input type="tel" name='phoneNumber'
+                  // pattern="^(010|011|012|015)[0-9]{8}$"
+                  placeholder="Phone nummber"
+                  value={formData.phoneNumber}
+                  onChange={handleChangeregister}
+                  className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0"
+                  required />
               </div>
               <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
                 <input type="email" name='email' placeholder="Email" value={formData.email} onChange={handleChangeregister} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />

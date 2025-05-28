@@ -11,11 +11,11 @@ import female from "../Images/female.png";
 import orga from "../Images/Hospital.png";
 import EditProfile from '../components/EditProfile';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../rtk/slices/userSlice';
+import { deleteaccountuser, logoutUser } from '../rtk/slices/userSlice';
 import { deleteUserById, fetchUserid } from '../rtk/slices/userid';
 import { MdDeleteForever } from "react-icons/md";
 import { deleteorgById, fetchorgid } from '../rtk/slices/orgid';
-import { logoutOrg } from '../rtk/slices/orgSlice';
+import { deleteaccountorg, logoutOrg } from '../rtk/slices/orgSlice';
 import Swal from "sweetalert2";
 import { GridLoader } from "react-spinners";
 // import { setUserType } from '../rtk/slices/userTypeSlice';
@@ -61,20 +61,22 @@ function Profile({ setOpenDialog }) {
         await dispatch(deleteUserById(userId)).unwrap();
         localStorage.removeItem("userid")
         localStorage.removeItem("userToken")
+        dispatch(deleteaccountuser());
       } else {
         await dispatch(deleteorgById(orgId)).unwrap();
         localStorage.removeItem("orgaid")
         localStorage.removeItem("organizationToken")
+        dispatch(deleteaccountorg());
       }
-
+      setOpenDialog(false);
       localStorage.removeItem("scope")
+      
       await Swal.fire({
         title: "Deleted!",
         text: "User has been deleted successfully.",
         icon: "success",
       });
 
-      setOpenDialog(false);
       navigate("/");
     } catch (error) {
       await Swal.fire({

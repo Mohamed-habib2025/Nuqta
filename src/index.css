@@ -8,6 +8,12 @@ body {
   overflow-x: hidden;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 @layer components {
   .btn-bg_red {
     @apply bg-red-600 rounded-2xl text-white hover:text-black duration-300;

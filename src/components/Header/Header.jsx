@@ -106,6 +106,7 @@ function Header() {
       showCancelButton: true,
       cancelButtonText: "Cancel",
       showDenyButton: true,
+      scrollbarPadding: false,
       confirmButtonText: ReactDOMServer.renderToString(
         <div className="flex items-center gap-2">
           <FaRegUser className="w-5 h-5" /> <span>User</span>
@@ -200,7 +201,7 @@ function Header() {
 
           <div className="flex">
             <div className=' flex items-center space-x-5 '>
-              {token && usertyperequest ?
+              {token ?
                 <div>
                   <CgProfile onClick={handleProfileClick} className=' cursor-pointer text-2xl' />
                 </div>

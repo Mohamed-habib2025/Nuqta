@@ -62,6 +62,11 @@ const organizationSlice = createSlice({
       localStorage.removeItem('organizationToken');
       localStorage.removeItem('orgaid');
     },
+    deleteaccountorg: (state) => {
+      state.org = null;
+      state.token = null;
+      state.org_id = null;
+    },
     setorgToken: (state, action) => {
       state.token = action.payload;
       localStorage.setItem("organizationToken", action.payload);
@@ -106,6 +111,6 @@ const organizationSlice = createSlice({
   },
 });
 
-export const { logoutOrg, setorgToken } = organizationSlice.actions;
+export const { logoutOrg, setorgToken , deleteaccountorg } = organizationSlice.actions;
 
 export default organizationSlice.reducer;

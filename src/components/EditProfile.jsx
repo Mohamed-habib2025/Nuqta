@@ -22,13 +22,13 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
     phoneNumber: user?.phoneNumber || "",
     donation: {
       id: user?.donation.id || "",
-      status: user?.donation.status || "VALID",
+      status: user?.donation.status || "",
       city: user?.donation.city || "",
       conservatism: user?.donation.conservatism || "",
       blood_type: user?.donation.blood_type || "",
     }
   });
-  
+
   const [isEditlocation, setIsEditlocation] = useState(false);
   const [isEditpassword, setIsEditpassword] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);

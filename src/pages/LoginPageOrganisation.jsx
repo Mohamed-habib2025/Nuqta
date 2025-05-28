@@ -134,8 +134,8 @@ function LoginPageOrganisation() {
             <span className="text-[17px] font-bold text-gray-800">or use your email for registration</span>
             <div className="space-y-2 mt-5 w-full">
               <input type="text" name='orgName' placeholder="Organization Name" value={formData.orgName} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
-              <input type="text" name="licenseNumber" placeholder="License Number" value={formData.licenseNumber} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
-              <input type="number" name="phoneNumber" placeholder="phone Number" value={formData.phoneNumber} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+              <input type="number" name="licenseNumber" placeholder="License Number" value={formData.licenseNumber} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+              <input type="number" name="phoneNumber" placeholder="Phone Number" value={formData.phoneNumber} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
                 <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChangeregister} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
                 <MdOutlineMail className='text-[20px] text-gray-500 ' />
