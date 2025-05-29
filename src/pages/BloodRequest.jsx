@@ -35,7 +35,7 @@ function BloodRequest() {
     urgency_level: "",
     blood_type_needed: "",
     status: "OPEN",
-    request_date: "2024-12-01",
+    request_date: "",
     payment_available: true,
   });
   const [isEditing, setIsEditing] = useState(false);
@@ -67,7 +67,7 @@ function BloodRequest() {
     const requestPayload = {
       amount: formData.amount,
       blood_type_needed: formData.blood_type_needed,
-      request_date: "2024-12-01",
+      request_date: `${new Date().toISOString().split("T")[0]}`,
       urgency_level: formData.urgency_level,
       status: formData.status,
       payment_available: formData.payment_available,
@@ -101,7 +101,7 @@ function BloodRequest() {
         toast.success("Added request Successful");
       }
       setFormData({
-        conservatism: "", city: "", amount: "", urgency_level: "", blood_type_needed: "", status: 'OPEN', request_date: "2024-12-01"
+        conservatism: "", city: "", amount: "", urgency_level: "", blood_type_needed: "", status: 'OPEN', request_date: ""
       });
 
     } catch (error) {
@@ -146,6 +146,7 @@ function BloodRequest() {
                 >
                   <option value="">Urgency</option>
                   <option value="HIGH">HIGH</option>
+                  <option value="MEDIUM">MEDIUM</option>
                   <option value="LOW">Low</option>
                 </select>
               </div>
