@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import { acceptRequest, deleteRequest, fetchRequests } from '../rtk/slices/Requests';
+import { useDispatch, useSelector } from 'react-redux';
 import quantity from '../Images/quantity blood .png';
 import { IoLocationOutline } from 'react-icons/io5';
-import { LuPhone } from 'react-icons/lu';
+import React, { useEffect, useState } from 'react';
+import { fetchUserid } from '../rtk/slices/userid';
 import { MdBloodtype } from 'react-icons/md';
+import { LuPhone } from 'react-icons/lu';
 // import { FaWhatsapp } from "react-icons/fa";
-import { useDispatch, useSelector } from 'react-redux';
-import { acceptRequest, deleteRequest, fetchRequests } from '../rtk/slices/Requests';
 import orgimg from "../Images/Hospital.png";
 import male from '../Images/male.jpg';
 import female from "../Images/female.png";
-import { fetchUserid } from '../rtk/slices/userid';
 import { SyncLoader } from 'react-spinners';
 import Donorsorg from './Donorsorg';
 import Swal from 'sweetalert2';
+
+import { RiAlarmWarningFill, RiAlarmWarningLine } from "react-icons/ri";
+import { ImNotification } from "react-icons/im";
+import { BiDonateBlood } from "react-icons/bi";
+import { BiCalendarAlt } from "react-icons/bi";
 
 function Donors() {
 
@@ -155,42 +160,81 @@ function Donors() {
                 </select>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 gap-6">
+
+            <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] md:grid-cols-2 xl:grid-cols-[repeat(auto-fit,_minmax(600px,_1fr))] justify-center items-center gap-3">
               {
                 filteredRequests.length > 0 ? (
                   filteredRequests.map((request) => (
-                    <div key={request.id} className=" bg-gray-100 border border-gray-300 shadow-lg rounded-lg p-4 flex flex-col gap-1 justify-center items-center text-center transition-transform hover:scale-105 cursor-pointer">
-                      <img src={request.organization ? orgimg : request.user.gender === "MALE" ? male : female} alt="Donor" className="w-24 h-24 rounded-full mb-3" />
-                      <p className="flex items-center text-xl font-semibold text-red-600">{request.organization ? request.organization?.orgName : request.user?.username}</p>
-                      <p className="flex items-center text-lg"><IoLocationOutline className="mr-2 text-2xl" />{request.conservatism} - {request.city}</p>
-                      {/* <p className="flex items-center text-xl"><LuPhone className="mr-2 text-xl" />{request.organization ? request.organization?.phoneNumber : request.user?.phoneNumber}</p> */}
-                      <div className='flex items-center space-x-5'>
-                        <div className="flex items-center gap-1 text-lg font-semibold mt-2">
-                          <MdBloodtype className="text-2xl text-red-600" />
-                          <span className="">{request.blood_type_needed}</span>
+                    <div key={request.id} className=" bg-white md:max-w-[400px] lg:max-w-[550px] xl:max-w-[650px] border border-gray-200 rounded-2xl shadow-md p-4 flex items-center justify-around flex-wrap gap-6 hover:shadow-lg transition-all duration-300">
+                      <img src={request.organization ? orgimg : request.user.gender === "MALE" ? male : female} alt="Donor" className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-red-500" />
+
+                      <div className=' space-y-1'>
+                        <p className="flex items-center text-xl font-semibold text-red-600">{request.organization ? request.organization?.orgName : request.user?.username}</p>
+                        <p className="flex items-center text-[16px] text-gray-600"><IoLocationOutline className="mr-2 text-2xl" />{request.conservatism} - {request.city}</p>
+                        <div className='flex items-center space-x-5'>
+                          <div className="flex items-center gap-1 text-lg font-semibold ">
+                            <MdBloodtype className="text-2xl text-red-600" />
+                            <span className="">{request.blood_type_needed}</span>
+                          </div>
+                          <p className="flex items-center font-bold"><img src={quantity} alt="Blood quantity" className="w-6 mr-1" />{request.amount} ml</p>
                         </div>
-                        <p className="flex items-center  mt-2 font-bold"><img src={quantity} alt="Blood quantity" className="w-6 mr-1" />{request.amount} ml</p>
                       </div>
-                      <div className='flex items-center gap-2 mt-4'>
-                        {activeDonationId === request.id ? (
-                          user?.donation.confirmDonate === true ? null : (
-                            <button
-                              onClick={() => handleCancelDonation(request.id)}
-                              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                            >
-                              Cancel Donation
-                            </button>
-                          )
-                        ) : (
-                          user?.donation?.status === 'VALID' && activeDonationId === 0 && (
-                            <button
-                              onClick={() => handeleaccept(request.id)}
-                              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800 transition"
-                            >
-                              Donate
-                            </button>
-                          )
-                        )}
+
+                      <div className=' flex xl:flex-col items-center gap-2 sm:gap-4 lg:gap-6 xl:justify-center xl:gap-2'>
+                        <p className="flex items-center space-x-1 sm:mr-0 "><BiCalendarAlt className="text-xl" /><span className='font-medium text-gray-500'>{request.request_date}</span></p>
+
+                        {
+                          request.status === "OPEN" ? <div>
+                            {
+                              request.urgency_level === "HIGH" && (
+                                <p className="flex items-center gap-2 text-red-700">
+                                  <RiAlarmWarningFill className='text-xl' />
+                                  <span className="font-medium">High</span>
+                                </p>
+                              )
+                            }
+
+                            {request.urgency_level === "MEDIUM" && (
+                              <p className="flex items-center gap-2 text-orange-500">
+                                <RiAlarmWarningLine className='text-xl' />
+                                <span className="font-medium">Medium</span>
+                              </p>
+                            )}
+
+                            {request.urgency_level === "LOW" && (
+                              <p className="flex items-center gap-2 text-orange-400">
+                                <ImNotification className='text-lg' />
+                                <span className="font-medium">Low</span>
+                              </p>
+                            )}
+                          </div> :
+                            <p className="flex items-center gap-2 mt-2 text-green-700">
+                              <HiOutlineCheckCircle className='text-xl' /> <span className="font-medium ">Completed</span>
+                            </p>
+
+                        }
+
+                        <div className='flex items-center gap-2 '>
+                          {activeDonationId === request.id ? (
+                            user?.donation.confirmDonate === true ? null : (
+                              <button
+                                onClick={() => handleCancelDonation(request.id)}
+                                className="px-3 py-1 text-[16px] bg-red-600 text-white rounded-lg hover:bg-red-800 transition"
+                              >
+                                Cancel
+                              </button>
+                            )
+                          ) : (
+                            user?.donation?.status === 'VALID' && activeDonationId === 0 && (
+                              <button
+                                onClick={() => handeleaccept(request.id)}
+                                className="px-2 py-1 flex items-center gap-2 bg-red-600 text-[16px] text-white rounded-lg hover:bg-red-800 transition"
+                              >
+                                <BiDonateBlood className='text-xl' /> <span>Donate</span>
+                              </button>
+                            )
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))

@@ -254,14 +254,14 @@ function Header() {
         <AnimatePresence>
           {openDialog && (
             <motion.div
-              initial={{ x: 480 }}
+              initial={{ x: 450 }}
               whileInView={{ x: 0 }}
-              exit={{ x: 500 }}
+              exit={{ x: 470 }}
               transition={{
                 type: "spring",
                 stiffness: 30,
               }}
-              className=" w-full sm:w-[500px] h-screen bg-gray-100 shadow-lg rounded-l-3xl absolute top-0 right-0 z-[990]"
+              className=" w-full sm:w-[470px] h-screen bg-gray-100 shadow-lg rounded-l-3xl absolute top-0 right-0 z-[990]"
             >
               <Profile setOpenDialog={setOpenDialog} />
             </motion.div>

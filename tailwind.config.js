@@ -15,13 +15,13 @@ export default {
       },
       keyframes: {
         movetop: {
-          "0%": { transform:"translatey(0)" },
-          "50%": { transform:"translatey(20px)" },
-          "100%": { transform:"translatey(0)" },
+          "0%": { transform: "translatey(0)" },
+          "50%": { transform: "translatey(20px)" },
+          "100%": { transform: "translatey(0)" },
         },
       },
-      animation:{
-        movetop:"movetop 3s 2s ease-in-out infinite"
+      animation: {
+        movetop: "movetop 3s 2s ease-in-out infinite"
       },
       screens: {
         'sm': '540px',
@@ -36,4 +36,6 @@ export default {
     flowbite.plugin(),
   ],
 }
+
+
 

@@ -64,14 +64,14 @@ function RequestsList({ requestsuser, setRequests, setCurrentRequestId, setFormD
 
   return (
     <div className='h-fit'>
-      <div className='mt-5 grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] lg:grid-cols-[repeat(auto-fit,_minmax(450px,_1fr))] justify-center gap-3'>
+      <div className='mt-5 grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] md:grid-cols-2 lg:grid-cols-[repeat(auto-fit,_minmax(450px,_1fr))] justify-center items-center gap-3'>
         {sortedRequests.map((request) => (
 
-          <div key={request.id} className="bg-white border border-gray-200 rounded-2xl shadow-md p-5 flex items-center justify-around flex-wrap gap-6 hover:shadow-lg transition-all duration-300">
+          <div key={request.id} className="bg-white md:max-w-[400px] lg:max-w-[550px] xl:max-w-[650px] border border-gray-200 rounded-2xl shadow-md p-5 flex items-center justify-around flex-wrap gap-6 hover:shadow-lg transition-all duration-300">
             <img
               src={scope === "USER" ? (user.gender === "MALE" ? male : female) : orgimg}
               alt="Profile"
-              className="w-20 h-20 rounded-full border-[3px] border-red-500"
+              className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-red-500"
             />
 
             <div className="flex flex-col items-center space-y-2">

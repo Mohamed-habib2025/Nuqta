@@ -26,6 +26,7 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
       city: user?.donation.city || "",
       conservatism: user?.donation.conservatism || "",
       blood_type: user?.donation.blood_type || "",
+      weight: user?.donation.weight || "",
     }
   });
 
@@ -43,6 +44,7 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
         userData.username !== user.username ||
         userData.phoneNumber !== user.phoneNumber ||
         userData.donation.blood_type !== user.donation.blood_type ||
+        userData.donation.weight !== user.donation.weight ||
         userData.donation.conservatism !== user.donation.conservatism ||
         userData.donation.city !== user.donation.city
       );
@@ -52,12 +54,12 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'blood_type') {
+    if (['blood_type', 'weight'].includes(name)) {
       setuserData((prevData) => ({
         ...prevData,
         donation: {
           ...prevData.donation,
-          blood_type: value,
+          [name]: value,
         },
       }));
     } else {
@@ -277,6 +279,19 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
                           <option value="AB-">AB-</option>
                         </select>
                         <span className='text-gray-500 text-sm'>blood Type</span>
+                      </div>
+
+                      <div className='flex items-center justify-between mb-4 border-b-[1px] border-gray-300'>
+                        <input
+                          autoComplete="off"
+                          type="number"
+                          name="weight"
+                          min="0"
+                          value={userData.donation.weight}
+                          onChange={handleChange}
+                          className='w-[50%] p-2 border-none bg-transparent font-normal focus:ring-0 focus:outline-none'
+                        />
+                        <span className='text-gray-500 text-sm'>Weight (kg)</span>
                       </div>
 
                       <div

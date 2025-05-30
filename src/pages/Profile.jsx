@@ -13,11 +13,12 @@ import EditProfile from '../components/EditProfile';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteaccountuser, logoutUser } from '../rtk/slices/userSlice';
 import { deleteUserById, fetchUserid } from '../rtk/slices/userid';
-import { MdDeleteForever } from "react-icons/md";
 import { deleteorgById, fetchorgid } from '../rtk/slices/orgid';
 import { deleteaccountorg, logoutOrg } from '../rtk/slices/orgSlice';
 import Swal from "sweetalert2";
 import { GridLoader } from "react-spinners";
+import { HiChevronRight } from "react-icons/hi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 // import { setUserType } from '../rtk/slices/userTypeSlice';
 
 function Profile({ setOpenDialog }) {
@@ -70,7 +71,7 @@ function Profile({ setOpenDialog }) {
       }
       setOpenDialog(false);
       localStorage.removeItem("scope")
-      
+
       await Swal.fire({
         title: "Deleted!",
         text: "User has been deleted successfully.",
@@ -120,48 +121,90 @@ function Profile({ setOpenDialog }) {
 
             {
               scope === "USER" ? (
-                <div className='flex flex-col items-center justify-center gap-5'>
-                  <div className=' relative'>
-                    <div onClick={() => setIsEditing(true)} className=' cursor-pointer text-2xl absolute bottom-4 left-1 w-8 h-8 flex items-center justify-center rounded-full bg-slate-200'>
-                      <MdEdit className=' text-2xl ' />
-                    </div>
+                <div className=' mt-16 flex flex-col items-center gap-5 rounded-t-[35px] h-lvh bg-white'>
+                  <div className=' px-5 w-full absolute flex flex-col items-center gap-2 top-[4rem] '>
                     <img
                       src={user.gender === "MALE" ? male : female}
-                      className={`w-44 h-44 rounded-full border-[4px] ${user.donation.status === "VALID" ? " border-green-400" : "border-red-500"}`}
+                      // className={`w-28 h-28 rounded-full border-[3px] ${user.donation.status === "VALID" ? " border-green-400" : "border-red-500"}`}
+                      className='w-28 h-28 rounded-full border'
                       alt="Profile phote"
                     />
+                    <div className='text-xl'>{user.username}</div>
+                    <div className='text-gray-500'>{user.email}</div>
+
+                    <div className="flex gap-2">
+                      <span className={`rounded-xl py-1 px-5 ${user.donation.status === "VALID" ? "bg-green-400 text-white" : "bg-gray-200 text-gray-400"}`}>
+                        Eligible to donate
+                      </span>
+                      <span className={`rounded-xl py-1 px-5 ${user.donation.status !== "VALID" ? "bg-red-400 text-white" : "bg-gray-200 text-gray-400"}`}>
+                        Cannot donate
+                      </span>
+                    </div>
+
+                    <div className='mt-2 flex items-center space-x-2'>
+                      <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500 hover:bg-green-300 duration-200" : "border-red-300 bg-red-200 text-red-500 hover:bg-red-300 duration-200"}`}>
+                        <span className='text-2xl'>0</span>
+                        <span className='text-sm'>Donate</span>
+                      </p>
+                      <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500 hover:bg-green-300 duration-200" : "border-red-300 bg-red-200 text-red-500 hover:bg-red-300 duration-200"}`}>
+                        <span className='text-2xl'>{user.donation.blood_type}</span>
+                        <span className='text-sm'>Blood Type</span>
+                      </p>
+                      <p onClick={() => { navigate("/bloodRequest"); setOpenDialog(false); }} className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500 hover:bg-green-300 duration-200" : "border-red-300 bg-red-200 text-red-500 hover:bg-red-300 duration-200"}`}>
+                        <span className='text-2xl'>{user.uploadedRequests?.length ?? 0}</span>
+                        <span className='text-sm'>Requests</span>
+                      </p>
+                    </div>
+
+
+                    <div className=' w-full flex flex-col gap-2 bg-gray-100 px-5 py-2 rounded-lg mt-2'>
+                      < div className='w-full flex items-center justify-between font-normal text-[17px] border-b-[1px] pb-2'>
+                        <p>Phone Number</p>
+                        <span className='text-lg'>{user.phoneNumber}</span>
+                      </div>
+                      <div className='w-full flex items-center justify-between font-normal text-[17px] border-b-[1px] pb-2'>
+                        <p>Location</p>
+                        <p><span>{user.donation.conservatism}</span> - <span>{user.donation.city}</span> </p>
+                      </div>
+
+                      <div className='w-full flex items-center justify-between font-normal text-[17px] border-b-[1px] pb-2'>
+                        <p>Age</p>
+                        <span className='text-[16px]'>{user.age}</span>
+                      </div>
+
+                      <div className='w-full flex items-center justify-between font-normal text-[17px]'>
+                        <p>Weight</p>
+                        <span className='text-[16px]'>{user.donation.weight} Kg</span>
+                      </div>
+                    </div>
+
+                    <div onClick={() => setIsEditing(true)} className=' w-full flex items-center justify-between gap-2 bg-gray-100 px-5 py-2 rounded-lg cursor-pointer hover:bg-gray-200 duration-200'>
+                      <p>Edit Profile</p>
+                      <HiChevronRight className='text-lg text-gray-500' />
+                    </div>
+
+                    <div onClick={handlesignout} className=' bg-gray-100 px-5 py-2 w-full rounded-lg flex items-center justify-between cursor-pointer hover:text-red-600 duration-200'>
+                      <div className='flex items-center space-x-2'>
+                        <PiSignOutBold className='text-2xl' />
+                        <span >Sign Out</span>
+                      </div>
+                      <HiChevronRight className='text-lg text-gray-500' />
+                    </div>
+
+                    <div onClick={handleDelete} className='bg-gray-100 px-5 py-2 w-full rounded-lg flex items-center justify-between cursor-pointer text-red-500 hover:text-red-700 duration-200 mt-2'>
+                      <div className='flex items-center space-x-2'>
+                        <RiDeleteBin6Line className='text-xl' />
+                        <span>Delete Account</span>
+                      </div>
+                      <HiChevronRight className='text-lg text-gray-500' />
+                    </div>
+
+
+
                   </div>
 
-                  <p className={`text-xl text-blue-600 font-bold ${user.donation.status === "VALID" ? "text-green-500" : " text-red-500"} `}>{user.username}</p>
 
-                  <div className='flex items-center gap-2'>
-                    <IoLocationOutline className={`text-3xl ${user.donation.status === "VALID" ? "text-green-500" : " text-red-500"}`} />
-                    <p className='text-lg'><span>{user.donation.conservatism}</span> - <span>{user.donation.city}</span> </p>
-                  </div>
-
-                  <div className='flex items-center gap-2'>
-                    <LuPhone className={`text-2xl ${user.donation.status === "VALID" ? "text-green-500" : " text-red-500"}`} />
-                    <span className='text-lg'>{user.phoneNumber}</span>
-                  </div>
-
-                  <div className='mt-2 flex items-center space-x-2'>
-                    <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500 hover:bg-green-300 duration-200" : "border-red-300 bg-red-200 text-red-500 hover:bg-red-300 duration-200"}`}>
-                      <span>Donate</span>
-                      <span>0</span>
-                    </p>
-                    <p className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500 hover:bg-green-300 duration-200" : "border-red-300 bg-red-200 text-red-500 hover:bg-red-300 duration-200"}`}>
-                      <span>Blood Type</span>
-                      <span>{user.donation.blood_type}</span>
-                    </p>
-                    <p onClick={() => { navigate("/bloodRequest"); setOpenDialog(false); }} className={`w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500 hover:bg-green-300 duration-200" : "border-red-300 bg-red-200 text-red-500 hover:bg-red-300 duration-200"}`}>
-                      <span>Requests</span>
-                      <span>{user.uploadedRequests?.length ?? 0}</span>
-                      {/* <span>{user.uploadedRequests.length}</span> */}
-                      {/* <span>0</span> */}
-                    </p>
-                  </div>
-
-                  <div className="mt-2 px-6 flex flex-col items-center gap-4 text-lg">
+                  {/* <div className="mt-2 px-6 flex flex-col items-center gap-4 text-lg">
                     <div className="flex items-center gap-1">
                       <span className="inline-block h-3 w-3 bg-green-400 rounded-full border border-green-700"></span>
                       <span className="text-gray-700">Valid - Eligible to donate</span>
@@ -170,7 +213,7 @@ function Profile({ setOpenDialog }) {
                       <span className="inline-block h-3 w-3 bg-red-400 rounded-full border border-red-700"></span>
                       <span className="text-gray-700">Not Valid - Cannot donate</span>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               ) : (
                 <div className='flex flex-col items-center justify-center gap-5'>
@@ -211,21 +254,6 @@ function Profile({ setOpenDialog }) {
               )
             }
 
-            <div
-              className=' absolute bottom-4 sm:bottom-6 left-0 w-full flex items-center justify-between px-4 text-red-600'>
-              <div onClick={handlesignout}
-                className='flex items-center space-x-2 cursor-pointer hover:translate-x-1 duration-300'>
-                <PiSignOutBold className='text-2xl' />
-                <span >Sign Out</span>
-              </div>
-              <div
-                onClick={handleDelete}
-                className='flex items-center space-x-2 cursor-pointer hover:-translate-x-1 duration-300'>
-                <MdDeleteForever className='text-2xl' />
-                <span>Delete Account</span>
-              </div>
-            </div>
-
           </div>
         ) : (
           <EditProfile setIsEditing={setIsEditing} setOpenDialog={setOpenDialog} scope={scope} />
@@ -233,9 +261,14 @@ function Profile({ setOpenDialog }) {
       }
 
 
-    </div>
+    </div >
 
   )
 }
 
 export default Profile
+
+
+//   < div onClick = {() => setIsEditing(true)} className = ' cursor-pointer text-2xl absolute bottom-4 left-1 w-7 h-7 flex items-center justify-center rounded-full bg-slate-200' >
+//     <MdEdit className=' text-xl ' />
+// </div >
