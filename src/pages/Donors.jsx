@@ -5,15 +5,13 @@ import { IoLocationOutline } from 'react-icons/io5';
 import React, { useEffect, useState } from 'react';
 import { fetchUserid } from '../rtk/slices/userid';
 import { MdBloodtype } from 'react-icons/md';
-import { LuPhone } from 'react-icons/lu';
-// import { FaWhatsapp } from "react-icons/fa";
 import orgimg from "../Images/Hospital.png";
 import male from '../Images/male.jpg';
+import { HiOutlineCheckCircle } from "react-icons/hi2";
 import female from "../Images/female.png";
 import { SyncLoader } from 'react-spinners';
 import Donorsorg from './Donorsorg';
 import Swal from 'sweetalert2';
-
 import { RiAlarmWarningFill, RiAlarmWarningLine } from "react-icons/ri";
 import { ImNotification } from "react-icons/im";
 import { BiDonateBlood } from "react-icons/bi";
@@ -32,7 +30,6 @@ function Donors() {
 
   const [allrequests, setallrequests] = useState([]);
   const [filterType, setFilterType] = useState("all");
-  const [activeDonationId, setActiveDonationId] = useState(0);
 
   const sortedRequests = [...allrequests].sort((a, b) => a.id - b.id);
 
@@ -88,8 +85,7 @@ function Donors() {
               text: "Thank you for your donation.",
               icon: "success"
             });
-            setActiveDonationId(reqid);
-            localStorage.setItem("activeDonationId", reqid);
+            dispatch(fetchUserid(userId));
           })
           .catch(() => {
             Swal.fire({
@@ -102,12 +98,6 @@ function Donors() {
     });
   };
 
-  useEffect(() => {
-    const saved = localStorage.getItem("activeDonationId");
-    if (saved) {
-      setActiveDonationId(Number(saved));
-    }
-  }, []);
 
   const handleCancelDonation = (reqid) => {
     Swal.fire({
@@ -122,8 +112,7 @@ function Donors() {
         dispatch(deleteRequest({ donationId: userId, requestId: reqid }))
           .unwrap()
           .then(() => {
-            setActiveDonationId(0);
-            localStorage.removeItem("activeDonationId");
+            dispatch(fetchUserid(userId));
             Swal.fire("Cancelled", "Your donation has been successfully cancelled.", "success");
           })
           .catch((error) => {
@@ -166,12 +155,12 @@ function Donors() {
                 filteredRequests.length > 0 ? (
                   filteredRequests.map((request) => (
                     <div key={request.id} className=" bg-white md:max-w-[400px] lg:max-w-[550px] xl:max-w-[650px] border border-gray-200 rounded-2xl shadow-md p-4 flex items-center justify-around flex-wrap gap-6 hover:shadow-lg transition-all duration-300">
-                      <img src={request.organization ? orgimg : request.user.gender === "MALE" ? male : female} alt="Donor" className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-red-500" />
+                      <img src={request.organization ? orgimg : request.user.gender === "MALE" ? male : female} alt="Donor" className="w-16 h-16 md:w-20 md:h-20 rounded-full border" />
 
                       <div className=' space-y-1'>
-                        <p className="flex items-center text-xl font-semibold text-red-600">{request.organization ? request.organization?.orgName : request.user?.username}</p>
+                        <p className="flex items-center justify-center text-xl font-semibold text-red-600">{request.organization ? request.organization?.orgName : request.user?.username}</p>
                         <p className="flex items-center text-[16px] text-gray-600"><IoLocationOutline className="mr-2 text-2xl" />{request.conservatism} - {request.city}</p>
-                        <div className='flex items-center space-x-5'>
+                        <div className='flex items-center justify-center space-x-5'>
                           <div className="flex items-center gap-1 text-lg font-semibold ">
                             <MdBloodtype className="text-2xl text-red-600" />
                             <span className="">{request.blood_type_needed}</span>
@@ -180,42 +169,43 @@ function Donors() {
                         </div>
                       </div>
 
-                      <div className=' flex xl:flex-col items-center gap-2 sm:gap-4 lg:gap-6 xl:justify-center xl:gap-2'>
+                      <div className=' flex xl:flex-col items-center gap-2 sm:gap-4 lg:gap-6 xl:justify-center xl:gap-1'>
                         <p className="flex items-center space-x-1 sm:mr-0 "><BiCalendarAlt className="text-xl" /><span className='font-medium text-gray-500'>{request.request_date}</span></p>
 
                         {
-                          request.status === "OPEN" ? <div>
-                            {
-                              request.urgency_level === "HIGH" && (
-                                <p className="flex items-center gap-2 text-red-700">
-                                  <RiAlarmWarningFill className='text-xl' />
-                                  <span className="font-medium">High</span>
+                          request.status === "OPEN" ?
+                            <div>
+                              {
+                                request.urgency_level === "HIGH" && (
+                                  <p className="flex items-center gap-2 text-red-700">
+                                    <RiAlarmWarningFill className='text-xl' />
+                                    <span className="font-medium">High</span>
+                                  </p>
+                                )
+                              }
+
+                              {request.urgency_level === "MEDIUM" && (
+                                <p className="flex items-center gap-2 text-orange-500">
+                                  <RiAlarmWarningLine className='text-xl' />
+                                  <span className="font-medium">Medium</span>
                                 </p>
-                              )
-                            }
+                              )}
 
-                            {request.urgency_level === "MEDIUM" && (
-                              <p className="flex items-center gap-2 text-orange-500">
-                                <RiAlarmWarningLine className='text-xl' />
-                                <span className="font-medium">Medium</span>
-                              </p>
-                            )}
-
-                            {request.urgency_level === "LOW" && (
-                              <p className="flex items-center gap-2 text-orange-400">
-                                <ImNotification className='text-lg' />
-                                <span className="font-medium">Low</span>
-                              </p>
-                            )}
-                          </div> :
-                            <p className="flex items-center gap-2 mt-2 text-green-700">
-                              <HiOutlineCheckCircle className='text-xl' /> <span className="font-medium ">Completed</span>
+                              {request.urgency_level === "LOW" && (
+                                <p className="flex items-center gap-2 text-orange-400">
+                                  <ImNotification className='text-lg' />
+                                  <span className="font-medium">Low</span>
+                                </p>
+                              )}
+                            </div> :
+                            <p className="flex items-center gap-2 text-green-500">
+                              <HiOutlineCheckCircle className='text-2xl' /> <span className="font-bold ">Completed</span>
                             </p>
 
                         }
 
                         <div className='flex items-center gap-2 '>
-                          {activeDonationId === request.id ? (
+                          {user?.donation.confirmDonateReqId === request.id ? (
                             user?.donation.confirmDonate === true ? null : (
                               <button
                                 onClick={() => handleCancelDonation(request.id)}
@@ -225,7 +215,7 @@ function Donors() {
                               </button>
                             )
                           ) : (
-                            user?.donation?.status === 'VALID' && activeDonationId === 0 && (
+                            user?.donation?.status === 'VALID' && user?.donation.confirmDonateReqId === 0 && request.status === "OPEN" && (
                               <button
                                 onClick={() => handeleaccept(request.id)}
                                 className="px-2 py-1 flex items-center gap-2 bg-red-600 text-[16px] text-white rounded-lg hover:bg-red-800 transition"

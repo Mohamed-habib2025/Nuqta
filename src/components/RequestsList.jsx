@@ -71,7 +71,7 @@ function RequestsList({ requestsuser, setRequests, setCurrentRequestId, setFormD
             <img
               src={scope === "USER" ? (user.gender === "MALE" ? male : female) : orgimg}
               alt="Profile"
-              className="w-16 h-16 md:w-20 md:h-20 rounded-full border-[3px] border-red-500"
+              className="w-16 h-16 md:w-20 md:h-20 rounded-full border"
             />
 
             <div className="flex flex-col items-center space-y-2">
