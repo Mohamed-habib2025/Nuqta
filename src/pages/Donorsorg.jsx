@@ -75,19 +75,26 @@ function Donorsorg() {
           </select>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {
           filteredusers.length > 0 ? (
             filteredusers.map((user) => (
-              <div key={user.id} className={` border ${user.donation.status === 'VALID' ? "bg-green-100 border-green-200" : "bg-red-100 border-red-200"} shadow-lg rounded-lg p-4 flex flex-col items-center text-center transition-transform hover:scale-105 cursor-pointer`}>
-                <img src={user.gender === "MALE" ? male : female} alt="Donor" className="w-24 h-24 rounded-full mb-3" />
-                <p className="flex items-center text-lg font-semibold text-red-600">{user.username}</p>
-                <p className=" w-full flex items-center justify-center text-lg"><IoLocationOutline className="mr-2 text-2xl" /><span className='flex items-center flex-wrap'>{user.donation.conservatism} - {user.donation.city}</span></p>
-                <p className="flex items-center text-lg"><LuPhone className="mr-2 text-xl" />{user.phoneNumber}</p>
-                <div className="flex items-center gap-1 text-lg font-semibold mt-2">
-                  <MdBloodtype className="text-2xl text-red-600" />
-                  <span className="">{user.donation.blood_type}</span>
+              <div key={user.id} className={` border ${user.donation.status === 'VALID' ? "bg-green-100 border-green-200" : "bg-red-100 border-red-200"} md:max-w-[500px] border border-gray-200 rounded-2xl shadow-md p-4 flex items-center gap-6 flex-wrap hover:shadow-lg transition-all duration-300`}>
+                <img src={user.gender === "MALE" ? male : female} alt="Donor" className="w-16 h-16 md:w-20 md:h-20 rounded-full border" />
+
+                <div>
+                  <p className=" text-xl text-center">{user.username}</p>
+                  <p className=" w-full flex items-center justify-center gap-1 text-lg"><IoLocationOutline className=" text-2xl" /><span className='flex items-center flex-wrap'>{user.donation.conservatism} - {user.donation.city}</span></p>
                 </div>
+
+                <div className='flex flex-col items-center'>
+                  <div className="flex items-center gap-1 text-lg font-semibold text-center">
+                    <MdBloodtype className="text-2xl text-red-600" />
+                    <span className="">{user.donation.blood_type}</span>
+                  </div>
+                  <p className="flex items-center gap-1 text-lg"><LuPhone className="text-lg" />{user.phoneNumber}</p>
+                </div>
+
               </div>
             ))
           ) : (

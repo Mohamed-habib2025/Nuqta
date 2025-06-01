@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import quantity from "../Images/quantity blood .png"
 import { IoLocationOutline } from "react-icons/io5";
-// import { LuPhone } from "react-icons/lu";
 import { HiOutlineCheckCircle } from "react-icons/hi";
 import { MdBloodtype } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -75,7 +74,7 @@ function RequestsList({ requestsuser, setRequests, setCurrentRequestId, setFormD
             />
 
             <div className="flex flex-col items-center space-y-2">
-              <h2 className="text-lg font-bold ml-2 md:ml-0 md:text-center text-red-500">
+              <h2 className={`text-lg font-bold ml-2 md:ml-0 md:text-center ${ scope === "USER" ? "text-red-500" : "text-blue-500"}`}>
                 {scope === "USER" ? user.username : org.orgName}
               </h2>
               <div className="flex items-center gap-1">

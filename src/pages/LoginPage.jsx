@@ -8,6 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser, loginUser } from "../rtk/slices/userSlice";
 import { setUserToken } from '../rtk/slices/userSlice'
 import { toast } from 'react-toastify';
+import { format } from 'date-fns';
+
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+
 import Swal from 'sweetalert2';
 import { ScaleLoader } from "react-spinners";
 
@@ -60,6 +65,7 @@ function LoginPage() {
   };
 
   const handleChangeregister = (e) => {
+
     const { name, value } = e.target;
 
     if (["blood_type", "donation_date", "last_donation", "amount", "payment_offered", "status", "weight", "city", "governorate"].includes(name)) {
@@ -76,6 +82,18 @@ function LoginPage() {
         [name]: value
       }));
     }
+  };
+
+  const handleBirthDateChange = (selectedDates) => {
+    const dateObj = selectedDates[0];
+    if (!dateObj) return;
+
+    const formattedDate = format(dateObj, 'yyyy-MM-dd');
+
+    setFormData((prev) => ({
+      ...prev,
+      birthDate: formattedDate,
+    }));
   };
 
   const handleChangelogin = (e) => {
@@ -167,26 +185,46 @@ function LoginPage() {
             <h1 className="text-2xl font-bold mt-4">Create Account</h1>
             <span className="text-[18px]">or use your email for registration</span>
             <div className="space-y-2 mt-2 w-full">
-              {/* <input type="text" name='username' placeholder="Username" value={formData.username} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required /> */}
               <div className="flex gap-2">
                 <input type="text" name='firstName' placeholder="First Name" value={formData.firstName} onChange={handleChangeregister} className="rounded bg-gray-200 border-none w-full p-2 focus:ring-0" required />
                 <input type="text" name='lastName' placeholder="Last Name" value={formData.lastName} onChange={handleChangeregister} className="rounded bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               </div>
 
               <div className="flex gap-2">
-                <input type="date" placeholder="Birth Date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-full p-2 focus:ring-0" required />
-                <input type="number" name='weight' min="60" placeholder='Weight' value={formData.donation.weight} onChange={handleChangeregister} className=" rounded bg-gray-200 border-none w-full p-2 focus:ring-0" required />
+                <div className="w-1/2">
+                  <Flatpickr
+                    className=" rounded  bg-gray-200 border-none w-full p-2 focus:ring-0"
+                    placeholder="Birth Date"
+                    options={{
+                      dateFormat: "Y-m-d",
+                      altFormat: "d/m/Y",
+                      altInput: true,
+                      allowInput: true,
+                    }}
+                    value={formData.birthDate}
+                    onChange={handleBirthDateChange}
+                  />
+                  {/* مش بينفع عشان تفاصيل ال input بتختفى فى الشاشات الصغيرة  */}
+                  {/* <input type="date" placeholder="Birth Date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-full p-2 focus:ring-0" required /> */}
+                </div>
+                <div className="w-1/2">
+                  <input type="number" name="weight" min="60" placeholder="Weight"
+                    value={formData.donation.weight}
+                    onChange={handleChangeregister}
+                    className="w-full rounded bg-gray-200 border-none p-2 focus:ring-0 focus:outline-none focus:border-none" required
+                  />
+                </div>
               </div>
 
               <div className='flex gap-2'>
-                <select name="blood_type" value={formData.donation.blood_type} onChange={handleChangeregister} className=" w-full cursor-pointer p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                <select name="blood_type" value={formData.donation.blood_type} onChange={handleChangeregister} className=" w-full cursor-pointer p-2 border-none rounded bg-gray-200 focus:ring-0  focus:text-black" required>
                   <option value="">Blood Type</option>
                   {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map((type) => (
                     <option key={type} value={type}>{type}</option>
                   ))}
                 </select>
 
-                <select name="gender" value={formData.gender} onChange={handleChangeregister} className=" w-full cursor-pointer  p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                <select name="gender" value={formData.gender} onChange={handleChangeregister} className=" w-full cursor-pointer  p-2 border-none rounded bg-gray-200 focus:ring-0 focus:text-black" required>
                   <option value="">Gender</option>
                   {["Male", "Female"].map((type) => (
                     <option key={type} value={type.toUpperCase()}>{type}</option>
@@ -195,14 +233,14 @@ function LoginPage() {
               </div>
 
               <div className="flex gap-2">
-                <select name="governorate" value={formData.donation.conservatism} onChange={handleChangeregister} className=" w-full cursor-pointer p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                <select name="governorate" value={formData.donation.conservatism} onChange={handleChangeregister} className=" w-full cursor-pointer p-2 border-none rounded bg-gray-200 focus:ring-0  focus:text-black" required>
                   <option value=""> Governorate</option>
                   {Object.keys(governorates).map((gov) => (
                     <option key={gov} value={gov}>{gov}</option>
                   ))}
                 </select>
                 {formData.donation.conservatism && (
-                  <select name="city" value={formData.donation.city} onChange={handleChangeregister} className=" w-full cursor-pointer p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                  <select name="city" value={formData.donation.city} onChange={handleChangeregister} className=" w-full cursor-pointer p-2 border-none rounded bg-gray-200 focus:ring-0 focus:text-black" required>
                     <option value="">Select City</option>
                     {governorates[formData.donation.conservatism].map((city) => (
                       <option key={city} value={city}>{city}</option>
@@ -210,6 +248,7 @@ function LoginPage() {
                   </select>
                 )}
               </div>
+
               <div className=' py-2 px-2 bg-gray-200 rounded-lg'>
                 <input type="tel" name='phoneNumber'
                   // pattern="^(010|011|012|015)[0-9]{8}$"
@@ -219,10 +258,12 @@ function LoginPage() {
                   className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0"
                   required />
               </div>
+
               <div className=' py-2 px-2 bg-gray-200 rounded-lg flex items-center justify-between'>
                 <input type="email" name='email' placeholder="Email" value={formData.email} onChange={handleChangeregister} className="pl-1 rounded-lg bg-transparent border-none w-full p-0 focus:ring-0" required />
                 <MdOutlineMail className='text-[20px] text-gray-500 ' />
               </div>
+
               <div className=' p-2 bg-gray-200 rounded-lg flex items-center justify-between'>
                 <input type={showPassword.new ? "text" : "password"} name='password' value={formData.password} onChange={handleChangeregister} placeholder="Password" className=" bg-transparent p-0 border-none w-full focus:ring-0" required />
                 <div className=' flex items-center justify-between w-fit cursor-pointer' onClick={() => togglePasswordVisibility("new")}>
@@ -232,7 +273,6 @@ function LoginPage() {
                 </div>
               </div>
             </div>
-            {/* <button className="mt-3 bg-red-600 text-white rounded-lg px-10 py-2 hover:bg-red-800 duration-200">Sign Up</button> */}
             <button
               disabled={isLoading}
               className="my-4 bg-red-600 text-white rounded-lg px-6 py-2 hover:bg-red-800 duration-200 flex items-center justify-center min-h-[42px]">
@@ -298,3 +338,16 @@ function LoginPage() {
 
 export default LoginPage
 
+{/* <input type="date" placeholder="Birth Date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-full p-2 focus:ring-0" required /> */ }
+
+// const handleBirthDateChange = (selectedDates) => {
+//   const dateObj = selectedDates[0];
+//   if (!dateObj) return;
+
+//   const formattedDate = dateObj.toISOString().split('T')[0];
+
+//   setFormData((prev) => ({
+//     ...prev,
+//     birthDate: formattedDate,
+//   }));
+// };

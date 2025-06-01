@@ -17,7 +17,7 @@ import { FaRegUser, FaRegHospital } from "react-icons/fa";
 import ReactDOMServer from "react-dom/server";
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserType } from '../../rtk/slices/userTypeSlice';
-import logo from "../../Images/Logo.png"
+import logo from "../../Images/Nuqta Dark.png"
 
 function Header() {
 
@@ -182,8 +182,8 @@ function Header() {
         ref={headerRef} >
         <Navbar className=' w-[85%] mx-auto pt-5 !px-0'>
           <Link to="/" className='flex flex-col items-center'>
-            <span className="text-3xl font-semibold">Nu<span className=' text-red-600'>q</span>ta</span>
-            {/* <img src={logo} alt="logo" className='w-24 bg-slate-800 rounded-lg' /> */}
+            {/* <span className="text-3xl font-semibold">Nu<span className=' text-red-600'>q</span>ta</span> */}
+            <img src={logo} alt="logo" className=' w-20 md:w-24 rounded-lg ml-1' />
           </Link>
           <div className=' w-[50%] hidden lg:flex items-center justify-around'>
             {navLinks.map((link) => (

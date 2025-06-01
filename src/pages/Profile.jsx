@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { IoClose } from "react-icons/io5";
-import { IoLocationOutline } from "react-icons/io5";
-import { LuPhone } from "react-icons/lu";
 import { PiSignOutBold } from "react-icons/pi";
-import { MdEdit } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
+import { FiEdit } from "react-icons/fi";
 import male from "../Images/male.jpg";
 import female from "../Images/female.png";
 import orga from "../Images/Hospital.png";
@@ -69,6 +67,7 @@ function Profile({ setOpenDialog }) {
         localStorage.removeItem("organizationToken")
         dispatch(deleteaccountorg());
       }
+
       setOpenDialog(false);
       localStorage.removeItem("scope")
 
@@ -183,7 +182,10 @@ function Profile({ setOpenDialog }) {
                     </div>
 
                     <div onClick={() => setIsEditing(true)} className=' w-full flex items-center justify-between gap-2 bg-gray-100 px-5 py-2 rounded-lg cursor-pointer hover:bg-gray-200 duration-200'>
-                      <p>Edit Profile</p>
+                      <div className='flex items-center space-x-2'>
+                        <FiEdit />
+                        <p>Edit Profile</p>
+                      </div>
                       <HiChevronRight className='text-lg text-gray-500' />
                     </div>
 
@@ -209,40 +211,63 @@ function Profile({ setOpenDialog }) {
 
                 </div>
               ) : (
-                <div className='flex flex-col items-center justify-center gap-5'>
-                  <div className=' relative'>
-                    <div onClick={() => setIsEditing(true)} className=' cursor-pointer text-2xl absolute bottom-4 left-1 w-8 h-8 flex items-center justify-center rounded-full bg-slate-200'>
-                      <MdEdit className=' text-2xl ' />
-                    </div>
+                <div className='bg-white mt-16 flex flex-col items-center gap-5 rounded-t-[35px] h-screen'>
+                  <div className=' px-4 w-full absolute flex flex-col items-center gap-2 top-[4rem]'>
                     <img
                       src={orga}
-                      className='w-44 h-44 rounded-full border'
+                      className='w-28 h-28 rounded-full border'
                       alt="Profile phote"
                     />
+                    <p className={`text-xl text-blue-600`}>{org.orgName}</p>
+                    <p className={`text-gray-500`}>{org.email}</p>
+                    <div className='mt-2 flex items-center space-x-2'>
+                      <p onClick={() => { navigate("/RequstOrganization"); setOpenDialog(false); }} s className='w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer border-blue-300 bg-blue-200 text-blue-500 hover:bg-blue-300'>
+                        <span className='text-xl sm:text-2xl'>{org.uploadedRequests?.length ?? 0}</span>
+                        <span >Requests</span>
+                      </p>
+                      <p className=' w-24 sm:w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer border-blue-300 bg-blue-200 text-blue-500 hover:bg-blue-300'>
+                        <span className='text-xl sm:text-2xl'>{users.length}</span>
+                        <span >Donors</span>
+                      </p>
+                    </div>
+
+                    <div className=' w-full flex flex-col gap-2 bg-gray-100 px-4 py-2 rounded-lg mt-2'>
+                      < div className='w-full flex items-center justify-between font-normal text-[17px] border-b-[1px] pb-2'>
+                        <p>Phone Number</p>
+                        <span className='text-lg'>{org.phoneNumber}</span>
+                      </div>
+                      <div className='w-full flex items-center justify-between font-normal text-[17px] pb-2'>
+                        <p>Location</p>
+                        <p><span>{org.conservatism}</span> - <span>{org.city}</span> </p>
+                      </div>
+                    </div>
+
+
+                    <div onClick={() => setIsEditing(true)} className=' w-full flex items-center justify-between gap-2 bg-gray-100 px-5 py-2 rounded-lg cursor-pointer hover:bg-gray-200 duration-200'>
+                      <div className='flex items-center space-x-2'>
+                        <FiEdit />
+                        <p>Edit Profile</p>
+                      </div>
+                      <HiChevronRight className='text-lg text-gray-500' />
+                    </div>
+
+                    <div onClick={handlesignout} className=' bg-gray-100 px-5 py-2 w-full rounded-lg flex items-center justify-between cursor-pointer hover:text-red-600 duration-200'>
+                      <div className='flex items-center space-x-2'>
+                        <PiSignOutBold className='text-2xl' />
+                        <span >Sign Out</span>
+                      </div>
+                      <HiChevronRight className='text-lg text-gray-500' />
+                    </div>
+
+                    <div onClick={handleDelete} className='bg-gray-100 px-5 py-2 w-full rounded-lg flex items-center justify-between cursor-pointer text-red-500 hover:text-red-700 duration-200 mt-2 mb-4'>
+                      <div className='flex items-center space-x-2'>
+                        <RiDeleteBin6Line className='text-xl' />
+                        <span>Delete Account</span>
+                      </div>
+                      <HiChevronRight className='text-lg text-gray-500' />
+                    </div>
                   </div>
 
-                  <p className={`text-xl text-blue-600 font-bold`}>{org.orgName}</p>
-
-                  <div className='flex items-center gap-2'>
-                    <IoLocationOutline className='text-3xl text-blue-500' />
-                    <p className='text-lg'><span>{org.conservatism}</span> - <span>{org.city}</span> </p>
-                  </div>
-
-                  <div className='flex items-center gap-2'>
-                    <LuPhone className='text-2xl text-blue-500' />
-                    <span className='text-lg'>{org.phoneNumber}</span>
-                  </div>
-
-                  <div className='mt-2 flex items-center space-x-2'>
-                    <p onClick={() => { navigate("/RequstOrganization"); setOpenDialog(false); }} s className='w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer border-blue-300 bg-blue-200 text-blue-500 hover:bg-blue-300'>
-                      <span>Requests</span>
-                      <span>{org.uploadedRequests?.length ?? 0}</span>
-                    </p>
-                    <p className='w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer border-blue-300 bg-blue-200 text-blue-500 hover:bg-blue-300'>
-                      <span>Donors</span>
-                      <span>{users.length}</span>
-                    </p>
-                  </div>
                 </div>
               )
             }
