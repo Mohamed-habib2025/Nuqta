@@ -4,8 +4,31 @@ import { motion } from "framer-motion"
 import { FaFacebook, FaGoogle, FaInstagram, FaPhone, FaTelegram } from 'react-icons/fa'
 import { LuChevronsRight } from "react-icons/lu";
 import { HashLink as Link } from "react-router-hash-link";
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import logo from "../Images/Nuqta Dark.png"
 
 function Footer() {
+
+  const navigate = useNavigate();
+  const userToken = useSelector((state) => state.user?.token);
+  const orgToken = useSelector((state) => state.organization?.token);
+  const token = userToken || orgToken;
+
+
+  const handleProtectedRoute = (event, to) => {
+    event.preventDefault();
+    if (!token) {
+      toast.warning("You need to login first to access this page.", {
+        autoClose: 2000,
+        hideProgressBar: true,
+        className: "text-red-500 font-bold",
+      });
+    } else {
+      navigate(to);
+    }
+  };
 
   return (
     <div className=' py-5 bg-gray-100'>
@@ -20,15 +43,13 @@ function Footer() {
               duration: 0.6,
             }}
             className=' space-y-6'>
-            <h1 className=' text-3xl font-bold text-gray-800'>
-              Nu<span className='text-red-600'>q</span>ta
-            </h1>
+            <img src={logo} alt="logo" className=' w-20 md:w-24 rounded-lg ml-1' />
             <p className='text-gray-600 font-medium max-w-[300px]'>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum ea ratione quidem libero, praesentium ab atque? Quidem maxime, numquam dolores
             </p>
             <div>
               <p className='flex items-center gap-2 w-[220px] mb-2 text-gray-700'>
-                <FaPhone className='text-[20px] text-red-600' /> +201597845357
+                <FaPhone className='text-[20px] text-red-600' /> +201234567892
               </p>
               <p className='flex items-center gap-2 w-[240px] text-gray-700'>
                 <FaMapLocation className='text-[20px] text-red-600' /> Qalyubia, Shibin El Qenater
@@ -50,20 +71,26 @@ function Footer() {
               <ul className='space-y-2 text-xl'>
                 <li className='w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold'>
                   <LuChevronsRight />
-                  <Link to='/'>Home</Link>
+                  <Link smooth to='/'>Home</Link>
                 </li>
                 <li
                   className='w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold'>
                   <LuChevronsRight />
                   <Link smooth to='/#aboutus'>About</Link>
                 </li>
-                <li className='w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold'>
+                <li
+                  onClick={(e) => handleProtectedRoute(e, "/donors")}
+                  className="w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold"
+                >
                   <LuChevronsRight />
-                  <Link to='/donors'>Donation</Link>
+                  <span>Donation</span>
                 </li>
-                <li className='w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold'>
+                <li
+                  onClick={(e) => handleProtectedRoute(e, "/bloodRequest")}
+                  className="w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold"
+                >
                   <LuChevronsRight />
-                  <Link to='/bloodRequest'>Request</Link>
+                  <span>Request</span>
                 </li>
               </ul>
             </div>

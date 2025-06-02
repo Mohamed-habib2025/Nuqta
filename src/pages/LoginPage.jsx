@@ -10,8 +10,8 @@ import { setUserToken } from '../rtk/slices/userSlice'
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 
-import Flatpickr from "react-flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
+// import Flatpickr from "react-flatpickr";
+// import "flatpickr/dist/flatpickr.min.css";
 
 import Swal from 'sweetalert2';
 import { ScaleLoader } from "react-spinners";
@@ -84,17 +84,17 @@ function LoginPage() {
     }
   };
 
-  const handleBirthDateChange = (selectedDates) => {
-    const dateObj = selectedDates[0];
-    if (!dateObj) return;
+  // const handleBirthDateChange = (selectedDates) => {
+  //   const dateObj = selectedDates[0];
+  //   if (!dateObj) return;
 
-    const formattedDate = format(dateObj, 'yyyy-MM-dd');
+  //   const formattedDate = format(dateObj, 'yyyy-MM-dd');
 
-    setFormData((prev) => ({
-      ...prev,
-      birthDate: formattedDate,
-    }));
-  };
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     birthDate: formattedDate,
+  //   }));
+  // };
 
   const handleChangelogin = (e) => {
     const { name, value } = e.target;
@@ -191,21 +191,20 @@ function LoginPage() {
               </div>
 
               <div className="flex gap-2">
-                <div className="w-1/2">
-                  <Flatpickr
-                    className=" rounded  bg-gray-200 border-none w-full p-2 focus:ring-0"
-                    placeholder="Birth Date"
-                    options={{
-                      dateFormat: "Y-m-d",
-                      altFormat: "d/m/Y",
-                      altInput: true,
-                      allowInput: true,
-                    }}
+                <div className="relative w-1/2">
+                  <input
+                    type="date"
+                    name="birthDate"
                     value={formData.birthDate}
-                    onChange={handleBirthDateChange}
+                    onChange={handleChangeregister}
+                    required
+                    className="peer rounded bg-gray-200 border-none w-full p-2 focus:ring-0 placeholder-transparent"
                   />
-                  {/* مش بينفع عشان تفاصيل ال input بتختفى فى الشاشات الصغيرة  */}
-                  {/* <input type="date" placeholder="Birth Date" name='birthDate' value={formData.birthDate} onChange={handleChangeregister} className=" rounded text-gray-500 bg-gray-200 border-none w-full p-2 focus:ring-0" required /> */}
+                  {!formData.birthDate && (
+                    <span className="absolute left-2 top-2 text-lg text-gray-500 transition-all duration-200 md:hidden">
+                      Birth Date
+                    </span>
+                  )}
                 </div>
                 <div className="w-1/2">
                   <input type="number" name="weight" min="60" placeholder="Weight"
@@ -351,3 +350,16 @@ export default LoginPage
 //     birthDate: formattedDate,
 //   }));
 // };
+
+{/* <Flatpickr
+                    className=" rounded bg-gray-200 border-none w-full p-2 focus:ring-0 "
+                    placeholder="Birth Date"
+                    options={{
+                      dateFormat: "Y-m-d",
+                      altFormat: "d/m/Y",
+                      altInput: true,
+                      allowInput: true,
+                    }}
+                    value={formData.birthDate}
+                    onChange={handleBirthDateChange}
+                  /> */}
