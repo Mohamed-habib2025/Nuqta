@@ -75,11 +75,11 @@ function Donorsorg() {
           </select>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {
           filteredusers.length > 0 ? (
             filteredusers.map((user) => (
-              <div key={user.id} className={` border ${user.donation.status === 'VALID' ? "bg-green-100 border-green-200" : "bg-red-100 border-red-200"} md:max-w-[500px] border border-gray-200 rounded-2xl shadow-md p-4 flex items-center gap-6 flex-wrap hover:shadow-lg transition-all duration-300`}>
+              <div key={user.id} className={` border ${user.donation.status === 'VALID' ? "bg-green-100 border-green-200" : "bg-red-100 border-red-200"} md:max-w-[500px] border border-gray-200 rounded-2xl shadow-md p-4 flex items-center justify-center gap-6 flex-wrap hover:shadow-lg transition-all duration-300`}>
                 <img src={user.gender === "MALE" ? male : female} alt="Donor" className="w-16 h-16 md:w-20 md:h-20 rounded-full border" />
 
                 <div>

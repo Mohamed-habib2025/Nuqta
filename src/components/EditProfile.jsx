@@ -14,7 +14,6 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
   const { user } = useSelector(state => state.userid);
   const dispatch = useDispatch();
 
-  // const [userData, setuserData] = useState(user);
   const [userData, setuserData] = useState({
     id: user?.id || "",
     username: user?.username || "",
@@ -181,7 +180,7 @@ function EditProfile({ setIsEditing, setOpenDialog, scope }) {
       {
         scope === "USER" ? (
           <div className='flex flex-col items-center'>
-            <form onSubmit={handleSubmituser} className='w-full space-y-3'>
+            <form onSubmit={handleSubmituser} className='w-full space-y-3 h-screen'>
               {
                 isEditlocation ? (
                   <LocationPicker

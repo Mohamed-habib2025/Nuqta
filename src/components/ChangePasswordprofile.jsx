@@ -107,10 +107,10 @@ function ChangePasswordprofile({ setIsEditpassword, setOpenDialog }) {
 
         {isLoading && <p className="px-2 text-green-400 ">Updating Password...</p>}
 
-        {errors.oldPassword && <p className='text-red-600 px-2'>The old password is not correct!.</p>}
-        {errors.confirmPassword && <p className='text-red-600 px-2'>Passwords do not match!</p>}
-        {errors.samePassword && <p className='text-red-600 px-2'>Passwords must be different!</p>}
-        {errors.rules && <p className='text-red-600 px-2'>Password doesn't meet requirements!</p>}
+        {errors.oldPassword && <p className='text-red-500 px-3 bg-red-200 py-2 rounded'>The old password is not correct!.</p>}
+        {errors.confirmPassword && <p className='text-red-500 px-3 bg-red-200 py-2 rounded'>Passwords do not match!</p>}
+        {errors.samePassword && <p className='text-red-500 px-3 bg-red-200 py-2 rounded'>Passwords must be different!</p>}
+        {errors.rules && <p className='text-red-500 px-3 bg-red-200 py-2 rounded'>Password doesn't meet requirements!</p>}
 
         <div className=' flex items-center justify-between border-b-[1px]'>
           <input

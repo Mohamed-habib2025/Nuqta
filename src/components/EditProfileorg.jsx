@@ -144,7 +144,7 @@ function EditProfileorg({ setIsEditing, setOpenDialog, scope }) {
 
   return (
     <div>
-      <form onSubmit={handleSubmitorg} className='w-full space-y-3'>
+      <form onSubmit={handleSubmitorg} className='w-full space-y-3 h-screen'>
         {
           isEditlocation ? (
             <LocationPicker

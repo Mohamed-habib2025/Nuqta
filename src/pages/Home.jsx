@@ -7,8 +7,8 @@ import { motion } from 'framer-motion';
 import { IoMail } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
-import { fetchUsers } from '../rtk/slices/usersSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { fetchUsers } from '../rtk/slices/usersSlice'
 import { fetchOrganizations } from '../rtk/slices/organizationsSlice'
 
 const AboutUsSection = [
@@ -16,21 +16,21 @@ const AboutUsSection = [
     id: 1,
     img: img1,
     title: "We Volunteer",
-    description: "Donate experties donations food bags and equpments to loss privileged.",
+    description: "We dedicate our time and skills to support blood donation drives and deliver vital aid to those in need.",
     AnimatTime: 0.4
   },
   {
     id: 2,
     img: img2,
     title: "We Donate",
-    description: "Donate experties donations food bags and equpments to loss privileged.",
+    description: "We provide financial support, food supplies, and essential equipment to uplift underprivileged communities.",
     AnimatTime: 0.6
   },
   {
     id: 3,
     img: img3,
     title: "We Encourage",
-    description: "Donate experties donations food bags and equpments to loss privileged.",
+    description: "We inspire others to take action, spread kindness, and support those who are less fortunate.",
     AnimatTime: 0.8
   },
 ]
@@ -85,7 +85,7 @@ function Home() {
                 delay: 0.2,
               }}
               className='text-red-600 text-2xl font-semibold'>
-              Well Come Blood Donation Kohat
+              Well Come Blood Donation Nuqta
             </motion.h4>
             <motion.p
               initial={{ opacity: 0, x: -100 }}
@@ -108,7 +108,7 @@ function Home() {
                 damping: 30,
                 delay: 0.2,
               }}
-              className='text-gray-400 text-lg'>Welcome to donateblood.pk, Pakistan's premier blood donation website! Our platform is dedicated
+              className='text-gray-400 text-lg'>Welcome to Nuqta, Egypt's premier blood donation website! Our platform is dedicated
               to connecting blood donors with individuals in need, providing a lifeline of hope and support to
               those requiring blood transfusions across the country.
             </motion.p>
@@ -183,7 +183,7 @@ function Home() {
             <div className='lg:w-[50%] h-[500px] relative bg-[url("D:\web\Nuqta\src\Images\factory.jpeg")] bg-cover bg-center'>
               <div className=' p-5 bg-gray-50 w-[65%] h-[50%] sm:h-[35%] absolute bottom-0 right-0 space-y-3 border'>
                 <h1 className='text-2xl'>Our Main Services</h1>
-                <p className='text-sm text-gray-400 font-normal'>Allow users to register themselves as blood donoers.
+                <p className=' text-sm lg:text-[16px] text-gray-500 font-normal'>Allow users to register themselves as blood donoers.
                   Collect necessary information such as name, contact details,
                   blood type, and any medical conditions.
                 </p>
@@ -199,7 +199,7 @@ function Home() {
                   process, from registration to past-donation refreshments and rest.
                 </p>
               </div>
-              <div className='w-full h-[66%] space-y-3 px-10 py-5 bg-red-600'>
+              <div className='w-full h-[66%] space-y-3 px-5 md:px-10 py-5 bg-red-600'>
                 <h1 className='text-2xl text-white font-semibold'>Be a hero give a blood</h1>
                 <p className='text-sm text-white md:w-[70%]'>
                   Help us spread the word about the importance of blood donation,

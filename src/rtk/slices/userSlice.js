@@ -70,9 +70,9 @@ const userSlice = createSlice({
       state.token = action.payload;
       localStorage.setItem("userToken", action.payload);
     },
-    setUserId: (state, action) => {
-      state.user_id = action.payload;
-    },
+    // setUserId: (state, action) => {
+    //   state.user_id = action.payload;
+    // },
   },
   extraReducers: (builder) => {
     builder

@@ -6,14 +6,8 @@ import axios from 'axios';
 export const registerOrg = createAsyncThunk(
   'organization/register',
   async (userData, thunkAPI) => {
-    // console.log(userData)
     try {
       const state = thunkAPI.getState();
-      // const { userType } = state.userType.scope;
-      // const fullData = {
-      //   ...userData,
-      //   scope : userType
-      // }
       const response = await axios.post('https://nuqta-02f0fc9e8c38.herokuapp.com/api/auth/register/org', userData);
       return response.data;
     } catch (error) {
@@ -101,8 +95,8 @@ const organizationSlice = createSlice({
         state.token = action.payload.token;
         state.org_id = action.payload.org_id;
         state.org = action.payload;
-        localStorage.setItem('organizationToken', action.payload.token);
-        localStorage.setItem("orgaid", action.payload.org_id);
+        // localStorage.setItem('organizationToken', action.payload.token);
+        // localStorage.setItem("orgaid", action.payload.org_id);
       })
       .addCase(loginOrg.rejected, (state, action) => {
         state.loading = false;

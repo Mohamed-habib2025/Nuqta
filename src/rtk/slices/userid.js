@@ -65,10 +65,10 @@ export const updateUser = createAsyncThunk(
         }
       );
 
-      console.log("Updated user:", response.data);
+      // console.log("Updated user:", response.data);
       return response.data;
     } catch (error) {
-      console.error("Update failed:", error);
+      // console.error("Update failed:", error);
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Update failed"
       );
@@ -95,7 +95,7 @@ export const changePassword = createAsyncThunk(
           }
         }
       );
-      console.log("RESPONSE FROM CHANGE PASSWORD:", response.data);
+      // console.log("RESPONSE FROM CHANGE PASSWORD:", response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(

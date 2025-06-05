@@ -137,25 +137,25 @@ function LoginPageOrganisation() {
 
   return (
     <div className={` w-full flex items-center justify-center sm:h-[720px] ${isSignUp ? 'h-[700px]' : 'h-[550px] '}`}>
-      <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden mx-3">
+      <div className="relative w-[768px] sm:h-[70%] h-full bg-white rounded-3xl shadow-xl overflow-hidden mx-3 mt-4 md:mt-0">
         {/* Sign Up Form */}
         <div className={`absolute transition-all duration-700 bottom-0 sm:top-0 right-0 w-full sm:w-1/2 h-[70%] sm:h-full ${isSignUp ? 'opacity-100 ' : 'opacity-0 hidden'}`}>
-          <form onSubmit={handleSubmitSignUp} className="flex flex-col items-center justify-center h-full p-5 sm:p-8">
-            <h1 className="text-2xl font-bold mb-2">Create Account</h1>
+          <form onSubmit={handleSubmitSignUp} className="flex flex-col items-center justify-center h-full px-5 sm:px-8">
+            <h1 className="text-2xl font-bold">Create Account</h1>
             <span className="text-[17px] font-bold text-gray-800">or use your email for registration</span>
-            <div className="space-y-2 mt-5 w-full">
+            <div className="space-y-2 mt-3 w-full">
               <input type="text" name='orgName' placeholder="Organization Name" value={formData.orgName} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               <input type="number" name="licenseNumber" placeholder="License Number" value={formData.licenseNumber} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               <input type="number" name="phoneNumber" placeholder="Phone Number" value={formData.phoneNumber} onChange={handleChangeregister} className="rounded-lg bg-gray-200 border-none w-full p-2 focus:ring-0" required />
 
-              <select name="conservatism" value={formData.conservatism} onChange={handleChangeregister} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+              <select name="conservatism" value={formData.conservatism} onChange={handleChangeregister} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 focus:text-black" required>
                 <option value=""> conservatism</option>
                 {Object.keys(governorates).map((gov) => (
                   <option key={gov} value={gov}>{gov}</option>
                 ))}
               </select>
               {formData.conservatism && (
-                <select name="city" value={formData.city} onChange={handleChangeregister} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 text-gray-500 focus:text-black" required>
+                <select name="city" value={formData.city} onChange={handleChangeregister} className=" cursor-pointer w-full p-2 border-none rounded bg-gray-200 focus:ring-0 focus:text-black" required>
                   <option value="">Select City</option>
                   {governorates[formData.conservatism].map((city) => (
                     <option key={city} value={city}>{city}</option>
@@ -190,7 +190,7 @@ function LoginPageOrganisation() {
 
         {/* Sign In Form */}
         <div className={`absolute transition-all duration-700 top-0 left-0 w-full sm:w-1/2 h-[50%] sm:h-full ${isSignUp ? 'opacity-0 hidden' : 'opacity-100'}`}>
-          <form onSubmit={handleSubmitSignIn} className="flex flex-col items-center justify-center sm:h-full p-5 md:p-10">
+          <form onSubmit={handleSubmitSignIn} className="flex flex-col items-center justify-center mt-10 md:mt-0 sm:h-full p-5 md:p-10">
             <h1 className="text-2xl font-bold">Sign In</h1>
             <span className="text-[18px]">or use your email password</span>
             <div className="space-y-2 mt-2 w-full  ">

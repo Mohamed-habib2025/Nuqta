@@ -45,7 +45,7 @@ function Footer() {
             className=' space-y-6'>
             <img src={logo} alt="logo" className=' w-20 md:w-24 rounded-lg ml-1' />
             <p className='text-gray-600 font-medium max-w-[300px]'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum ea ratione quidem libero, praesentium ab atque? Quidem maxime, numquam dolores
+              Nuqta is a platform that connects blood donors with those in urgent need. Together, we save lives and build a healthier future.
             </p>
             <div>
               <p className='flex items-center gap-2 w-[220px] mb-2 text-gray-700'>
@@ -117,7 +117,7 @@ function Footer() {
 
         {/* Copyright Section */}
         <p className=' text-center text-gray-700 mt-8 pt-8 border-t-2 border-gray-300 font-medium'>
-          Copyright © 2025 Company Name. All rights reserved.
+          Nuqta. Together, we save lives. All rights reserved © 2025.
         </p>
       </div>
     </div>
