@@ -173,7 +173,7 @@ function Home() {
                     delay: sec.AnimatTime,
                   }}
                   key={sec.id} className=' mb-16 text-center lg:text-left flex flex-col items-center lg:items-start gap-5 w-full'>
-                  <div  className=' text-center flex flex-col md:flex-row items-center gap-3'>
+                  <div className=' text-center flex flex-col md:flex-row items-center gap-3'>
                     <img className='w-20' src={sec.img} alt={sec.title} />
                     <h2 className='text-xl font-bold text-[#710C12]'>{sec.title}</h2>
                   </div>
@@ -183,41 +183,36 @@ function Home() {
             }
           </div>
 
-          <div className='mt-20 rounded-lg overflow-hidden flex flex-col lg:flex-row gap-6 lg:gap-0 '>
+          <div className='mt-20 rounded-lg overflow-hidden flex flex-col lg:flex-row gap-6 lg:gap-0 lg:h-[500px]'>
             {/* left */}
-            <div className='lg:w-[50%] h-[500px] relative bg-[url("D:\web\Nuqta\src\Images\factory.jpeg")] bg-cover bg-center'>
-              <div className=' p-5 bg-gray-50 w-[65%] h-[50%] sm:h-[35%] absolute bottom-0 right-0 space-y-3 border'>
-                <h1 className='text-2xl'>Our Main Services</h1>
-                <p className=' text-sm lg:text-[16px] text-gray-500 font-normal'>Allow users to register themselves as blood donoers.
-                  Collect necessary information such as name, contact details,
-                  blood type, and any medical conditions.
+            <div className='lg:w-[50%] lg:h-full h-[300px] relative bg-[url("D:/web/Nuqta/src/Images/factory.jpeg")] bg-cover bg-center'>
+              <div className='p-4 bg-gray-50 w-[65%] h-fit absolute bottom-0 right-0 space-y-3 border'>
+                <h1 className='text-2xl'>{t('our_facilities')}</h1>
+                <p className='text-sm lg:text-[17px] text-gray-400 font-normal leading-5 md:leading-6'>
+                  {t('our_facilities_desc')}
                 </p>
               </div>
             </div>
+
             {/* right */}
-            <div className='lg:w-[50%]'>
-              <div className='bg-gray-50 px-5 md:px-10 py-5 space-y-2'>
-                <h1 className='text-3xl'>Our Facilites</h1>
-                <p className='text-[15px] text-gray-400 md:w-[60%] font-normal'>
-                  Support to these requiring blood transfusions across
-                  the country. Explain the steps involved in the donation
-                  process, from registration to past-donation refreshments and rest.
+            <div className=' bg-gray-100 lg:w-[50%] lg:h-full flex flex-col justify-between '>
+              <div className=' px-5 md:px-10 py-5 space-y-2'>
+                <h1 className='text-3xl xl:mt-9'>{t('our_facilities')}</h1>
+                <p className='text-[15px] text-gray-400 lg:w-[80%] font-normal'>
+                  {t('our_facilities_desc')}
                 </p>
               </div>
-              <div className='w-full h-[66%] space-y-3 px-5 md:px-10 py-5 bg-red-600'>
-                <h1 className='text-2xl text-white font-semibold'>Be a hero give a blood</h1>
-                <p className='text-sm text-white md:w-[70%]'>
-                  Help us spread the word about the importance of blood donation,
-                  Share your donation experience on social media, encourage your
-                  friends and family to donate, and be a champion for our couse
+
+              <div className='w-full px-5 md:px-10 py-5 bg-red-600 space-y-2'>
+                <h1 className='text-2xl text-white font-semibold'>{t('be_hero')}</h1>
+                <p className='text-sm text-white lg:w-[90%] '>
+                  {t('be_hero_desc_1')}
                 </p>
-                <p className='text-sm text-white  md:w-[70%]'>
-                  On behalf of all those whose lives you'l touch with your generosity,
-                  we extend our heartfelt gratitude Together, we can create a healthier,
-                  brighter future for our communities
+                <p className='text-sm text-white lg:w-[90%]'>
+                  {t('be_hero_desc_2')}
                 </p>
                 <div className='text-white'>
-                  <h1 className='text-2xl font-semibold mb-2'>Contact us today</h1>
+                  <h1 className='text-2xl font-semibold mb-2'>{t('contact_us_today')}</h1>
                   <div className='flex items-center space-x-2'>
                     <IoMail className='text-2xl' />
                     <span>nuqta.help@gmail.com</span>

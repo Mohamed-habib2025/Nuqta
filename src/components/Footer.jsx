@@ -8,8 +8,11 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import logo from "../Images/Nuqta Dark.png"
+import { useTranslation } from 'react-i18next';
 
 function Footer() {
+
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
   const userToken = useSelector((state) => state.user?.token);
@@ -34,7 +37,6 @@ function Footer() {
     <div dir="ltr" className=' py-5 bg-gray-100'>
       <div className=' w-[85%] mx-auto '>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-          {/* Company Details Section  */}
           <motion.div
             initial={{ opacity: 0, y: 100 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -45,20 +47,20 @@ function Footer() {
             className=' space-y-6'>
             <img src={logo} alt="logo" className=' w-20 md:w-24 rounded-lg ml-1' />
             <p className='text-gray-600 font-medium max-w-[300px]'>
-              Nuqta is a platform that connects blood donors with those in urgent need. Together, we save lives and build a healthier future.
+              {t("footer_desc")}
             </p>
             <div>
               <p className='flex items-center gap-2 w-[220px] mb-2 text-gray-700'>
                 <FaPhone className='text-[20px] text-red-600' /> +201234567892
               </p>
               <p className='flex items-center gap-2 w-[240px] text-gray-700'>
-                <FaMapLocation className='text-[20px] text-red-600' /> Qalyubia, Shibin El Qenater
+                <FaMapLocation className='text-[20px] text-red-600' /> {t("location")}
               </p>
             </div>
           </motion.div>
 
-          {/* Footer Links Section  */}
-          <motion.div
+          <motion.div 
+          
             initial={{ opacity: 0, y: 100 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{
@@ -66,37 +68,36 @@ function Footer() {
               duration: 0.6,
             }}
             className='space-y-6'>
-            <h1 className='text-3xl font-bold text-gray-800'> Quick Links </h1>
+            <h1 className='text-3xl font-bold text-gray-800'> {t("quick_links")} </h1>
             <div className=' space-y-2'>
               <ul className='space-y-2 text-xl'>
                 <li className='w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold'>
                   <LuChevronsRight />
-                  <Link smooth to='/'>Home</Link>
+                  <Link smooth to='/'>{t("Home")}</Link>
                 </li>
                 <li
                   className='w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold'>
                   <LuChevronsRight />
-                  <Link smooth to='/#aboutus'>About</Link>
+                  <Link smooth to='/#aboutus'>{t("About Us")}</Link>
                 </li>
                 <li
                   onClick={(e) => handleProtectedRoute(e, "/donors")}
                   className="w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold"
                 >
                   <LuChevronsRight />
-                  <span>Donation</span>
+                  <span>{t("Donation")}</span>
                 </li>
                 <li
                   onClick={(e) => handleProtectedRoute(e, "/bloodRequest")}
                   className="w-fit flex items-center space-x-2 cursor-pointer hover:text-red-600 hover:translate-x-2 duration-200 font-semibold"
                 >
                   <LuChevronsRight />
-                  <span>Request</span>
+                  <span>{t("Request")}</span>
                 </li>
               </ul>
             </div>
           </motion.div>
 
-          {/* Social Links Section  */}
           <motion.div
             initial={{ opacity: 0, y: 100 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -105,7 +106,7 @@ function Footer() {
               duration: 0.6,
             }}
             className='space-y-6'>
-            <h1 className='text-3xl font-bold text-gray-800'> Follow Us </h1>
+            <h1 className='text-3xl font-bold text-gray-800'> {t("follow_us")} </h1>
             <div className=' flex items-center gap-3'>
               <FaFacebook className=' cursor-pointer text-black text-3xl hover:scale-110 hover:text-red-600 duration-300' />
               <FaInstagram className=' cursor-pointer text-black text-3xl hover:scale-110 hover:text-red-600 duration-300' />
@@ -115,7 +116,6 @@ function Footer() {
           </motion.div>
         </div>
 
-        {/* Copyright Section */}
         <p className=' text-center text-gray-700 mt-8 pt-8 border-t-2 border-gray-300 font-medium'>
           Nuqta. Together, we save lives. All rights reserved © 2025.
         </p>

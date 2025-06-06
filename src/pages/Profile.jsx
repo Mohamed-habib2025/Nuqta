@@ -150,7 +150,7 @@ function Profile({ setOpenDialog }) {
                       </span>
                     </div>
 
-                    <div className='mt-1 flex items-center space-x-2'>
+                    <div className='mt-1 flex items-center gap-2'>
                       <p onClick={() => { navigate("/donors"); setOpenDialog(false); }} className={` w-24 sm:w-28 p-2 flex flex-col items-center border-[2px] rounded-lg hover:cursor-pointer ${user.donation.status === "VALID" ? " border-green-300 bg-green-200 text-green-500 hover:bg-green-300 duration-200" : "border-red-300 bg-red-200 text-red-500 hover:bg-red-300 duration-200"}`}>
                         <span className='text-xl sm:text-2xl'>{user.donation.acceptedRequests?.length}</span>
                         <span className='text-sm'>Donate</span>
