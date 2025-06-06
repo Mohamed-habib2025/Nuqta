@@ -18,8 +18,12 @@ import ReactDOMServer from "react-dom/server";
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserType } from '../../rtk/slices/userTypeSlice';
 import logo from "../../Images/Nuqta Dark.png"
+import { useTranslation } from 'react-i18next';
 
 function Header() {
+
+  const { t } = useTranslation();
+
 
   const usertyperequest = useSelector((state) => state.userType.scope);
   const userToken = useSelector((state) => state.user?.token);
@@ -28,14 +32,14 @@ function Header() {
   const dispatch = useDispatch();
 
   const navLinks = [
-    { name: 'Home', to: '/' },
-    { name: 'Donation', to: '/donors', protected: true },
+    { name: t('Home'), to: '/' },
+    { name: t('Donation'), to: '/donors', protected: true },
     {
-      name: 'Request',
+      name: t('Request'),
       to: usertyperequest === 'ORGANIZATION' ? '/RequstOrganization' : '/bloodRequest',
       protected: true
     },
-    { name: 'About Us', to: '/#aboutus', smooth: true },
+    { name: t('About Us'), to: '/#aboutus', smooth: true },
   ];
 
 
@@ -100,21 +104,21 @@ function Header() {
 
   const handleLogin = () => {
     Swal.fire({
-      title: "Select Account Type",
-      text: "Choose 'User' if you want to donate or receive blood. Choose 'Organization' if you represent a blood bank or hospital.",
+      title: t("Select Account Type"),
+      text: t("Choose user or organization"),
       icon: "info",
       showCancelButton: true,
-      cancelButtonText: "Cancel",
+      cancelButtonText: t("Cancel"),
       showDenyButton: true,
       scrollbarPadding: false,
       confirmButtonText: ReactDOMServer.renderToString(
         <div className="flex items-center gap-2">
-          <FaRegUser className="w-5 h-5" /> <span>User</span>
+          <FaRegUser className="w-5 h-5" /> <span>{t("User")}</span>
         </div>
       ),
       denyButtonText: ReactDOMServer.renderToString(
         <div className="flex items-center gap-2">
-          <FaRegHospital className="w-5 h-5" /> <span>Organization</span>
+          <FaRegHospital className="w-5 h-5" /> <span>{t("Organization")}</span>
         </div>
       ),
       customClass: {
@@ -142,7 +146,7 @@ function Header() {
   const handleProtectedRoute = (event, to, linkname) => {
     if (!token) {
       event.preventDefault();
-      toast.warning("You need to login first to access this page.", {
+      toast.warning(t("You need to login first to access this page"), {
         autoClose: 2000,
         hideProgressBar: true,
         className: "text-red-500 font-bold"
@@ -180,7 +184,7 @@ function Header() {
           delay: 0.1,
         }}
         ref={headerRef} >
-        <Navbar className=' w-[85%] mx-auto pt-5 !px-0'>
+        <Navbar dir="ltr" className=' w-[85%] mx-auto pt-5 !px-0'>
           <Link to="/" className='flex flex-col items-center'>
             {/* <span className="text-3xl font-semibold">Nu<span className=' text-red-600'>q</span>ta</span> */}
             <img src={logo} alt="logo" className=' w-20 md:w-24 rounded-lg ml-1' />
@@ -208,9 +212,9 @@ function Header() {
                 : <div>
                   <Link onClick={() => handleLogin()} className='block lg:hidden space-x-2 hover:text-red-600 duration-200'>
                     <FiLogIn className='inline-block cursor-pointer text-[22px]' />
-                    <span>Login</span>
+                    <span>{t('login')}</span>
                   </Link>
-                  <Link onClick={() => handleLogin()} className=' hidden lg:block border-2 border-red-600 rounded text-red-600 hover:text-white hover:bg-red-600 duration-300 px-5 sm:px-8 py-[2px] sm:py-1'> Login </Link>
+                  <Link onClick={() => handleLogin()} className=' hidden lg:block border-2 border-red-600 rounded text-red-600 hover:text-white hover:bg-red-600 duration-300 px-5 sm:px-8 py-[2px] sm:py-1'> {t('login')} </Link>
                 </div>
               }
               {/* toggle */}
@@ -261,7 +265,7 @@ function Header() {
                 type: "spring",
                 stiffness: 30,
               }}
-              className=" w-full sm:w-[470px] bg-gray-100 shadow-lg rounded-l-3xl absolute top-0 right-0 z-[990]"
+              className=" w-full sm:w-[470px] h-screen bg-gray-100 shadow-lg rounded-l-3xl absolute top-0 right-0 z-[990]"
             >
               <Profile setOpenDialog={setOpenDialog} />
             </motion.div>

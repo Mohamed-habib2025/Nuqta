@@ -31,7 +31,7 @@ function Footer() {
   };
 
   return (
-    <div className=' py-5 bg-gray-100'>
+    <div dir="ltr" className=' py-5 bg-gray-100'>
       <div className=' w-[85%] mx-auto '>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
           {/* Company Details Section  */}

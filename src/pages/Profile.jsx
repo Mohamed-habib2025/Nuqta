@@ -18,11 +18,13 @@ import { GridLoader } from "react-spinners";
 import { HiChevronRight } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { GrLanguage } from "react-icons/gr";
+import Translate from '../components/Translate';
 // import { setUserType } from '../rtk/slices/userTypeSlice';
 
 function Profile({ setOpenDialog }) {
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isChangingLanguage, setIsChangingLanguage] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const scope = useSelector((state) => state.userType.scope);
@@ -113,7 +115,7 @@ function Profile({ setOpenDialog }) {
   return (
     <div>
       {
-        !isEditing ? (
+        !isEditing && !isChangingLanguage ? (
           <div className='w-full relative '>
             <div className="px-6 pt-4 flex items-center justify-between">
               <span className='text-xl'>My Profile</span>
@@ -129,7 +131,7 @@ function Profile({ setOpenDialog }) {
 
             {
               scope === "USER" ? (
-                <div className=' bg-white mt-16 flex flex-col items-center gap-5 rounded-t-[35px] md:h-screen'>
+                <div className=' bg-white mt-16 flex flex-col items-center gap-5 rounded-t-[35px] h-screen'>
                   <div className=' px-4 w-full absolute flex flex-col items-center gap-1 top-[4rem] '>
                     <img
                       src={user.gender === "MALE" ? male : female}
@@ -193,7 +195,7 @@ function Profile({ setOpenDialog }) {
                       <HiChevronRight className='text-lg text-gray-500' />
                     </div>
 
-                    <div className=' w-full flex items-center justify-between gap-2 bg-gray-100 px-5 py-2 rounded-lg cursor-pointer hover:bg-gray-200 duration-200 mt-1'>
+                    <div onClick={() => setIsChangingLanguage(true)} className=' w-full flex items-center justify-between gap-2 bg-gray-100 px-5 py-2 rounded-lg cursor-pointer hover:bg-gray-200 duration-200 mt-1'>
                       <div className='flex items-center space-x-2'>
                         <GrLanguage />
                         <p>Languages</p>
@@ -223,7 +225,7 @@ function Profile({ setOpenDialog }) {
 
                 </div>
               ) : (
-                <div className='bg-white mt-16 flex flex-col items-center gap-5 rounded-t-[35px] md:h-screen'>
+                <div className='bg-white mt-16 flex flex-col items-center gap-5 rounded-t-[35px] h-screen'>
                   <div className=' px-4 w-full absolute flex flex-col items-center  top-[4rem]'>
                     <img
                       src={orga}
@@ -293,11 +295,12 @@ function Profile({ setOpenDialog }) {
             }
 
           </div>
-        ) : (
+        ) : isEditing ? (
           <EditProfile setIsEditing={setIsEditing} setOpenDialog={setOpenDialog} scope={scope} />
+        ) : (
+          <Translate setIsChangingLanguage={setIsChangingLanguage} setIsEditing={setIsEditing} />
         )
       }
-
 
     </div >
 

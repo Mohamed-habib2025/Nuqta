@@ -8,37 +8,40 @@ import { IoMail } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next';
 import { fetchUsers } from '../rtk/slices/usersSlice'
 import { fetchOrganizations } from '../rtk/slices/organizationsSlice'
 
-const AboutUsSection = [
-  {
-    id: 1,
-    img: img1,
-    title: "We Volunteer",
-    description: "We dedicate our time and skills to support blood donation drives and deliver vital aid to those in need.",
-    AnimatTime: 0.4
-  },
-  {
-    id: 2,
-    img: img2,
-    title: "We Donate",
-    description: "We provide financial support, food supplies, and essential equipment to uplift underprivileged communities.",
-    AnimatTime: 0.6
-  },
-  {
-    id: 3,
-    img: img3,
-    title: "We Encourage",
-    description: "We inspire others to take action, spread kindness, and support those who are less fortunate.",
-    AnimatTime: 0.8
-  },
-]
 
 function Home() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
+  const AboutUsSection = [
+    {
+      id: 1,
+      img: img1,
+      title: t("We Volunteer"),
+      description: t("we_volunteer_description"),
+      AnimatTime: 0.4
+    },
+    {
+      id: 2,
+      img: img2,
+      title: t("We Donate"),
+      description: t("we_Donate_description"),
+      AnimatTime: 0.6
+    },
+    {
+      id: 3,
+      img: img3,
+      title: t("We Encourage"),
+      description: t("we_Encourage_description"),
+      AnimatTime: 0.8
+    },
+  ]
 
   // useEffect(() => {
   //   dispatch(fetchUsers());
@@ -54,7 +57,7 @@ function Home() {
   const handleProtectedRoute = (e, to) => {
     if (!Token) {
       e.preventDefault();
-      toast.warning("You need to login first to access this page.", {
+      toast.warning(t("You need to login first to access this page"), {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: true,
@@ -85,8 +88,9 @@ function Home() {
                 delay: 0.2,
               }}
               className='text-red-600 text-2xl font-semibold'>
-              Well Come Blood Donation Nuqta
+              {t('Well Come Blood Donation Nuqta')}
             </motion.h4>
+
             <motion.p
               initial={{ opacity: 0, x: -100 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -97,8 +101,9 @@ function Home() {
                 delay: 0.2,
               }}
               className=' lg:w-[80%] text-4xl font-bold leading-[1.5]'>
-              Join the Life Saving Movement Donate Blood and Make a Differenc!
+              {t('Join the Life ...')}
             </motion.p>
+
             <motion.p
               initial={{ opacity: 0, y: 100 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -108,11 +113,11 @@ function Home() {
                 damping: 30,
                 delay: 0.2,
               }}
-              className='text-gray-400 text-lg'>Welcome to Nuqta, Egypt's premier blood donation website! Our platform is dedicated
-              to connecting blood donors with individuals in need, providing a lifeline of hope and support to
-              those requiring blood transfusions across the country.
+              className='text-gray-400 text-lg'>
+              {t("Welcome to Nuqta, Egypt's ...")}
             </motion.p>
-            <div className=' space-x-3 flex '>
+
+            <div className='flex gap-2'>
               <motion.button
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -123,7 +128,7 @@ function Home() {
                 }}
                 className='btn-bg_red px-5 sm:px-10 py-2'
                 onClick={(e) => handleProtectedRoute(e, '/donors')}
-              >Donate blood</motion.button>
+              >{t('Donate blood')}</motion.button>
               <motion.button
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -134,7 +139,7 @@ function Home() {
                 }}
                 className='border-[1px] btn-bor_red px-5 sm:px-11 py-2'
                 onClick={(e) => handleProtectedRoute(e, '/bloodRequest')}
-              >Blood Requests</motion.button>
+              >{t('Blood Requests')}</motion.button>
             </div>
           </div>
           {/* image page */}
@@ -154,7 +159,7 @@ function Home() {
               damping: 50,
               delay: 0.2,
             }}
-            className='text-4xl font-bold text-red-600 '>We Heal lives</motion.h2>
+            className='text-4xl font-bold text-red-600 '>{t("We Heal lives")}</motion.h2>
           <div className='mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-6'>
             {
               AboutUsSection.map((sec) => (
@@ -168,11 +173,11 @@ function Home() {
                     delay: sec.AnimatTime,
                   }}
                   key={sec.id} className=' mb-16 text-center lg:text-left flex flex-col items-center lg:items-start gap-5 w-full'>
-                  <div className=' text-center flex flex-col md:flex-row items-center space-x-3'>
+                  <div  className=' text-center flex flex-col md:flex-row items-center gap-3'>
                     <img className='w-20' src={sec.img} alt={sec.title} />
                     <h2 className='text-xl font-bold text-[#710C12]'>{sec.title}</h2>
                   </div>
-                  <p className='text-xl w-[80%]'>{sec.description}</p>
+                  <p className='text-xl text-center w-[80%]'>{sec.description}</p>
                 </motion.div>
               ))
             }
