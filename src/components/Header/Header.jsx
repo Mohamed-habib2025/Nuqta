@@ -204,7 +204,7 @@ function Header() {
           </div>
 
           <div className="flex">
-            <div className=' flex items-center space-x-5 '>
+            <div className=' flex items-center gap-3 '>
               {token ?
                 <div>
                   <CgProfile onClick={handleProfileClick} className=' cursor-pointer text-2xl' />
@@ -214,7 +214,7 @@ function Header() {
                     <FiLogIn className='inline-block cursor-pointer text-[22px]' />
                     <span>{t('login')}</span>
                   </Link>
-                  <Link onClick={() => handleLogin()} className=' hidden lg:block border-2 border-red-600 rounded text-red-600 hover:text-white hover:bg-red-600 duration-300 px-5 sm:px-8 py-[2px] sm:py-1'> {t('login')} </Link>
+                  <Link onClick={() => handleLogin()} className=' hidden lg:block border-2 border-red-600 rounded text-red-600 hover:text-white hover:bg-red-600 duration-300 px-5 sm:px-4 py-[2px] sm:py-1'> {t('login')} </Link>
                 </div>
               }
               {/* toggle */}
