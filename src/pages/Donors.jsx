@@ -16,9 +16,11 @@ import { RiAlarmWarningFill, RiAlarmWarningLine } from "react-icons/ri";
 import { ImNotification } from "react-icons/im";
 import { BiDonateBlood } from "react-icons/bi";
 import { BiCalendarAlt } from "react-icons/bi";
+import { useTranslation } from 'react-i18next';
 
 function Donors() {
 
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const scope = useSelector((state) => state.userType.scope);
 
@@ -133,19 +135,19 @@ function Donors() {
     <>
       {
         scope === "USER" ?
-          <div className=" w-[90%] lg:w-[85%] mx-auto pt-5 min-h-[400px]">
-            <div className=' mx-3 flex flex-col lg:flex-row items-center justify-between '>
-              <h2 className="text-3xl font-bold mb-2 text-red-700">Available Requests</h2>
-              <div className="mb-6 mt-4 text-center space-y-2 md:space-y-0 ">
-                <label className="text-xl font-semibold mr-2">Requests by location:</label>
+          <div className=" w-[90%] md:w-[85%] mx-auto pt-5 min-h-[400px]">
+            <div className='w-full mx-3 flex flex-col lg:flex-row items-center justify-between flex-wrap '>
+              <h2 className=" text-3xl font-bold mb-2 text-red-700">{t("available_requests")}</h2>
+              <div className=" mb-6 mt-4 text-center flex flex-col md:flex-row items-center gap-2 ">
+                <label className="text-xl font-semibold ">{t("requests_by_location")}</label>
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
                   className=" p-2 rounded-lg w-[280px] cursor-pointer"
                 >
-                  <option value="all">All locations</option>
-                  <option value="Conservatism">Conservatism</option>
-                  <option value="Conservatism_City">Conservatism - City</option>
+                  <option value="all">{t("all_locations")}</option>
+                  <option value="Conservatism">{t("governorates_only")}</option>
+                  <option value="Conservatism_City">{t("governorate_and_city")}</option>
                 </select>
               </div>
             </div>
@@ -179,7 +181,7 @@ function Donors() {
                                 request.urgency_level === "HIGH" && (
                                   <p className="flex items-center gap-2 text-red-700">
                                     <RiAlarmWarningFill className='text-xl' />
-                                    <span className="font-medium">High</span>
+                                    <span className="font-medium">{t('HIGH')}</span>
                                   </p>
                                 )
                               }
@@ -187,19 +189,19 @@ function Donors() {
                               {request.urgency_level === "MEDIUM" && (
                                 <p className="flex items-center gap-2 text-orange-500">
                                   <RiAlarmWarningLine className='text-xl' />
-                                  <span className="font-medium">Medium</span>
+                                  <span className="font-medium">{t('Medium')}</span>
                                 </p>
                               )}
 
                               {request.urgency_level === "LOW" && (
                                 <p className="flex items-center gap-2 text-orange-400">
                                   <ImNotification className='text-lg' />
-                                  <span className="font-medium">Low</span>
+                                  <span className="font-medium">{t('Low')}</span>
                                 </p>
                               )}
                             </div> :
                             <p className="flex items-center gap-2 text-green-500">
-                              <HiOutlineCheckCircle className='text-2xl' /> <span className="font-bold ">Completed</span>
+                              <HiOutlineCheckCircle className='text-2xl' /> <span className="font-bold ">{t('Completed')}</span>
                             </p>
 
                         }
@@ -211,7 +213,7 @@ function Donors() {
                                 onClick={() => handleCancelDonation(request.id)}
                                 className="px-3 py-1 text-[16px] bg-red-600 text-white rounded-lg hover:bg-red-800 transition"
                               >
-                                Cancel
+                                {t('Cancel')}
                               </button>
                             )
                           ) : (
@@ -220,7 +222,7 @@ function Donors() {
                                 onClick={() => handeleaccept(request.id)}
                                 className="px-2 py-1 flex items-center gap-2 bg-red-600 text-[16px] text-white rounded-lg hover:bg-red-800 transition"
                               >
-                                <BiDonateBlood className='text-xl' /> <span>Donate</span>
+                                <BiDonateBlood className='text-xl' /> <span>{t('Donate')}</span>
                               </button>
                             )
                           )}
@@ -230,7 +232,7 @@ function Donors() {
                   ))
                 ) : (
                   <div className="col-span-full text-center text-2xl text-red-600 font-semibold py-10">
-                    No requests for the specified location.
+                    {t("no_requests")}
                   </div>
                 )
               }

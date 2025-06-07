@@ -6,13 +6,16 @@ import RequestsList from '../components/RequestsList';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserid } from '../rtk/slices/userid';
 import { addRequest, updateRequest } from '../rtk/slices/RequestsUser';
-// import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { ScaleLoader, SyncLoader } from "react-spinners";
+import { useTranslation } from 'react-i18next';
 
 
 
 function BloodRequest() {
+
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language;
 
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.userid);
@@ -52,12 +55,13 @@ function BloodRequest() {
   }, [user]);
 
   const handleChange = (e) => {
-    if (e.target.name === "gender") {
-      const selectedImage = e.target.value === "male" ? male : female;
-      setFormData({ ...formData, gender: e.target.value, image: selectedImage });
-    } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
+    // if (e.target.name === "gender") {
+    //   const selectedImage = e.target.value === "male" ? male : female;
+    //   setFormData({ ...formData, gender: e.target.value, image: selectedImage });
+    // } else {
+    //   setFormData({ ...formData, [e.target.name]: e.target.value });
+    // }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -90,7 +94,7 @@ function BloodRequest() {
         setIsEditing(false);
         setCurrentRequestId(null);
 
-        toast.success("updated request Successful");
+        toast.success(t('updated request Successful'));
       } else {
         const newRequest = await dispatch(addRequest({
           ...requestPayload,
@@ -98,7 +102,7 @@ function BloodRequest() {
         })).unwrap();
         setRequests(prev => [...prev, newRequest]);
         setShowForm(false);
-        toast.success("Added request Successful");
+        toast.success(t('Added request Successful'));
       }
       setFormData({
         conservatism: "", city: "", amount: "", urgency_level: "", blood_type_needed: "", status: 'OPEN', request_date: ""
@@ -118,15 +122,15 @@ function BloodRequest() {
   }
 
   return (
-    <div className="w-[85%] mx-auto mt-4 py-6 ">
+    <div className=" w-[90%] md:w-[85%] mx-auto mt-4 py-6 ">
       {requestsuser.length > 0 && (
         <div className='w-full flex items-center justify-between'>
-          <h3 className="text-2xl font-bold mb-4">Your Requests</h3>
+          <h3 className="text-2xl font-bold mb-4">{t('Your Requests')}</h3>
           <button onClick={() => {
             setShowForm(true);
             setFormData({ conservatism: "", city: "", amount: "", urgency_level: "", blood_type_needed: "", status: 'OPEN' });
           }}
-            className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded mb-4">New Request</button>
+            className="bg-red-600 hover:bg-red-800 text-white py-2 px-4 rounded mb-4">{t("New Request")}</button>
         </div>
       )}
       {showForm && (
@@ -135,40 +139,47 @@ function BloodRequest() {
             onSubmit={handleSubmit}
             className=" mx-auto bg-white shadow-lg rounded-xl p-6 border border-gray-300 space-y-4"
           >
-            <h2 className="text-xl font-semibold text-center text-gray-700">Request Blood Donation</h2>
+            <h2 className="text-xl font-semibold text-center text-gray-700">{t('Request Blood Donation')}</h2>
             <div className="flex flex-col gap-3">
               <div className="flex gap-3">
-                <input type="number" name="amount" min='1' max='50' placeholder="Blood Quantity" value={formData.amount} onChange={handleChange}
-                  className="w-1/2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
+                <input type="number" name="amount" min='1' max='50' placeholder={t('Blood Quantity')} value={formData.amount} onChange={handleChange}
+                  className="w-1/2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px] placeholder:text-black" required
                 />
                 <select name="urgency_level" value={formData.urgency_level} onChange={handleChange}
                   className=" cursor-pointer w-1/2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]"
                 >
-                  <option value="">Urgency</option>
-                  <option value="HIGH">HIGH</option>
-                  <option value="MEDIUM">MEDIUM</option>
-                  <option value="LOW">Low</option>
+                  <option value="">{t('Urgency')}</option>
+                  <option value='HIGH'>{t('HIGH')}</option>
+                  <option value='MEDIUM'>{t('MEDIUM')}</option>
+                  <option value='Low'>{t('Low')}</option>
                 </select>
               </div>
 
               <div className="flex gap-3">
-                <select name="conservatism" value={formData.conservatism} onChange={handleChange}
-                  className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
+                <select
+                  name="conservatism"
+                  value={formData.conservatism}
+                  onChange={handleChange}
+                  className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]"
+                  required
                 >
-                  <option value="">Select Governorate</option>
-                  {Object.keys(governorates).map((gov) => (
-                    <option key={gov} value={gov}>{gov}</option>
+                  <option value="">{t('Governorate')}</option>
+                  {Object.entries(governorates).map(([key, value]) => (
+                    <option key={key} value={key}>{value.name[currentLang]}</option>
                   ))}
 
                 </select>
 
                 {formData.conservatism && (
-                  <select name="city" value={formData.city} onChange={handleChange}
+                  <select
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
                     className=" cursor-pointer w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
                   >
-                    <option value="">Select City</option>
-                    {governorates[formData.conservatism].map((city) => (
-                      <option key={city} value={city}>{city}</option>
+                    <option value="">{t('City')}</option>
+                    {governorates[formData.conservatism].cities.map((city, index) => (
+                      <option key={index} value={city.en}>{city[currentLang]}</option>
                     ))}
                   </select>
                 )}
@@ -177,7 +188,7 @@ function BloodRequest() {
               <select name="blood_type_needed" value={formData.blood_type_needed} onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-red-600 focus:border-[2px]" required
               >
-                <option value="">Blood Type</option>
+                <option value="">{t('Blood Type')}</option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
                 <option value="B+">B+</option>
@@ -194,14 +205,14 @@ function BloodRequest() {
                   className={`hover:bg-red-800 text-white text-sm text-nowrap sm:text-[16px] p-3 rounded-lg w-full sm:w-auto transition duration-300 ${isLoading ? "bg-red-500" : "bg-red-600"}`}
                 >
                   {isLoading ? <ScaleLoader color="#fff" height={15} width={2} radius={2} margin={2} /> : isEditing ?
-                    'Edit Request' : 'Upload Request'}
+                    (t('edit_request')) : (t('upload_request'))}
                 </button>
 
                 {requestsuser.length > 0 && (
                   <button onClick={() => setShowForm(false)}
                     className="bg-gray-500 hover:bg-gray-700 text-white text-sm sm:text-base py-3 px-6 sm:px-10 rounded-lg w-full sm:w-auto  transition duration-300"
                   >
-                    Close
+                    {t("Close")}
                   </button>
                 )}
               </div>

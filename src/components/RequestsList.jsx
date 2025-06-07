@@ -13,8 +13,14 @@ import female from "../Images/female.png";
 import orgimg from "../Images/Hospital.png";
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteRequest } from '../rtk/slices/RequestsUser';
+import { useTranslation } from 'react-i18next';
+import governorates from "../Data/egyptLocations";
 
 function RequestsList({ requestsuser, setRequests, setCurrentRequestId, setFormData, setIsEditing, setShowForm }) {
+
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language;
+
 
   const dispatch = useDispatch();
   const scope = localStorage.getItem("scope");
@@ -23,10 +29,11 @@ function RequestsList({ requestsuser, setRequests, setCurrentRequestId, setFormD
 
   const removeRequest = (id) => {
     Swal.fire({
-      title: "Are you sure?",
+      title: (t('Are you sure')),
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: t('Cancel'),
+      confirmButtonText: (t('Yes')),
       showLoaderOnConfirm: true,
       allowOutsideClick: () => !Swal.isLoading(),
       preConfirm: async () => {
@@ -38,14 +45,14 @@ function RequestsList({ requestsuser, setRequests, setCurrentRequestId, setFormD
 
           return true;
         } catch (error) {
-          Swal.showValidationMessage("Failed to delete. Try again.");
+          Swal.showValidationMessage(t('Failed to delete. Try again'));
           return false;
         }
       }
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: "Deleted!",
+          title: (t('Deleted')),
           icon: "success"
         });
       }
@@ -74,12 +81,15 @@ function RequestsList({ requestsuser, setRequests, setCurrentRequestId, setFormD
             />
 
             <div className="flex flex-col items-center space-y-2">
-              <h2 className={`text-lg font-bold ml-2 md:ml-0 md:text-center ${ scope === "USER" ? "text-red-500" : "text-blue-500"}`}>
+              <h2 className={`text-lg font-bold ml-2 md:ml-0 md:text-center ${scope === "USER" ? "text-red-500" : "text-blue-500"}`}>
                 {scope === "USER" ? user.username : org.orgName}
               </h2>
               <div className="flex items-center gap-1">
                 <IoLocationOutline className="text-xl " />
-                <p className='text-gray-600 text-[16px] flex flex-wrap gap-2'>{request.conservatism} - {request.city}</p>
+                <p className='text-gray-600 text-[16px] flex flex-wrap gap-2'>
+                  {governorates[request.conservatism]?.name[currentLang] || request.conservatism} -{' '}
+                  {governorates[request.conservatism]?.cities.find(city => city.en === request.city)?.[currentLang] || request.city}
+                </p>
               </div>
               <div className="flex items-center gap-6 ">
                 <div className="flex items-center gap-2 text-red-600 font-semibold">
@@ -88,7 +98,7 @@ function RequestsList({ requestsuser, setRequests, setCurrentRequestId, setFormD
                 </div>
                 <div className="flex items-center gap-1 text-gray-800 font-semibold">
                   <img src={quantity} alt="Quantity" className="w-6" />
-                  <span>{request.amount} ml</span>
+                  <span>{request.amount} {t('liter')}</span>
                 </div>
               </div>
             </div>
@@ -104,7 +114,7 @@ function RequestsList({ requestsuser, setRequests, setCurrentRequestId, setFormD
                     request.urgency_level === "HIGH" && (
                       <p className="flex items-center gap-2 text-red-700">
                         <RiAlarmWarningFill className='text-xl' />
-                        <span className="font-medium">High</span>
+                        <span className="font-medium">{t('HIGH')}</span>
                       </p>
                     )
                   }
@@ -112,23 +122,22 @@ function RequestsList({ requestsuser, setRequests, setCurrentRequestId, setFormD
                   {request.urgency_level === "MEDIUM" && (
                     <p className="flex items-center gap-2 text-orange-500">
                       <RiAlarmWarningLine className='text-xl' />
-                      <span className="font-medium">Medium</span>
+                      <span className="font-medium">{t('MEDIUM')}</span>
                     </p>
                   )}
 
                   {request.urgency_level === "LOW" && (
                     <p className="flex items-center gap-2 text-orange-400">
                       <ImNotification className='text-lg' />
-                      <span className="font-medium">Low</span>
+                      <span className="font-medium">{t('Low')}</span>
                     </p>
                   )}
                 </div> :
                   <p className="flex items-center gap-2 mt-2 text-green-700">
-                    <HiOutlineCheckCircle className='text-xl' /> <span className="font-medium ">Completed</span>
+                    <HiOutlineCheckCircle className='text-xl' /> <span className="font-medium ">{t('Completed')}</span>
                   </p>
 
               }
-
 
               <div className="flex gap-3">
                 <button onClick={() => editRequest(request)} className="text-blue-600 hover:text-blue-800 text-xl transition">
