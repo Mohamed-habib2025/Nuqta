@@ -33,11 +33,10 @@ function Donors() {
   const [allrequests, setallrequests] = useState([]);
   const [filterType, setFilterType] = useState("all");
 
-  const sortedRequests = [...allrequests].sort((a, b) => a.id - b.id);
-
   useEffect(() => {
     if (requests && requests.length > 0) {
-      setallrequests(requests);
+      const sortedRequests = [...requests].sort((a, b) => a.id - b.id);
+      setallrequests(sortedRequests);
     }
   }, [requests]);
 
@@ -50,11 +49,10 @@ function Donors() {
     }
   }, [dispatch, userId]);
 
-  const filteredRequests = sortedRequests.filter((req) => {
+  const uploadedIds = new Set(user?.uploadedRequests?.map(req => req.id));
 
-    const MyRequest = user?.uploadedRequests?.some((uploadedReq) => uploadedReq.id === req.id);
-    if (MyRequest) return false;
-
+  const filteredRequests = allrequests.filter((req) => {
+    if (uploadedIds.has(req.id)) return false;
 
     if (filterType === "Conservatism") {
       return req.conservatism === user?.donation.conservatism;
@@ -64,8 +62,25 @@ function Donors() {
         req.city === user.donation.city
       );
     }
+
     return true;
   });
+
+  // const filteredRequests = sortedRequests.filter((req) => {
+
+  //   const MyRequest = user?.uploadedRequests?.some((uploadedReq) => uploadedReq.id === req.id);
+  //   if (MyRequest) return false;
+
+  //   if (filterType === "Conservatism") {
+  //     return req.conservatism === user?.donation.conservatism;
+  //   } else if (filterType === "Conservatism_City") {
+  //     return (
+  //       req.conservatism === user?.donation.conservatism &&
+  //       req.city === user.donation.city
+  //     );
+  //   }
+  //   return true;
+  // });
 
   const handeleaccept = (reqid) => {
     Swal.fire({
@@ -161,8 +176,9 @@ function Donors() {
 
                       <div className=' space-y-1'>
                         <p className="flex items-center justify-center text-xl font-semibold text-red-600">{request.organization ? request.organization?.orgName : request.user?.username}</p>
+                        {/* <p className="flex items-center justify-center text-xl font-semibold text-red-600">{request.organization ? request.organization?.phoneNumber : request.user?.phoneNumber}</p> */}
                         <p className="flex items-center text-[16px] text-gray-600"><IoLocationOutline className="mr-2 text-2xl" />{request.conservatism} - {request.city}</p>
-                        <div className='flex items-center justify-center space-x-5'>
+                        <div className='flex items-center justify-center gap-3'>
                           <div className="flex items-center gap-1 text-lg font-semibold ">
                             <MdBloodtype className="text-2xl text-red-600" />
                             <span className="">{request.blood_type_needed}</span>
@@ -189,7 +205,7 @@ function Donors() {
                               {request.urgency_level === "MEDIUM" && (
                                 <p className="flex items-center gap-2 text-orange-500">
                                   <RiAlarmWarningLine className='text-xl' />
-                                  <span className="font-medium">{t('Medium')}</span>
+                                  <span className="font-medium">{t('MEDIUM')}</span>
                                 </p>
                               )}
 

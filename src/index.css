@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+input[type="date"]::-webkit-datetime-edit {
+  opacity: 0;
+}
+
+input[type="date"]:not([value=""]):not(:focus)::-webkit-datetime-edit {
+  opacity: 1 !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+
+
 
 html,
 body {

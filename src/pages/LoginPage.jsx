@@ -195,18 +195,20 @@ function LoginPage() {
                 <input type="text" name='lastName' placeholder={t("Last Name")} value={formData.lastName} onChange={handleChangeregister} className="rounded bg-gray-200 border-none w-full p-2 focus:ring-0" required />
               </div>
 
-              <div className="flex gap-2">
-                <div className="relative w-1/2">
+              <div className="flex items-center gap-2">
+                <div dir={currentLang === 'ar' ? 'rtl' : 'ltr'} className="relative w-1/2 flex items-center ">
                   <input
                     type="date"
                     name="birthDate"
                     value={formData.birthDate}
                     onChange={handleChangeregister}
+                    onClick={(e) => e.target.showPicker()}
                     required
-                    className="peer rounded bg-gray-200 border-none w-full p-2 focus:ring-0"
+                    className=" rounded bg-gray-200 border-none w-full p-2 focus:ring-0 cursor-pointer"
                   />
                   {!formData.birthDate && (
-                    <span className="absolute left-2 top-2 text-lg text-gray-500 transition-all duration-200 md:hidden">
+                    <span
+                      className="absolute left-2 top-2 text-gray-500 transition-all duration-200 pointer-events-none">
                       {t("Birth Date")}
                     </span>
                   )}
